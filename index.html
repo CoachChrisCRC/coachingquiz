@@ -3,7 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Path to #Fitter #Stronger #Better | Take the Quiz </title>
+    <title>Get Your Program Summary | COACH CHRIS</title>
+    
+    <!-- --- SOCIAL SHARING METADATA (OPEN GRAPH & TWITTER CARD) --- -->
+    <meta property="og:title" content="Find your path to #Fitter #Stronger #Better">
+    <meta property="og:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
+    <meta property="og:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
+    <meta property="og:url" content="YOUR_APP_URL_HERE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Find your path to #Fitter #Stronger #Better">
+    <meta name="twitter:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
+    <!-- --- END SOCIAL SHARING METADATA --- -->
+
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -453,7 +465,7 @@
                     briefOverview: "This subscription provides access to our Flagship Hybrid program (Strength, Endurance & Cardio/Conditioning) via our dedicated app. It features customisable nutrition targets, monthly individual progress check-ins with your coach, and ongoing support from our community.", 
                     accentColor: "text-blue-600",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
-                    requiresCall: true // Requires a discovery call
+                    requiresCall: true // Requires a discovery call (for step 2 logic)
                 };
             } else {
                 return {
@@ -743,8 +755,8 @@
         }
 
         function renderLoadingScreen() {
-             // Simplified loading text
-             const loadingText = "ANALYZING YOUR RESULTS...";
+             // START: Change text from "ANALYZING YOUR RESULTS..." to "ANALYZING YOUR ANSWERS..."
+             const loadingText = "ANALYZING YOUR ANSWERS...";
 
              contentArea.innerHTML = `
                  <div class="text-center animate-in min-h-[300px] flex flex-col items-center justify-center">
@@ -759,6 +771,7 @@
                      </p>
                  </div>
              `;
+             // END: Change text from "ANALYZING YOUR RESULTS..." to "ANALYZING YOUR ANSWERS..."
              
              // Simulate analysis time (2.5 seconds)
              setTimeout(() => {
@@ -782,25 +795,35 @@
             const alternativeDescriptionText = generateAlternativeDescription(primaryRec, alternativeRec); 
             const clientDisplay = clientName.toUpperCase();
             
-            // --- UPDATED STEP 2 CONTENT WITH MARKDOWN CONVERSION ---
+            // --- UPDATED STEP 2 CONTENT LOGIC ---
             let step2Content;
-            
-            if (primaryRec.requiresCall) {
-                // Tier 1 and 2: No internal markdown used here, text is static
+            const primaryTitle = primaryRec.title;
+
+            if (primaryTitle.includes(TIER_1_TITLE)) {
+                // T1: 1-1 Online Coaching (Chat before sign up) 
+                const step2Text = "Before signing up, you need to **submit a quick application form** to share more details about your goals, then **reach out directly to Coach Chris via WhatsApp** for a quick chat to ensure the program is the perfect fit and discuss any final details.";
                 step2Content = `
                     <li>
-                        <span class="font-extrabold text-black">Step 2: Book Your Free Discovery Call</span>
-                        <span class="block text-gray-700">Because your recommended program is a high-touch service, you need to book a quick, free discovery call with Coach Chris to ensure a perfect fit and discuss the final details.</span>
+                        <span class="font-extrabold text-black">Step 2: Apply & Chat with Coach Chris</span>
+                        <span class="block text-gray-700">${markdownToHtml(step2Text)}</span>
+                    </li>`;
+            } else if (primaryTitle.includes(TIER_2_TITLE)) {
+                // T2: Fitter Stronger Better Subscription (Optional chat before sign up)
+                const step2Text = "You'll first **submit a short application form** to share your current status. After this, you will **follow the on-screen next steps** to complete your sign-up and immediately access the program via the dedicated app. You also have the option to **chat with Coach Chris on WhatsApp** to clarify any last-minute questions before you commit.";
+                step2Content = `
+                    <li>
+                        <span class="font-extrabold text-black">Step 2: Apply & Access (Optional Chat)</span>
+                        <span class="block text-gray-700">${markdownToHtml(step2Text)}</span>
                     </li>`;
             } else {
-                // Tier 3: Requires markdown conversion for the program title (**...**)
+                // T3: Online Program Library (Self-guided)
                 step2Content = `
                     <li>
                         <span class="font-extrabold text-black">Step 2: Start the Program</span>
                         <span class="block text-gray-700">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and be ready to begin your journey immediately.`)}</span>
                     </li>`;
             }
-            // --- END UPDATED STEP 2 CONTENT ---
+            // --- END UPDATED STEP 2 CONTENT LOGIC ---
 
             
             // Define step 1 content - using font-bold HTML instead of Markdown for clean injection
