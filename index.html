@@ -152,7 +152,7 @@
             border-color: #000;
         }
         
-        /* Custom Checkbox Styling */
+        /* Custom Checkbox Styling - FIX APPLIED HERE */
         input[type="checkbox"] {
             /* Ensuring custom styling for the checkbox */
             -webkit-appearance: none;
@@ -161,11 +161,23 @@
             border-radius: 0.25rem; /* rounded-md */
             transition: all 0.2s;
             cursor: pointer;
+            /* Initial state border and background */
+            border: 2px solid #000;
+            background-color: #fff;
+            
+            /* Add focus style for accessibility */
+            outline: none;
+            box-shadow: none;
         }
+        input[type="checkbox"]:focus {
+             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5); /* Focus ring effect */
+        }
+        
+        /* FIXED CHECKED STATE STYLING */
         input[type="checkbox"]:checked {
             background-color: #22c55e; /* green-500 */
             border-color: #22c55e;
-            /* Checkmark icon using base64 SVG */
+            /* Correctly URL-encoded SVG checkmark for better cross-browser compatibility */
             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 00-1.414 0L6.5 9.086 4.207 6.793a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l5-5a1 1 0 000-1.414z'/%3e%3c/svg%3e");
             background-size: 100% 100%;
             background-position: center;
@@ -213,7 +225,7 @@
             </p>
         </div>
 
-        <!-- Main Quiz Title - UPDATED TEXT AND COLOR -->
+        <!-- Main Quiz Title -->
         <h2 class="text-3xl sm:text-4xl font-black text-black mb-4 uppercase italic tracking-tighter">
             FIND YOUR PATH TO BECOMING 
             <span class="text-green-500">#FITTER</span> 
@@ -247,7 +259,7 @@
 
     </div>
     
-    <!-- NEW Footer Block: Disclaimer, Copyright, and Tagline -->
+    <!-- Footer Block: Disclaimer, Copyright, and Tagline -->
     <div class="mt-12 w-full max-w-2xl text-center px-4">
         <!-- Disclaimer (Slightly lighter text) -->
         <p id="disclaimer" class="text-neutral-400 text-sm mb-6 leading-relaxed">
@@ -259,7 +271,7 @@
             © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL. All rights reserved.
         </p>
         
-        <!-- New Tagline (Fitter. Stronger. Better.) -->
+        <!-- Tagline (Fitter. Stronger. Better.) -->
         <p class="text-neutral-500 text-base italic font-medium mt-3">
             Fitter. Stronger. Better.
         </p>
@@ -267,7 +279,17 @@
 
 
     <script>
-        // --- QUIZ DATA (EXPANDED TO 10 QUESTIONS) ---
+        // Helper function to convert simple **bold** and *italic* markdown to HTML
+        function markdownToHtml(text) {
+            if (!text) return "";
+            // Replace **bold** with <strong>
+            let result = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Replace *italic* with <em>
+            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            return result;
+        }
+
+        // --- QUIZ DATA ---
         const quizData = [
             {
                 id: 1,
@@ -383,7 +405,7 @@
 
         let currentStep = 0;
         let totalScore = 0;
-        const maxScore = 300; // 10 questions * max 30 points each
+        // const maxScore = 300; // Unused but helpful for context
         let selectedOption = null;
         let userAnswers = []; // Array to store detailed answers
         let clientName = "Warrior"; // Default client name
@@ -400,6 +422,8 @@
                 return {
                     title: TIER_1_TITLE,
                     description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully-tailored solution designed to adapt to your life and ensure consistent, rapid progress.",
+                    // UPDATED briefOverview
+                    briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built around your unique life. Includes weekly in-depth check-ins, unlimited direct messaging access to Coach Chris, and dynamic, guaranteed program adaptation.", 
                     accentColor: "text-green-600",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
                     requiresCall: true // Requires a discovery call
@@ -408,6 +432,7 @@
                 return {
                     title: TIER_2_TITLE,
                     description: "You have clear goals and moderate commitment. This service provides structured programming, personalized check-ins, and the perfect blend of accountability and flexibility.",
+                    briefOverview: "This subscription provides access to our Flagship Hybrid program (Strength, Endurance & Cardio/Conditioning) via our dedicated app. It features customisable nutrition targets, monthly individual progress check-ins with your coach, and ongoing support from our community.", 
                     accentColor: "text-blue-600",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
                     requiresCall: true // Requires a discovery call
@@ -416,6 +441,7 @@
                 return {
                     title: TIER_3_TITLE,
                     description: "You are seeking expert-designed, foundational guidance. Get instant access to professionally built, self-paced training plans you can execute on your own schedule.",
+                    briefOverview: "Self-guided access to a growing Library of varied programs (e.g., Dedicated Strength Cycles, Focused Fitness/Conditioning Blocks, WOD Packs & more), lifetime access to purchased plans with and tutorials & movement demos. Perfect for DIY fitness enthusiasts.", 
                     accentColor: "text-gray-800",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
                     requiresCall: false // Self-guided, no call required
@@ -453,7 +479,7 @@
             }
         }
         
-        // --- DYNAMIC RATIONALE GENERATION ---
+        // Primary Rationale Generation Logic
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'an unknown block';
@@ -492,7 +518,7 @@
             if (recommendationTitle.includes(TIER_1_TITLE)) {
                 keySupportFeature = 'maximum 1-on-1 personalized structure and fully customized programming';
             } else if (recommendationTitle.includes(TIER_2_TITLE)) {
-                keySupportFeature = 'structured programming delivered with weekly coach check-ins and consistent support';
+                keySupportFeature = 'structured programming delivered with monthly individual check-ins and consistent support';
             } else { 
                 keySupportFeature = 'immediate access to a vast library of expert-designed training plans that remove the guesswork';
             }
@@ -506,21 +532,27 @@
             return rationale;
         }
 
+        // Alternative Description Generation Logic (Now outputs Markdown)
         function generateAlternativeDescription(primaryRec, alternativeRec) {
             const primaryTitle = primaryRec.title;
             const alternativeTitle = alternativeRec.title;
+            let description = '';
 
-            if (primaryTitle.includes(TIER_1_TITLE) && alternativeTitle.includes(TIER_2_TITLE)) {
+            if (primaryTitle.includes(TIER_1_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
                 // Alternative to T1 (1-1) is T2 (Subscription)
-                return `The **${TIER_2_TITLE}** offers the ideal balance of structure and support without the full 1-1 investment. You still receive structured programming and direct coach check-ins—perfect for achieving consistency.`;
-            } else if (primaryTitle.includes(TIER_2_TITLE) && alternativeTitle.includes(TIER_3_TITLE)) {
+                description = `The **${TIER_2_TITLE}** offers the ideal balance of structure and support without the full 1-1 investment. You still receive structured programming and direct coach check-ins—perfect for achieving consistency.`;
+            } else if (primaryTitle.includes(TIER_2_TITLE) && alternativeRec.title.includes(TIER_3_TITLE)) {
                 // Alternative to T2 (Subscription) is T3 (Library)
-                return `For a tighter budget or those preferring independent training, the **${TIER_3_TITLE}** provides a library of expert-built plans. You gain instant access to high-quality programs designed to deliver results on your schedule.`;
-            } else if (primaryTitle.includes(TIER_3_TITLE) && alternativeTitle.includes(TIER_2_TITLE)) {
+                description = `For a tighter budget or those preferring independent training, the **${TIER_3_TITLE}** provides a library of expert-built plans. You gain instant access to high-quality programs designed to deliver results on your schedule.`;
+            } else if (primaryTitle.includes(TIER_3_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
                 // Alternative to T3 (Library) is T2 (Subscription)
-                return `If you feel you require more accountability and personalized feedback than a self-paced plan provides, the **${TIER_2_TITLE}** adds weekly coach check-ins to ensure you stick to the plan and maximize results.`;
+                description = `If you feel you require more accountability and personalized feedback than a self-paced plan provides, the **${TIER_2_TITLE}** adds monthly individual coach check-ins to ensure you stick to the plan and maximize results.`;
+            } else {
+                description = alternativeRec.description; // Fallback
             }
-            return alternativeRec.description; // Fallback
+            
+            // Apply markdown conversion before returning
+            return markdownToHtml(description);
         }
 
 
@@ -554,13 +586,13 @@
             }
 
             const stepData = quizData[currentStep];
-            // F-1 Fix: Find previously selected option for this step to restore state
+            // Find previously selected option for this step to restore state
             const previousAnswer = userAnswers.find(a => a.key === stepData.key);
             selectedOption = previousAnswer ? stepData.options.find(opt => opt.text === previousAnswer.answer) : null;
             
             contentArea.innerHTML = ''; 
 
-            // Determine button text: "SUBMIT" for the final question (index 9, length 10)
+            // Determine button text: "SUBMIT" for the final question
             const nextButtonText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
 
             const questionBlock = document.createElement('div');
@@ -644,18 +676,18 @@
                      <form id="personalization-form" class="space-y-4">
                          
                          <div>
-                             <label for="name" class="block text-xs font-bold uppercase mb-1">First Name (Required)</label>
+                             <label for="client-name-input" class="block text-xs font-bold uppercase mb-1">First Name (Required)</label>
                              <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-3 bg-white" placeholder="JANE" value="${clientName === 'Warrior' ? '' : clientName}">
                          </div>
                          
-                         <!-- NEW CHECKBOX FIELD -->
+                         <!-- CHECKBOX FIELD -->
                          <div class="flex items-start">
                             <input type="checkbox" id="disclaimer-check" name="disclaimer" required class="mt-1 w-5 h-5 border-2 border-black text-green-500 bg-white rounded focus:ring-green-500">
                             <label for="disclaimer-check" class="ml-3 text-sm font-medium text-gray-700 leading-tight">
                                 I have read and agree to the <a href="#disclaimer" class="font-bold underline text-black">general fitness disclaimer</a> below.
                             </label>
                         </div>
-                         <!-- END NEW CHECKBOX FIELD -->
+                         <!-- END CHECKBOX FIELD -->
 
                          <button type="submit" id="display-button" disabled class="action-button w-full py-4 mt-2 rounded-lg text-lg">
                              CONFIRM
@@ -666,7 +698,7 @@
              
              document.getElementById('personalization-form').addEventListener('submit', handlePersonalize);
              
-             // --- New Validation Logic ---
+             // --- Validation Logic ---
              const nameInput = document.getElementById('client-name-input');
              const disclaimerCheck = document.getElementById('disclaimer-check');
              const confirmButton = document.getElementById('display-button');
@@ -682,32 +714,46 @@
              nameInput.addEventListener('input', updateButtonState);
              disclaimerCheck.addEventListener('change', updateButtonState);
 
-             // Initial state update (important if clientName was pre-filled)
+             // Initial state update
              updateButtonState(); 
-             // --- End New Validation Logic ---
         }
 
         function renderFinalProgramSummary() {
             const primaryRec = getRecommendation(totalScore);
             const alternativeRec = getAlternativeRecommendation(primaryRec.title);
             const personalizedRationale = generatePersonalizedRationale(userAnswers, primaryRec.title);
+            // This description will now contain HTML tags from the markdownToHtml function
             const alternativeDescriptionText = generateAlternativeDescription(primaryRec, alternativeRec); 
             const clientDisplay = clientName.toUpperCase();
             
-            // F-3 Fix: Define step2Content based on program type
-            let step2Content = `
-                <li>
-                    <span class="font-extrabold text-black">Step 2: Start the Program</span>
-                    <span class="block text-gray-700">Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and be ready to begin your journey immediately.</span>
-                </li>`;
-
+            // --- UPDATED STEP 2 CONTENT WITH MARKDOWN CONVERSION ---
+            let step2Content;
+            
             if (primaryRec.requiresCall) {
+                // Tier 1 and 2: No internal markdown used here, text is static
                 step2Content = `
                     <li>
                         <span class="font-extrabold text-black">Step 2: Book Your Free Discovery Call</span>
                         <span class="block text-gray-700">Because your recommended program is a high-touch service, you need to book a quick, free discovery call with Coach Chris to ensure a perfect fit and discuss the final details.</span>
                     </li>`;
+            } else {
+                // Tier 3: Requires markdown conversion for the program title (**...**)
+                step2Content = `
+                    <li>
+                        <span class="font-extrabold text-black">Step 2: Start the Program</span>
+                        <span class="block text-gray-700">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and be ready to begin your journey immediately.`)}</span>
+                    </li>`;
             }
+            // --- END UPDATED STEP 2 CONTENT ---
+
+            
+            // Define step 1 content - using font-bold HTML instead of Markdown for clean injection
+            const step1Content = `
+                <li>
+                    <span class="font-extrabold text-black">Step 1: Get the Full Program Details</span>
+                    <span class="block text-gray-700">Click the primary link below. It will take you to a private page detailing everything about the <span class="font-bold">${primaryRec.title}</span> service, including clear pricing, what’s included, and the expected timeline to achieve your specific goals.</span>
+                </li>
+            `;
 
             // --- MID-PAGE CTA TEXTS (More learning/exploration focused) ---
             const midPagePrimaryCtaText = `GET THE FULL BREAKDOWN: VIEW ${primaryRec.title} DETAILS`;
@@ -728,6 +774,9 @@
             }
             // Bottom alternative CTA remains exploration focused and named
             const bottomAlternativeCtaText = `VIEW ${alternativeRec.title} DETAILS & PRICING`; 
+            
+            // Convert the header that uses **Markdown**
+            const bestFitHeaderContent = markdownToHtml(`Your **BEST FIT** Recommended Program:`);
             
             // Render the full motivational program summary
             contentArea.innerHTML = `
@@ -750,16 +799,20 @@
                         
                         <!-- PRIMARY PROGRAM RECOMMENDATION - PREFERRED STYLE -->
                         <p class="text-center font-black text-xl border-y-2 border-black py-3 bg-gray-200">
-                            Your **BEST FIT** Recommended Program:
+                            ${bestFitHeaderContent}
                             <span class="block text-2xl mt-1 ${primaryRec.accentColor}">${primaryRec.title}</span>
                         </p>
                         
                         <!-- Rationale -->
                         <div class="p-4 bg-white border border-gray-300 rounded-lg">
-                            <p class="font-extrabold text-black mb-2">Why this program is the perfect fit:</p>
-                            <p class="italic text-gray-700">${personalizedRationale}</p>
-                            <p class="mt-3 font-medium text-sm">
-                                <span class="font-extrabold text-black">PERSONAL FIT:</span> ${personalizedRationale}
+                            <!-- Title and Content changed to Brief Overview -->
+                            <p class="font-extrabold text-black mb-2">Brief Program Overview:</p>
+                            <p class="text-gray-700">${primaryRec.briefOverview}</p>
+
+                            <!-- Subheading changed to "Why we think this is a great fit" -->
+                            <p class="mt-3 font-medium text-sm pt-3 border-t border-gray-200">
+                                <span class="font-extrabold text-black">Why we think this is a great fit:</span> 
+                                <span class="block italic text-gray-700 mt-1">${personalizedRationale}</span>
                             </p>
                         </div>
 
@@ -787,6 +840,7 @@
                                 <!-- Program Name and Description - NOW CONVERSATIONAL -->
                                 <div class="text-center sm:text-left flex-grow w-full sm:w-auto">
                                     <span class="block text-xl font-extrabold ${alternativeRec.accentColor} leading-tight">${alternativeRec.title}</span>
+                                    <!-- Alternative Description: Already converted from Markdown to HTML via generateAlternativeDescription -->
                                     <span class="block text-sm text-gray-700 mt-1 italic font-medium">${alternativeDescriptionText}</span>
                                 </div>
                                 
@@ -815,10 +869,7 @@
                         <p>It's time to stop guessing and <strong class="text-black">COMMIT TO THE PLAN</strong>.</p>
                         
                         <ol class="list-decimal list-inside space-y-3 font-medium">
-                            <li>
-                                <span class="font-extrabold text-black">Step 1: Get the Full Program Details</span>
-                                <span class="block text-gray-700">Click the primary link below. It will take you to a private page detailing everything about the <span class="font-bold">${primaryRec.title}</span> service, including clear pricing, what’s included, and the expected timeline to achieve your specific goals.</span>
-                            </li>
+                            ${step1Content}
                             ${step2Content}
                         </ol>
 
@@ -847,14 +898,13 @@
                             ${bottomAlternativeCtaText}
                         </a>
                     </div>
-                    <!-- The redundant desktop 'OR' separator has been removed -->
 
                     <!-- Restart Button -->
                     <button id="restart-button" class="secondary-button w-full py-3 mt-4 rounded-lg text-sm">
                         RESTART QUIZ & ANALYZE AGAIN
                     </button>
                     
-                    <!-- Footer Signature: Removed UNCNVNTNL mention -->
+                    <!-- Footer Signature: -->
                     <p class="text-sm font-bold pt-4 text-right">
                         — Coach Chris
                         <span class="block font-medium text-xs text-gray-500">CIRCULAR ROOTS COACHING</span>
@@ -888,6 +938,13 @@
                 
                 totalScore += selectedOption.score;
                 currentStep++;
+                
+                // Scroll to the progress bar element to show the new question near the top
+                document.getElementById('progress-text-label').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start' // Aligns the top of the element to the top of the viewport
+                });
+                
                 renderQuestion();
             }
         }
@@ -895,6 +952,12 @@
         function handleBack() {
              // 1. Decrement step
              currentStep = Math.max(0, currentStep - 1);
+             
+             // 2. Scroll to the progress bar element to show the previous question near the top
+             document.getElementById('progress-text-label').scrollIntoView({
+                 behavior: 'smooth',
+                 block: 'start' 
+             });
              
              // The next renderQuestion call will correctly pre-select the answer based on the (now current) userAnswers array.
              renderQuestion();
@@ -905,16 +968,24 @@
             const nameInput = document.getElementById('client-name-input');
             const disclaimerCheck = document.getElementById('disclaimer-check');
 
+            // Final check on input and checkbox state
             if (!nameInput.value.trim() || !disclaimerCheck.checked) {
-                // Should not happen if button is correctly disabled, but kept for safety.
-                console.error("Name or Disclaimer not confirmed.");
+                console.error("Form validation failed during submission.");
                 return; 
             }
             
-            // If validation passes
+            // 1. Set client name (using only the first word/name)
             const name = nameInput.value.trim();
-            clientName = name.split(' ')[0]; // Use first name
+            clientName = name.split(' ')[0];
+            
+            // 2. Render the final summary
             renderFinalProgramSummary();
+
+            // 3. Scroll to the top of the page (Ensures summary header is visible)
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
         }
         
         function restartQuiz() {
@@ -923,6 +994,13 @@
             selectedOption = null;
             userAnswers = [];
             clientName = "Warrior"; // Reset to default name
+            
+             // Scroll to the progress bar element to show the first question near the top
+             document.getElementById('progress-text-label').scrollIntoView({
+                 behavior: 'smooth',
+                 block: 'start' 
+             });
+             
             renderQuestion();
         }
 
