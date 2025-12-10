@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Program Summary | COACH CHRIS</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Black Background */
+            color: #fff;
+            /* Subtle background pattern */
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* --- BRANDING COMPONENTS --- */
+        
+        /* The Main White Card */
+        .quiz-container {
+            max-width: 650px;
+            min-height: 550px;
+            background-color: #fff;
+            color: #000;
+            border: 4px solid #fff;
+            /* Hard white shadow to pop off the black background */
+            box-shadow: 10px 10px 0 0 #333; 
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Option Buttons: High Contrast, Hard Edges */
+        .option-button {
+            border: 2px solid #000;
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 0 0 #000;
+        }
+
+        .option-button:hover:not(.selected) {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 0 #000; /* Hard Shadow Hover */
+            background-color: #f3f4f6;
+        }
+
+        /* Selected State: Black Background, Green Border Accent */
+        .selected {
+            background-color: #000 !important;
+            color: #fff !important;
+            border-color: #000 !important;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 0 #22c55e !important; /* Green Shadow */
+        }
+
+        /* Next Button: The "Green" Accent */
+        .action-button {
+            background-color: #22c55e; /* Green 500 */
+            color: #000;
+            border: 2px solid #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0 0 #fff; /* White Shadow on Green btn */
+            transition: all 0.2s;
+        }
+        
+        .action-button:hover:not(:disabled) {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 0 #fff;
+        }
+        
+        .action-button:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            border-color: #d1d5db;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        
+        /* Secondary/Back Button */
+        .secondary-button {
+            background-color: #fff; 
+            color: #000;
+            border: 2px solid #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 2px 2px 0 0 #000;
+            transition: all 0.2s;
+        }
+        .secondary-button:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 0 #000;
+        }
+        
+        /* Summary Button - smaller for alternative */
+        .summary-secondary-button {
+             background-color: #fff; 
+            color: #000;
+            border: 2px solid #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0 0 #ccc;
+            transition: all 0.2s;
+        }
+        .summary-secondary-button:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 0 #999;
+        }
+
+
+        /* Progress Bar: Black container, Green fill */
+        .progress-container {
+            background-color: #000; 
+            height: 12px;
+        }
+        .progress-bar-fill {
+            background-color: #22c55e; /* Green 500 */
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Animations */
+        .animate-in {
+            animation: slideUpFade 0.4s ease-out;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Custom Input Styling */
+        .custom-input {
+            border: 2px solid #000;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .custom-input:focus {
+            outline: none;
+            box-shadow: 4px 4px 0 0 #22c55e;
+            border-color: #000;
+        }
+        
+        /* Or Separator - CLEAN TEXT ONLY */
+        .or-separator {
+            /* Centered, Bold, Black Text */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 900;    /* font-black */
+            text-transform: uppercase;
+            color: #000;
+            margin: 1rem 0;      /* Vertical spacing */
+        }
+        /* Explicitly remove pseudo-element lines */
+        .or-separator::before,
+        .or-separator::after {
+            content: none;
+            display: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+
+    <!-- Main Quiz Container -->
+    <div id="quiz-app" class="quiz-container w-full rounded-2xl p-6 md:p-10 relative overflow-hidden">
+        
+        <!-- Decoration: Green accent line top -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-green-500"></div>
+
+        <!-- BRANDING BLOCK -->
+        <div class="mb-6 leading-tight animate-in">
+            <h1 class="text-4xl sm:text-5xl font-black text-black uppercase tracking-tighter">
+                COACH CHRIS
+            </h1>
+            <p class="text-lg font-extrabold uppercase text-neutral-600">
+                CIRCULAR ROOTS COACHING
+            </p>
+            <p class="text-base font-extrabold uppercase text-neutral-700">
+                TRAIN UNCNVNTNL
+            </p>
+        </div>
+
+        <!-- Main Quiz Title - UPDATED TEXT AND COLOR -->
+        <h2 class="text-3xl sm:text-4xl font-black text-black mb-4 uppercase italic tracking-tighter">
+            FIND YOUR PATH TO BECOMING 
+            <span class="text-green-500">#FITTER</span> 
+            <span class="text-green-500">#STRONGER</span> 
+            <span class="text-green-500">#BETTER</span>
+        </h2>
+        
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex items-center space-x-3">
+                <!-- Progress Label -->
+                <p id="progress-text-label" class="text-sm font-black uppercase tracking-widest text-black whitespace-nowrap">
+                    QUESTION 1 OF 10
+                </p>
+                <!-- Progress Bar Container -->
+                <div class="progress-container h-3 flex-grow rounded-full overflow-hidden">
+                    <div id="progress-bar-fill" class="progress-bar-fill h-full" style="width: 0%;"></div>
+                </div>
+                <!-- Percentage -->
+                <p id="progress-percent" class="text-sm font-black text-black whitespace-nowrap">
+                    0%
+                </p>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Area -->
+        <div id="content-area">
+            <!-- Quiz steps will be rendered here -->
+            <div class="text-center font-bold animate-pulse">LOADING...</div>
+        </div>
+
+    </div>
+    
+    <!-- NEW Footer Block: Disclaimer, Copyright, and Tagline -->
+    <div class="mt-12 w-full max-w-2xl text-center px-4">
+        <!-- Disclaimer (Slightly lighter text) -->
+        <p class="text-neutral-400 text-sm mb-6 leading-relaxed">
+            General Fitness Disclaimer: Always consult your medical professional or doctor before you begin any new fitness regime or make changes to your diet. This site provides general information for educational purposes only and is not intended to diagnose or treat any medical condition. You engage in physical activity at your own risk.
+        </p>
+
+        <!-- Copyright (Bold, White text) -->
+        <p class="text-white font-black text-sm uppercase tracking-wider leading-snug">
+            © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL. All rights reserved.
+        </p>
+        
+        <!-- New Tagline (Fitter. Stronger. Better.) -->
+        <p class="text-neutral-500 text-base italic font-medium mt-3">
+            Fitter. Stronger. Better.
+        </p>
+    </div>
+
+
+    <script>
+        // --- QUIZ DATA (EXPANDED TO 10 QUESTIONS) ---
+        const quizData = [
+            {
+                id: 1,
+                question: "What is your #1 primary fitness goal right now?",
+                key: "primaryGoal",
+                options: [
+                    { text: "Shedding fat and transforming my physique", score: 30 },
+                    { text: "Getting strong and building solid muscle", score: 20 },
+                    { text: "Boosting energy and improving my fitness/stamina", score: 10 },
+                    { text: "Feeling generally healthier and more consistent", score: 5 },
+                ]
+            },
+            {
+                id: 2,
+                question: "How many days per week can you realistically commit?",
+                key: "commitment",
+                options: [
+                    { text: "I'm ready for 5+ sessions per week (high commitment)", score: 30 },
+                    { text: "I can commit 3-4 days a week easily", score: 20 },
+                    { text: "1-2 days a week is realistic for me right now", score: 10 },
+                    { text: "I need help finding consistency/just starting", score: 5 },
+                ]
+            },
+            {
+                id: 3,
+                question: "What is your biggest barrier to success?",
+                key: "barrier",
+                options: [
+                    { text: "I don't have a plan that fits my goals", score: 5 },
+                    { text: "I struggle with follow-through and need someone to check in", score: 20 },
+                    { text: "My diet is my biggest weakness (need a strategy)", score: 30 },
+                    { text: "Staying motivated and finding the time to train", score: 10 },
+                ]
+            },
+            {
+                id: 4,
+                question: "What level of support do you need?",
+                key: "support",
+                options: [
+                    { text: "I need a great plan and I'll handle the rest.", score: 5 },
+                    { text: "I need weekly guidance and access to a coach for questions.", score: 20 },
+                    { text: "Maximum accountability, check-ins, and a fully custom plan.", score: 30 },
+                    { text: "I learn best in a supportive group environment.", score: 10 },
+                ]
+            },
+            {
+                id: 5,
+                question: "Do you have any injuries or medical considerations?",
+                key: "medical",
+                options: [
+                    { text: "Yes, I have current injuries that require specialized training", score: 30 },
+                    { text: "I have minor aches but nothing that stops me from training", score: 20 },
+                    { text: "No, I am generally fit and injury-free", score: 10 },
+                    { text: "I'm not sure about my body's limitations yet", score: 5 },
+                ]
+            },
+            {
+                id: 6,
+                question: "What is your budget for coaching?",
+                key: "budget",
+                options: [
+                    { text: "£150+ per month", score: 30 },
+                    { text: "Up to £100 per month", score: 20 },
+                    { text: "Up to £50 per month", score: 10 },
+                    { text: "My budget is flexible", score: 25 }, 
+                ]
+            },
+            {
+                id: 7,
+                question: "Where do you primarily workout?",
+                key: "location",
+                options: [
+                    { text: "A fully equipped gym/fitness center", score: 30 },
+                    { text: "At home with minimal equipment (bands, dumbbells)", score: 10 },
+                    { text: "Outdoors or using functional bodyweight training", score: 20 },
+                    { text: "Varies greatly (I travel or shift locations often)", score: 5 },
+                ]
+            },
+            {
+                id: 8,
+                question: "How would you describe your nutritional discipline?",
+                key: "nutrition",
+                options: [
+                    { text: "I track macros/calories and just need refinement", score: 30 },
+                    { text: "I eat generally healthy but need help with structure", score: 20 },
+                    { text: "My eating is inconsistent; I need a full overhaul", score: 10 },
+                    { text: "I haven't focused on nutrition yet", score: 5 },
+                ]
+            },
+            {
+                id: 9,
+                question: "How crucial is guidance on daily habits, sleep, and stress management?",
+                key: "lifestyle",
+                options: [
+                    { text: "It's essential (sleep, stress, daily habits are critical)", score: 30 },
+                    { text: "It's important (I need it covered in check-ins)", score: 20 },
+                    { text: "Not crucial (I only need the workout plan/training)", score: 10 },
+                    { text: "I'm already disciplined in sleep and stress management", score: 5 },
+                ]
+            },
+            {
+                id: 10,
+                question: "What is your long-term energy and health objective?",
+                key: "longTerm",
+                options: [
+                    { text: "Maximize health, longevity, and long-term energy", score: 25 },
+                    { text: "Look and feel great (my focus is aesthetics/physique)", score: 20 },
+                    { text: "Perform at an elite level (sports/military/job requirement)", score: 30 },
+                    { text: "Simply maintain my current health and fitness level", score: 5 },
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        let totalScore = 0;
+        const maxScore = 300; // 10 questions * max 30 points each
+        let selectedOption = null;
+        let userAnswers = []; // Array to store detailed answers
+        let clientName = "Warrior"; // Default client name
+
+        // --- PROGRAM LOGIC ---
+        
+        // Tier definitions for lookups
+        const TIER_1_TITLE = "1-1 ONLINE COACHING";
+        const TIER_2_TITLE = "FITTER STRONGER BETTER SUBSCRIPTION";
+        const TIER_3_TITLE = "ONLINE PROGRAM LIBRARY";
+        
+        function getProgramDetailsByTitle(title) {
+            if (title.includes(TIER_1_TITLE)) {
+                return {
+                    title: TIER_1_TITLE,
+                    description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully-tailored solution designed to adapt to your life and ensure consistent, rapid progress.",
+                    accentColor: "text-green-600",
+                    ctaLink: "https://coachchriscrc.github.io/oc-lp",
+                    requiresCall: true // Requires a discovery call
+                };
+            } else if (title.includes(TIER_2_TITLE)) {
+                return {
+                    title: TIER_2_TITLE,
+                    description: "You have clear goals and moderate commitment. This service provides structured programming, personalized check-ins, and the perfect blend of accountability and flexibility.",
+                    accentColor: "text-blue-600",
+                    ctaLink: "https://coachchriscrc.github.io/fsb-lp",
+                    requiresCall: true // Requires a discovery call
+                };
+            } else {
+                return {
+                    title: TIER_3_TITLE,
+                    description: "You are seeking expert-designed, foundational guidance. Get instant access to professionally built, self-paced training plans you can execute on your own schedule.",
+                    accentColor: "text-gray-800",
+                    ctaLink: "https://coachchriscrc.github.io/programs-lp",
+                    requiresCall: false // Self-guided, no call required
+                };
+            }
+        }
+        
+        // Primary Recommendation Logic
+        function getRecommendation(score) {
+            const s = parseInt(score, 10); 
+            
+            // T1: 230+
+            if (s >= 230) {
+                return getProgramDetailsByTitle(TIER_1_TITLE);
+            // T2: 145 - 229
+            } else if (s >= 145) {
+                return getProgramDetailsByTitle(TIER_2_TITLE);
+            // T3: < 145
+            } else {
+                return getProgramDetailsByTitle(TIER_3_TITLE);
+            }
+        }
+        
+        // Alternative Recommendation Logic
+        function getAlternativeRecommendation(primaryRecommendationTitle) {
+            if (primaryRecommendationTitle.includes(TIER_1_TITLE)) {
+                // If T1 is primary, T2 is the budget/flexibility alternative (Step Down)
+                return getProgramDetailsByTitle(TIER_2_TITLE);
+            } else if (primaryRecommendationTitle.includes(TIER_2_TITLE)) {
+                // If T2 is primary, T3 is the budget-focused alternative (Step Down)
+                return getProgramDetailsByTitle(TIER_3_TITLE);
+            } else {
+                // If T3 (Program Library) is primary, T2 is the step-up alternative for better support
+                return getProgramDetailsByTitle(TIER_2_TITLE);
+            }
+        }
+        
+        // --- DYNAMIC RATIONALE GENERATION ---
+        function generatePersonalizedRationale(answers, recommendationTitle) {
+            const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
+            const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'an unknown block';
+            
+            // 1. Determine Grammatically Correct GOAL Phrase
+            let goalPhrase;
+            if (rawGoal.includes("Shedding fat")) {
+                goalPhrase = "your primary focus on fat loss and physique transformation";
+            } else if (rawGoal.includes("Getting strong")) {
+                goalPhrase = "your core objective of building solid muscle and strength";
+            } else if (rawGoal.includes("Boosting energy")) {
+                goalPhrase = "your commitment to boosting overall energy and endurance";
+            } else if (rawGoal.includes("Feeling generally healthier")) {
+                goalPhrase = "your vital objective of establishing general health and consistent habits";
+            } else {
+                goalPhrase = rawGoal;
+            }
+
+
+            // 2. Determine Grammatically Correct BARRIER Phrase
+            let barrierPhrase;
+            if (rawBarrier.includes("don't have a plan")) {
+                barrierPhrase = "the critical absence of a structured, goal-fitting program";
+            } else if (rawBarrier.includes("struggle with follow-through")) {
+                barrierPhrase = "a strong need for external accountability and regular coach check-ins";
+            } else if (rawBarrier.includes("My diet is my biggest weakness")) {
+                barrierPhrase = "the fundamental challenge of optimizing nutrition and diet strategy";
+            } else if (rawBarrier.includes("Staying motivated")) {
+                barrierPhrase = "a persistent struggle with time management and maintaining high motivation";
+            } else {
+                barrierPhrase = rawBarrier; // Fallback
+            }
+
+            // 3. Determine the Key Support Feature (This is the solution, based on the program tier)
+            let keySupportFeature = '';
+            if (recommendationTitle.includes(TIER_1_TITLE)) {
+                keySupportFeature = 'maximum 1-on-1 personalized structure and fully customized programming';
+            } else if (recommendationTitle.includes(TIER_2_TITLE)) {
+                keySupportFeature = 'structured programming delivered with weekly coach check-ins and consistent support';
+            } else { 
+                keySupportFeature = 'immediate access to a vast library of expert-designed training plans that remove the guesswork';
+            }
+
+            // --- RESTRUCTURED RATIONALE FOR IMPROVED CONVERSATIONAL FLOW ---
+            let rationale = '';
+            rationale += `We first acknowledge <strong class="text-black">${goalPhrase}</strong>. `;
+            rationale += `However, it seems your progress is currently stalled by <strong class="text-black">${barrierPhrase}</strong>. `;
+            rationale += `The <strong>${recommendationTitle}</strong> is specifically designed to overcome this by providing <strong class="text-black">${keySupportFeature}</strong> to guarantee you break through your barriers and achieve consistent results.`;
+            
+            return rationale;
+        }
+
+        function generateAlternativeDescription(primaryRec, alternativeRec) {
+            const primaryTitle = primaryRec.title;
+            const alternativeTitle = alternativeRec.title;
+
+            if (primaryTitle.includes(TIER_1_TITLE) && alternativeTitle.includes(TIER_2_TITLE)) {
+                // Step Down from 1-1 to Subscription (T2)
+                return `If the full 1-1 customization isn't right now, the **${TIER_2_TITLE}** offers the ideal balance. You still receive structured programming and direct coach check-ins—perfect for the client who needs support and structure without the full premium investment.`;
+            } else if (primaryTitle.includes(TIER_2_TITLE) && alternativeTitle.includes(TIER_3_TITLE)) {
+                // Step Down from Subscription to Library (T3)
+                return `For those with a tighter budget or who prefer training independently, the **${TIER_3_TITLE}** provides a library of expert-built plans. You gain instant access to high-quality programs designed to deliver results on your schedule.`;
+            } else if (primaryTitle.includes(TIER_3_TITLE) && alternativeTitle.includes(TIER_2_TITLE)) {
+                // Step Up from Library to Subscription (T2)
+                return `If you feel you need more accountability than a self-paced plan provides, consider stepping up to the **${TIER_2_TITLE}**. This service adds weekly coach check-ins and personalized feedback to your structured programming, ensuring you stick to the plan.`;
+            }
+            return alternativeRec.description; // Fallback
+        }
+
+
+        // --- UI RENDER FUNCTIONS ---
+        const contentArea = document.getElementById('content-area');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressTextLabel = document.getElementById('progress-text-label'); 
+        const progressPercent = document.getElementById('progress-percent'); 
+
+        function updateProgress() {
+            const totalQuestions = quizData.length;
+            const displayStep = currentStep === totalQuestions ? totalQuestions : currentStep + 1;
+            const progress = (currentStep / totalQuestions) * 100;
+            const percentageDisplay = Math.round(progress);
+
+            progressBarFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${percentageDisplay}%`;
+
+            if (currentStep < totalQuestions) {
+                progressTextLabel.textContent = `QUESTION ${displayStep} OF ${totalQuestions}`;
+            } else {
+                 progressBarFill.style.width = `100%`;
+                 progressTextLabel.textContent = `ANALYSIS COMPLETE`;
+            }
+        }
+
+        function renderQuestion() {
+            if (currentStep >= quizData.length) {
+                renderNameInputScreen();
+                return;
+            }
+
+            const stepData = quizData[currentStep];
+            // Find previously selected option for this step to pre-select it
+            const previousAnswer = userAnswers.find(a => a.key === stepData.key);
+            selectedOption = previousAnswer ? stepData.options.find(opt => opt.text === previousAnswer.answer) : null;
+            
+            contentArea.innerHTML = ''; 
+
+            const questionBlock = document.createElement('div');
+            questionBlock.className = 'animate-in';
+            questionBlock.innerHTML = `
+                <h2 class="text-2xl font-black uppercase leading-tight mb-8">${stepData.question}</h2>
+                <div id="options-container" class="space-y-4">
+                    <!-- Options appended here -->
+                </div>
+                <div class="flex space-x-4 mt-10">
+                    <button id="back-button" class="secondary-button w-1/3 p-4 text-xl rounded-lg">
+                        <span class="hidden sm:inline">GO </span>BACK
+                    </button>
+                    <button id="next-button" ${selectedOption ? '' : 'disabled'} class="action-button flex-grow p-4 text-xl rounded-lg">
+                        CONTINUE
+                    </button>
+                </div>
+            `;
+            contentArea.appendChild(questionBlock);
+
+            const optionsContainer = document.getElementById('options-container');
+            const nextButton = document.getElementById('next-button');
+            const backButton = document.getElementById('back-button');
+
+            // Show/hide back button
+            if (currentStep === 0) {
+                backButton.classList.add('invisible');
+            } else {
+                 backButton.addEventListener('click', handleBack);
+            }
+
+
+            stepData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.text;
+                button.className = 'option-button w-full text-left p-5 rounded-lg text-lg';
+                button.setAttribute('data-score', option.score);
+                button.setAttribute('data-key', stepData.key);
+                
+                // Pre-select the button if it matches the previous answer
+                if (selectedOption && option.text === selectedOption.text) {
+                     button.classList.add('selected');
+                }
+
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+                    button.classList.add('selected');
+                    selectedOption = option; // Store the whole option object for rich data capture
+                    nextButton.disabled = false;
+                });
+                optionsContainer.appendChild(button);
+            });
+            
+            nextButton.addEventListener('click', handleNext);
+            updateProgress();
+        }
+        
+        function renderNameInputScreen() {
+             currentStep = quizData.length;
+             updateProgress();
+
+             contentArea.innerHTML = `
+                 <div class="text-center animate-in">
+                     <div class="inline-block p-3 rounded-full border-4 border-black mb-6">
+                         <svg class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                         </svg>
+                     </div>
+                     <h2 class="text-lg font-bold text-gray-500 uppercase tracking-widest mb-2">Quiz Complete!</h2>
+                     <p class="text-3xl sm:text-4xl font-black uppercase italic mb-6 leading-none text-black">GENERATING PROGRAM SUMMARY...</p>
+                 </div>
+                 
+                 <!-- Name Capture for Personalization -->
+                 <div class="animate-in bg-gray-50 border-2 border-black p-6 rounded-xl relative">
+                     <!-- Decorative Green Square -->
+                     <div class="absolute -top-3 -right-3 w-8 h-8 bg-green-500 border-2 border-black"></div>
+                     
+                     <h4 class="text-xl font-black uppercase mb-2">Finalize Summary</h4>
+                     <p class="text-sm font-medium text-gray-600 mb-6">Enter your first name to personalize your action plan below.</p>
+                     
+                     <form id="personalization-form" class="space-y-4">
+                         
+                         <div>
+                             <label for="name" class="block text-xs font-bold uppercase mb-1">First Name (Required)</label>
+                             <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-3 bg-white" placeholder="JANE" value="${clientName === 'Warrior' ? '' : clientName}">
+                         </div>
+                         
+                         <button type="submit" id="display-button" class="action-button w-full py-4 mt-2 rounded-lg text-lg">
+                             VIEW MY PROGRAM SUMMARY
+                         </button>
+                     </form>
+                 </div>
+             `;
+             
+             document.getElementById('personalization-form').addEventListener('submit', handlePersonalize);
+        }
+
+        function renderFinalProgramSummary() {
+            const primaryRec = getRecommendation(totalScore);
+            const alternativeRec = getAlternativeRecommendation(primaryRec.title);
+            const personalizedRationale = generatePersonalizedRationale(userAnswers, primaryRec.title);
+            const alternativeDescriptionText = generateAlternativeDescription(primaryRec, alternativeRec); 
+            const clientDisplay = clientName.toUpperCase();
+            
+            // --- MID-PAGE CTA TEXTS (More learning/exploration focused) ---
+            const midPagePrimaryCtaText = `GET THE FULL BREAKDOWN: VIEW ${primaryRec.title} DETAILS`;
+            // Mid-page alternative CTA is simplified
+            const midPageAlternativeCtaText = `VIEW ${alternativeRec.title} OVERVIEW`; 
+            
+            // --- BOTTOM CTA TEXTS (Final Decision Point) ---
+            let bottomPrimaryCtaText;
+            if (primaryRec.title.includes(TIER_3_TITLE)) {
+                // Specific text for T3 (Online Program Library)
+                bottomPrimaryCtaText = "LEARN MORE ABOUT OUR ONLINE PROGRAM LIBRARY";
+            } else if (primaryRec.title === TIER_2_TITLE) {
+                // Customized shorter text for FSB
+                bottomPrimaryCtaText = `EXPLORE THE ${TIER_2_TITLE.toUpperCase()}`;
+            } else {
+                // Default longer text for T1
+                bottomPrimaryCtaText = `COMMIT TO THE NEXT STEP: EXPLORE ${primaryRec.title} OVERVIEW`;
+            }
+            // Bottom alternative CTA remains exploration focused and named
+            const bottomAlternativeCtaText = `VIEW ${alternativeRec.title} DETAILS & PRICING`; 
+            
+            // Determine if the alternative is a step up or step down for contextual text
+            const isAlternativeStepUp = primaryRec.title === TIER_3_TITLE && alternativeRec.title === TIER_2_TITLE;
+            
+            // --- CONDITIONAL STEP 2 LOGIC (IMPROVED GRAMMAR) ---
+            let step2Content = '';
+
+            if (primaryRec.requiresCall) {
+                step2Content = `
+                    <li>
+                        <span class="font-extrabold text-black">Step 2: Book Your Discovery Call</span>
+                        <span class="block text-gray-700">If this Program resonates with your commitment level and goals, the next step is a quick, zero-pressure 15-minute Discovery Call with me (Coach Chris) to confirm the fit and officially kick off your customized training journey.</span>
+                    </li>
+                `;
+            } else {
+                // T3: Program Library (Self-Guided)
+                step2Content = `
+                    <li>
+                        <span class="font-extrabold text-black">Step 2: Start Training Instantly</span>
+                        <span class="block text-gray-700">Since the <span class="font-bold">${primaryRec.title}</span> is a self-guided plan, no call is required! Simply click through, complete the checkout process, and get immediate access to your program to start training today.</span>
+                    </li>
+                `;
+            }
+
+            // Render the full motivational program summary
+            contentArea.innerHTML = `
+                <div class="animate-in bg-gray-100 border-2 border-black p-6 rounded-xl relative space-y-5">
+                    <!-- Subject/Header -->
+                    <div class="text-center pb-4 border-b border-gray-300">
+                        <p class="text-lg font-extrabold uppercase text-green-600 tracking-widest mb-1">
+                            🚀 YOUR RECOMMENDED PROGRAM IS READY, ${clientDisplay}!
+                        </p>
+                        <h1 class="text-4xl font-black uppercase text-black italic leading-tight">
+                            STOP GUESSING. START TRAINING WITH PURPOSE.
+                        </h1>
+                    </div>
+                    
+                    <!-- Body Content -->
+                    <div class="text-gray-800 space-y-4 text-base leading-relaxed">
+                        <p>Hey ${clientDisplay},</p>
+                        
+                        <p>We've analyzed your data and cut through the confusion. It's time to commit to a defined program that guarantees <strong class="text-green-500">incredible</strong> results.</p>
+                        
+                        <!-- PRIMARY PROGRAM RECOMMENDATION - PREFERRED STYLE -->
+                        <p class="text-center font-black text-xl border-y-2 border-black py-3 bg-gray-200">
+                            Your **BEST FIT** Recommended Program:
+                            <span class="block text-2xl mt-1 ${primaryRec.accentColor}">${primaryRec.title}</span>
+                        </p>
+                        
+                        <!-- Rationale -->
+                        <div class="p-4 bg-white border border-gray-300 rounded-lg">
+                            <p class="font-extrabold text-black mb-2">Why this program is the perfect fit:</p>
+                            <p class="italic text-gray-700">${primaryRec.description}</p>
+                            <p class="mt-3 font-medium text-sm">
+                                <span class="font-extrabold text-black">PERSONAL FIT:</span> ${personalizedRationale}
+                            </p>
+                        </div>
+
+                        <!-- CTA Button for Primary Rec (Mid-Page) -->
+                        <a href="${primaryRec.ctaLink}" 
+                           target="_blank" 
+                           class="action-button w-full flex items-center justify-center py-4 rounded-lg text-lg text-center no-underline"
+                           style="box-shadow: 4px 4px 0 0 #000;">
+                            ${midPagePrimaryCtaText}
+                        </a>
+                        
+                        
+                        <!-- ALTERNATIVE PROGRAM OPTION (Full text displayed and conversational) -->
+                        <div class="bg-gray-200 border-2 border-gray-400 p-4 rounded-lg mt-6 text-black">
+                            <h3 class="text-lg font-black uppercase mb-3 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ALTERNATIVE OPTION
+                            </h3>
+                            
+                            <p class="text-sm font-medium mb-3 text-gray-700">
+                                ${isAlternativeStepUp ? 'Considering a higher level of accountability and support? Try this option:' : 'Looking for more flexibility or a different budget tier? Check this out:'}
+                            </p>
+                            
+                            <div class="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
+                                <!-- Program Name and Description - NOW CONVERSATIONAL -->
+                                <div class="text-center sm:text-left flex-grow w-full sm:w-auto">
+                                    <span class="block text-xl font-extrabold ${alternativeRec.accentColor} leading-tight">${alternativeRec.title}</span>
+                                    <span class="block text-sm text-gray-700 mt-1 italic font-medium">${alternativeDescriptionText}</span>
+                                </div>
+                                
+                                <!-- CTA Button (Mid-Page Wording) -->
+                                <a href="${alternativeRec.ctaLink}" 
+                                   target="_blank" 
+                                   class="summary-secondary-button py-3 px-5 text-sm rounded-lg w-full sm:w-auto">
+                                    ${midPageAlternativeCtaText}
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <!-- Actionable Advice Section -->
+                        <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">ACTIONABLE ADVICE</h3>
+                        <p class="font-bold text-black">Success is simple, but it's not easy. Keep these three principles in mind as you start any new program:</p>
+                        <ul class="list-disc list-outside ml-5 space-y-2">
+                            <li><strong class="font-extrabold text-black">COMMIT to Consistency, Not Perfection:</strong> A mediocre workout done 5 times a week beats a perfect workout done once. Show up, put in the work, and the results will follow.</li>
+                            <li><strong class="font-extrabold text-black">Master the Basics:</strong> Don't chase novelty. Focus on mastering the fundamental movements. This is where 90% of your gains will come from, regardless of the program.</li>
+                            <li><strong class="font-extrabold text-black">Prioritize Sleep & Fueling:</strong> Your body doesn't build muscle or burn fat in the gym; it does it while recovering. Treat your sleep and nutrition like they are the most important lifts of the day.</li>
+                        </ul>
+                        
+                        
+                        <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">YOUR NEXT STEPS</h3>
+                        
+                        <p>It's time to stop guessing and <strong class="text-black">COMMIT TO THE PLAN</strong>.</p>
+                        
+                        <ol class="list-decimal list-inside space-y-3 font-medium">
+                            <li>
+                                <span class="font-extrabold text-black">Step 1: Get the Full Program Details</span>
+                                <span class="block text-gray-700">Click the primary link below. It will take you to a private page detailing everything about the <span class="font-bold">${primaryRec.title}</span> service, including clear pricing, what’s included, and the expected timeline to achieve your specific goals.</span>
+                            </li>
+                            ${step2Content}
+                        </ol>
+
+                        <p class="text-center text-lg font-black pt-4">
+                            ACTION IS THE ONLY WAY FORWARD.
+                        </p>
+                    </div>
+
+                    <!-- NEW CTA BLOCK AT BOTTOM (Final Decision Point) -->
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4 border-t border-gray-300 items-center justify-center">
+                        
+                        <!-- Primary CTA (Larger, more prominent) -->
+                        <a href="${primaryRec.ctaLink}" 
+                           target="_blank" 
+                           class="action-button w-full sm:w-2/3 py-4 rounded-lg text-lg text-center no-underline">
+                            ${bottomPrimaryCtaText}
+                        </a>
+                        
+                        <!-- Separator visible only on mobile (stacked) -->
+                        <div class="or-separator w-full sm:w-auto sm:hidden">OR</div>
+                        
+                        <!-- Alternative CTA (Smaller, less prominent) -->
+                        <a href="${alternativeRec.ctaLink}" 
+                           target="_blank" 
+                           class="secondary-button w-full sm:w-1/3 py-4 rounded-lg text-base text-center no-underline">
+                            ${bottomAlternativeCtaText}
+                        </a>
+                    </div>
+                    <!-- The redundant desktop 'OR' separator has been removed -->
+
+                    <!-- Restart Button -->
+                    <button id="restart-button" class="secondary-button w-full py-3 mt-4 rounded-lg text-sm">
+                        RESTART QUIZ & ANALYZE AGAIN
+                    </button>
+                    
+                    <!-- Footer Signature: Removed UNCNVNTNL mention -->
+                    <p class="text-sm font-bold pt-4 text-right">
+                        — Coach Chris
+                        <span class="block font-medium text-xs text-gray-500">CIRCULAR ROOTS COACHING</span>
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('restart-button').addEventListener('click', restartQuiz);
+        }
+
+        // --- EVENT HANDLERS ---
+        function handleNext() {
+            if (selectedOption !== null) {
+                // Check if this question was previously answered (i.e., user went back)
+                const currentKey = quizData[currentStep].key;
+                const existingIndex = userAnswers.findIndex(a => a.key === currentKey);
+
+                if (existingIndex !== -1) {
+                    // If moving forward from a previous step, update the score and the answer
+                    totalScore -= userAnswers[existingIndex].score; // Subtract old score
+                    userAnswers.splice(existingIndex, 1); // Remove old answer
+                } 
+                
+                // Add the new answer
+                userAnswers.push({
+                    key: currentKey,
+                    question: quizData[currentStep].question,
+                    answer: selectedOption.text,
+                    score: selectedOption.score
+                });
+                
+                totalScore += selectedOption.score;
+                currentStep++;
+                renderQuestion();
+            }
+        }
+        
+        function handleBack() {
+             // 1. Decrement step
+             currentStep = Math.max(0, currentStep - 1);
+             
+             // The next renderQuestion call will correctly pre-select the answer based on the (now current) userAnswers array.
+             renderQuestion();
+        }
+        
+        function handlePersonalize(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('client-name-input').value.trim();
+            if (nameInput) {
+                // Update the global clientName variable for personalization
+                clientName = nameInput.split(' ')[0]; 
+            }
+            renderFinalProgramSummary();
+        }
+        
+        function restartQuiz() {
+            currentStep = 0;
+            totalScore = 0;
+            selectedOption = null;
+            userAnswers = [];
+            clientName = "Warrior"; // Reset to default name
+            renderQuestion();
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (progressTextLabel && progressPercent) {
+                updateProgress();
+            }
+            renderQuestion();
+        });
+    </script>
+</body>
+</html>
+
