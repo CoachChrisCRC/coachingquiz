@@ -981,10 +981,11 @@
             // 2. Render the final summary
             renderFinalProgramSummary();
 
-            // 3. Scroll to the top of the page (Ensures summary header is visible)
-            window.scrollTo({ 
-                top: 0, 
-                behavior: 'smooth' 
+            // 3. Scroll to the progress bar element to show the "ANALYSIS COMPLETE" bar
+            // This ensures the summary header is visible immediately.
+            document.getElementById('progress-text-label').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' 
             });
         }
         
