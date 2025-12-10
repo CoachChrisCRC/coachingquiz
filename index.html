@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Path to #Fitter #Stronger #Better| COACH CHRIS</title>
+    <title>Your Path to #Fitter #Stronger #Better | Take the Quiz </title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -202,6 +202,24 @@
             content: none;
             display: none;
         }
+        
+        /* --- NEW CLEAN SPINNER CSS --- */
+        .clean-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e5e7eb; /* Light grey base */
+            border-top: 6px solid #22c55e; /* Green accent for the spinning part */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            /* Subtle shadow/glow for depth */
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); 
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* --- END NEW CLEAN SPINNER CSS --- */
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
@@ -575,7 +593,8 @@
                 progressTextLabel.textContent = `QUESTION ${displayStep} OF ${totalQuestions}`;
             } else {
                  progressBarFill.style.width = `100%`;
-                 progressTextLabel.textContent = `ANALYSIS COMPLETE`;
+                 // Set to QUIZ COMPLETE for the personalization step
+                 progressTextLabel.textContent = `QUIZ COMPLETE`; 
             }
         }
 
@@ -661,18 +680,23 @@
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                          </svg>
                      </div>
-                     <h2 class="text-lg font-bold text-gray-500 uppercase tracking-widest mb-2">Quiz Complete!</h2>
-                     <p class="text-3xl sm:text-4xl font-black uppercase italic mb-6 leading-none text-black">GENERATING PROGRAM SUMMARY...</p>
                  </div>
                  
-                 <!-- Name Capture for Personalization -->
+                 <h2 class="text-3xl font-black uppercase leading-tight mb-6 text-center italic tracking-tighter">
+                    FINALIZE YOUR RESULTS
+                 </h2>
+
+                 <!-- Name Capture Form -->
                  <div class="animate-in bg-gray-50 border-2 border-black p-6 rounded-xl relative">
                      <!-- Decorative Green Square -->
                      <div class="absolute -top-3 -right-3 w-8 h-8 bg-green-500 border-2 border-black"></div>
                      
-                     <h4 class="text-xl font-black uppercase mb-2">Finalize Summary</h4>
-                     <p class="text-sm font-medium text-gray-600 mb-6">Enter your first name to personalize your action plan below.</p>
-                     
+                     <!-- UPDATED PROMPT TEXT -->
+                     <p class="text-base font-black uppercase text-black mb-4 tracking-tighter">
+                        Enter your first name and agree to the disclaimer below to view your personalized training recommendation based on your answers.
+                     </p>
+                     <!-- END UPDATED PROMPT TEXT -->
+
                      <form id="personalization-form" class="space-y-4">
                          
                          <div>
@@ -718,7 +742,39 @@
              updateButtonState(); 
         }
 
+        function renderLoadingScreen() {
+             // Simplified loading text
+             const loadingText = "ANALYZING YOUR RESULTS...";
+
+             contentArea.innerHTML = `
+                 <div class="text-center animate-in min-h-[300px] flex flex-col items-center justify-center">
+                     <!-- Using the new, clean CSS spinner -->
+                     <div class="clean-spinner mb-6"></div> 
+                     
+                     <p class="text-3xl sm:text-4xl font-black uppercase italic mb-6 leading-none text-black animate-pulse">
+                         ${loadingText}
+                     </p>
+                     <p class="text-lg font-medium text-gray-600">
+                         Please wait while we calculate your optimal path.
+                     </p>
+                 </div>
+             `;
+             
+             // Simulate analysis time (2.5 seconds)
+             setTimeout(() => {
+                 renderFinalProgramSummary();
+                 // Scroll to the progress bar element to show the "ANALYSIS COMPLETE" bar
+                 document.getElementById('progress-text-label').scrollIntoView({
+                     behavior: 'smooth',
+                     block: 'start' 
+                 });
+             }, 2500); // Set to 2.5 seconds
+        }
+
         function renderFinalProgramSummary() {
+            // Force the progress bar label to "ANALYSIS COMPLETE" 
+            progressTextLabel.textContent = `ANALYSIS COMPLETE`;
+            
             const primaryRec = getRecommendation(totalScore);
             const alternativeRec = getAlternativeRecommendation(primaryRec.title);
             const personalizedRationale = generatePersonalizedRationale(userAnswers, primaryRec.title);
@@ -755,6 +811,9 @@
                 </li>
             `;
 
+            // Convert the header that uses **Markdown**
+            const bestFitHeaderContent = markdownToHtml(`Your **BEST FIT** Recommended Program:`);
+            
             // --- MID-PAGE CTA TEXTS (More learning/exploration focused) ---
             const midPagePrimaryCtaText = `GET THE FULL BREAKDOWN: VIEW ${primaryRec.title} DETAILS`;
             // Mid-page alternative CTA is simplified
@@ -775,16 +834,14 @@
             // Bottom alternative CTA remains exploration focused and named
             const bottomAlternativeCtaText = `VIEW ${alternativeRec.title} DETAILS & PRICING`; 
             
-            // Convert the header that uses **Markdown**
-            const bestFitHeaderContent = markdownToHtml(`Your **BEST FIT** Recommended Program:`);
             
             // Render the full motivational program summary
             contentArea.innerHTML = `
                 <div class="animate-in bg-gray-100 border-2 border-black p-6 rounded-xl relative space-y-5">
-                    <!-- Subject/Header -->
+                    <!-- Subject/Header - UPDATED TEXT HERE -->
                     <div class="text-center pb-4 border-b border-gray-300">
                         <p class="text-lg font-extrabold uppercase text-green-600 tracking-widest mb-1">
-                            🚀 YOUR RECOMMENDED PROGRAM IS READY, ${clientDisplay}!
+                            🚀 YOUR RECOMMENDED PATH IS READY, ${clientDisplay}!
                         </p>
                         <h1 class="text-4xl font-black uppercase text-black italic leading-tight">
                             STOP GUESSING. START TRAINING WITH PURPOSE.
@@ -978,15 +1035,8 @@
             const name = nameInput.value.trim();
             clientName = name.split(' ')[0];
             
-            // 2. Render the final summary
-            renderFinalProgramSummary();
-
-            // 3. Scroll to the progress bar element to show the "ANALYSIS COMPLETE" bar
-            // This ensures the summary header is visible immediately.
-            document.getElementById('progress-text-label').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start' 
-            });
+            // 2. Render the loading screen instead of the summary immediately
+            renderLoadingScreen();
         }
         
         function restartQuiz() {
