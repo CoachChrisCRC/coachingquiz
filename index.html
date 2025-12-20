@@ -61,26 +61,22 @@
             font-family: 'Inter', sans-serif;
             background-color: #000; /* Black Background */
             color: #fff;
-            /* Subtle background pattern */
             background-image: radial-gradient(#222 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
         /* --- BRANDING COMPONENTS --- */
         
-        /* The Main White Card */
         .quiz-container {
             max-width: 650px;
             min-height: 550px;
             background-color: #fff;
             color: #000;
             border: 4px solid #fff;
-            /* Hard white shadow to pop off the black background */
             box-shadow: 10px 10px 0 0 #333; 
             transition: all 0.3s ease-in-out;
         }
 
-        /* Option Buttons: High Contrast, Hard Edges */
         .option-button {
             border: 2px solid #000;
             background-color: #fff;
@@ -94,27 +90,25 @@
 
         .option-button:hover:not(.selected) {
             transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0 0 #000; /* Hard Shadow Hover */
+            box-shadow: 4px 4px 0 0 #000;
             background-color: #f3f4f6;
         }
 
-        /* Selected State: Black Background, Green Border Accent */
         .selected {
             background-color: #000 !important;
             color: #fff !important;
             border-color: #000 !important;
             transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0 0 #22c55e !important; /* Green Shadow */
+            box-shadow: 4px 4px 0 0 #22c55e !important;
         }
 
-        /* Next Button: The "Green" Accent */
         .action-button {
-            background-color: #22c55e; /* Green 500 */
+            background-color: #22c55e;
             color: #000;
             border: 2px solid #000;
             font-weight: 900;
             text-transform: uppercase;
-            box-shadow: 4px 4px 0 0 #fff; /* White Shadow on Green btn */
+            box-shadow: 4px 4px 0 0 #fff;
             transition: all 0.2s;
         }
         
@@ -131,7 +125,6 @@
             cursor: not-allowed;
         }
         
-        /* Secondary/Back Button */
         .secondary-button {
             background-color: #fff; 
             color: #000;
@@ -146,7 +139,6 @@
             box-shadow: 3px 3px 0 0 #000;
         }
         
-        /* Summary Button - smaller for alternative */
         .summary-secondary-button {
              background-color: #fff; 
             color: #000;
@@ -161,18 +153,15 @@
             box-shadow: 5px 5px 0 0 #999;
         }
 
-
-        /* Progress Bar: Black container, Green fill */
         .progress-container {
             background-color: #000; 
             height: 12px;
         }
         .progress-bar-fill {
-            background-color: #22c55e; /* Green 500 */
+            background-color: #22c55e;
             transition: width 0.3s ease-in-out;
         }
 
-        /* Animations */
         .animate-in {
             animation: slideUpFade 0.4s ease-out;
         }
@@ -188,7 +177,6 @@
             }
         }
         
-        /* Custom Input Styling */
         .custom-input {
             border: 2px solid #000;
             border-radius: 0.5rem;
@@ -200,66 +188,49 @@
             border-color: #000;
         }
         
-        /* Custom Checkbox Styling - FIX APPLIED HERE */
         input[type="checkbox"] {
-            /* Ensuring custom styling for the checkbox */
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            border-radius: 0.25rem; /* rounded-md */
+            border-radius: 0.25rem; 
             transition: all 0.2s;
             cursor: pointer;
-            /* Initial state border and background */
             border: 2px solid #000;
             background-color: #fff;
-            
-            /* Add focus style for accessibility */
             outline: none;
             box-shadow: none;
         }
         input[type="checkbox"]:focus {
-             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5); /* Focus ring effect */
+             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5); 
         }
         
-        /* FIXED CHECKED STATE STYLING */
         input[type="checkbox"]:checked {
-            background-color: #22c55e; /* green-500 */
+            background-color: #22c55e; 
             border-color: #22c55e;
-            /* Correctly URL-encoded SVG checkmark for better cross-browser compatibility */
             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 00-1.414 0L6.5 9.086 4.207 6.793a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l5-5a1 1 0 000-1.414z'/%3e%3c/svg%3e");
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
         }
         
-        /* Or Separator - CLEAN TEXT ONLY */
         .or-separator {
-            /* Centered, Bold, Black Text */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 900;    /* font-black */
+            font-size: 1.125rem; 
+            font-weight: 900;    
             text-transform: uppercase;
             color: #000;
-            margin: 1rem 0;      /* Vertical spacing */
-        }
-        /* Explicitly remove pseudo-element lines */
-        .or-separator::before,
-        .or-separator::after {
-            content: none;
-            display: none;
+            margin: 1rem 0;      
         }
         
-        /* --- NEW CLEAN SPINNER CSS --- */
         .clean-spinner {
             width: 60px;
             height: 60px;
-            border: 6px solid #e5e7eb; /* Light grey base */
-            border-top: 6px solid #22c55e; /* Green accent for the spinning part */
+            border: 6px solid #e5e7eb; 
+            border-top: 6px solid #22c55e; 
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            /* Subtle shadow/glow for depth */
             box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); 
         }
 
@@ -267,7 +238,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* --- END NEW CLEAN SPINNER CSS --- */
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
@@ -317,15 +287,12 @@
         <!-- Progress Bar -->
         <div class="mb-8">
             <div class="flex items-center space-x-3">
-                <!-- Progress Label -->
                 <p id="progress-text-label" class="text-sm font-black uppercase tracking-widest text-black whitespace-nowrap">
                     QUESTION 1 OF 10
                 </p>
-                <!-- Progress Bar Container -->
                 <div class="progress-container h-3 flex-grow rounded-full overflow-hidden">
                     <div id="progress-bar-fill" class="progress-bar-fill h-full" style="width: 0%;"></div>
                 </div>
-                <!-- Percentage -->
                 <p id="progress-percent" class="text-sm font-black text-black whitespace-nowrap">
                     0%
                 </p>
@@ -334,25 +301,19 @@
 
         <!-- Dynamic Content Area -->
         <div id="content-area">
-            <!-- Quiz steps will be rendered here -->
             <div class="text-center font-bold animate-pulse">LOADING...</div>
         </div>
 
     </div>
     
-    <!-- Footer Block: Disclaimer, Copyright, and Tagline -->
+    <!-- Footer Block -->
     <div class="mt-12 w-full max-w-2xl text-center px-4">
-        <!-- Disclaimer (Slightly lighter text) -->
         <p id="disclaimer" class="text-neutral-400 text-sm mb-6 leading-relaxed">
-            General Fitness Disclaimer: Always consult your medical professional or doctor before you begin any new fitness regime or make changes to your diet. This site provides general information for educational purposes only and is not intended to diagnose or treat any medical condition. You engage in physical activity at your own risk.
+            General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime or making changes to your diet. This site provides general information for educational purposes only and is not intended to diagnose or treat any medical condition. You engage in physical activity at your own risk.
         </p>
-
-        <!-- Copyright (Bold, White text) -->
         <p class="text-white font-black text-sm uppercase tracking-wider leading-snug">
             © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL. All rights reserved.
         </p>
-        
-        <!-- Tagline (Fitter. Stronger. Better.) -->
         <p class="text-neutral-500 text-base italic font-medium mt-3">
             Fitter. Stronger. Better.
         </p>
@@ -389,137 +350,32 @@
             }, 1800);
         });
 
-        // Helper function to convert simple **bold** and *italic* markdown to HTML
         function markdownToHtml(text) {
             if (!text) return "";
-            // Replace **bold** with <strong>
             let result = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            // Replace *italic* with <em>
             result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
             return result;
         }
 
-        // --- QUIZ DATA ---
         const quizData = [
-            {
-                id: 1,
-                question: "What is your #1 primary fitness goal right now?",
-                key: "primaryGoal",
-                options: [
-                    { text: "Shedding fat and transforming my physique", score: 30 },
-                    { text: "Getting strong and building solid muscle", score: 20 },
-                    { text: "Boosting energy and improving my fitness/stamina", score: 10 },
-                    { text: "Feeling generally healthier and more consistent", score: 5 },
-                ]
-            },
-            {
-                id: 2,
-                question: "How many days per week can you realistically commit?",
-                key: "commitment",
-                options: [
-                    { text: "I'm ready for 5+ sessions per week (high commitment)", score: 30 },
-                    { text: "I can commit 3-4 days a week easily", score: 20 },
-                    { text: "1-2 days a week is realistic for me right now", score: 10 },
-                    { text: "I need help finding consistency/just starting", score: 5 },
-                ]
-            },
-            {
-                id: 3,
-                question: "What is your biggest barrier to success?",
-                key: "barrier",
-                options: [
-                    { text: "I don't have a plan that fits my goals", score: 5 },
-                    { text: "I struggle with follow-through and need someone to check in", score: 20 },
-                    { text: "My diet is my biggest weakness (need a strategy)", score: 30 },
-                    { text: "Staying motivated and finding the time to train", score: 10 },
-                ]
-            },
-            {
-                id: 4,
-                question: "What level of support do you need?",
-                key: "support",
-                options: [
-                    { text: "I need a great plan and I'll handle the rest.", score: 5 },
-                    { text: "I need weekly guidance and access to a coach for questions.", score: 20 },
-                    { text: "Maximum accountability, check-ins, and a fully custom plan.", score: 30 },
-                    { text: "I learn best in a supportive group environment.", score: 10 },
-                ]
-            },
-            {
-                id: 5,
-                question: "Do you have any injuries or medical considerations?",
-                key: "medical",
-                options: [
-                    { text: "Yes, I have current injuries that require specialized training", score: 30 },
-                    { text: "I have minor aches but nothing that stops me from training", score: 20 },
-                    { text: "No, I am generally fit and injury-free", score: 10 },
-                    { text: "I'm not sure about my body's limitations yet", score: 5 },
-                ]
-            },
-            {
-                id: 6,
-                question: "What is your budget for coaching?",
-                key: "budget",
-                options: [
-                    { text: "£150+ per month", score: 30 },
-                    { text: "Up to £100 per month", score: 20 },
-                    { text: "Up to £50 per month", score: 10 },
-                    { text: "My budget is flexible", score: 25 }, 
-                ]
-            },
-            {
-                id: 7,
-                question: "Where do you primarily workout?",
-                key: "location",
-                options: [
-                    { text: "A fully equipped gym/fitness center", score: 30 },
-                    { text: "At home with minimal equipment (bands, dumbbells)", score: 10 },
-                    { text: "Outdoors or using functional bodyweight training", score: 20 },
-                    { text: "Varies greatly (I travel or shift locations often)", score: 5 },
-                ]
-            },
-            {
-                id: 8,
-                question: "How would you describe your nutritional discipline?",
-                key: "nutrition",
-                options: [
-                    { text: "I track macros/calories and just need refinement", score: 30 },
-                    { text: "I eat generally healthy but need help with structure", score: 20 },
-                    { text: "My eating is inconsistent; I need a full overhaul", score: 10 },
-                    { text: "I haven't focused on nutrition yet", score: 5 },
-                ]
-            },
-            {
-                id: 9,
-                question: "How crucial is guidance on daily habits, sleep, and stress management?",
-                key: "lifestyle",
-                options: [
-                    { text: "It's essential (sleep, stress, daily habits are critical)", score: 30 },
-                    { text: "It's important (I need it covered in check-ins)", score: 20 },
-                    { text: "Not crucial (I only need the workout plan/training)", score: 10 },
-                    { text: "I'm already disciplined in sleep and stress management", score: 5 },
-                ]
-            },
-            {
-                id: 10,
-                question: "What is your long-term energy and health objective?",
-                key: "longTerm",
-                options: [
-                    { text: "Maximize health, longevity, and long-term energy", score: 25 },
-                    { text: "Look and feel great (my focus is aesthetics/physique)", score: 20 },
-                    { text: "Perform at an elite level (sports/military/job requirement)", score: 30 },
-                    { text: "Simply maintain my current health and fitness level", score: 5 },
-                ]
-            }
+            { id: 1, question: "What is your #1 primary fitness goal right now?", key: "primaryGoal", options: [{ text: "Shedding fat and transforming my physique", score: 30 }, { text: "Getting strong and building solid muscle", score: 20 }, { text: "Boosting energy and improving my fitness/stamina", score: 10 }, { text: "Feeling generally healthier and more consistent", score: 5 }] },
+            { id: 2, question: "How many days per week can you realistically commit?", key: "commitment", options: [{ text: "I'm ready for 5+ sessions per week (high commitment)", score: 30 }, { text: "I can commit 3-4 days a week easily", score: 20 }, { text: "1-2 days a week is realistic for me right now", score: 10 }, { text: "I need help finding consistency/just starting", score: 5 }] },
+            { id: 3, question: "What is your biggest barrier to success?", key: "barrier", options: [{ text: "I don't have a plan that fits my goals", score: 5 }, { text: "I struggle with follow-through and need accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", score: 30 }, { text: "Staying motivated and finding the time to train", score: 10 }] },
+            { id: 4, question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
+            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 30 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
+            { id: 6, question: "What is your budget for coaching?", key: "budget", options: [{ text: "£150+ per month", score: 30 }, { text: "Up to £100 per month", score: 20 }, { text: "Up to £50 per month", score: 10 }, { text: "My budget is flexible", score: 25 }] },
+            { id: 7, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
+            { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but need more structure", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
+            { id: 9, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
+            { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] }
         ];
 
         let currentStep = 0;
         let totalScore = 0;
         let selectedOption = null;
-        let userAnswers = []; // Array to store detailed answers
-        let clientName = "Warrior"; // Default client name
+        let userAnswers = []; 
+        let clientName = "Warrior"; 
 
-        // --- PROGRAM LOGIC ---
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
         const TIER_2_TITLE = "FITTER STRONGER BETTER SUBSCRIPTION";
         const TIER_3_TITLE = "ONLINE PROGRAM LIBRARY";
@@ -528,8 +384,8 @@
             if (title.includes(TIER_1_TITLE)) {
                 return {
                     title: TIER_1_TITLE,
-                    description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully-tailored solution designed to adapt to your life and ensure consistent, rapid progress.",
-                    briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built around your unique life. Includes weekly in-depth check-ins, unlimited direct messaging access to Coach Chris, and dynamic, guaranteed program adaptation.", 
+                    description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully tailored solution designed to adapt to your lifestyle and ensure rapid, consistent progress.",
+                    briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built specifically for you. Includes weekly in-depth check-ins, unlimited direct messaging with Coach Chris, and dynamic program adjustments.", 
                     accentColor: "text-green-600",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
                     requiresCall: true
@@ -537,8 +393,8 @@
             } else if (title.includes(TIER_2_TITLE)) {
                 return {
                     title: TIER_2_TITLE,
-                    description: "You have clear goals and moderate commitment. This service provides structured programming, personalized check-ins, and the perfect blend of accountability and flexibility.",
-                    briefOverview: "This subscription provides access to our Flagship Hybrid program (Strength, Endurance & Cardio/Conditioning) via our dedicated app. It features customisable nutrition targets, monthly individual progress check-ins with your coach, and ongoing support from our community.", 
+                    description: "You have clear goals and a moderate level of commitment. This service provides structured programming, personalized check-ins, and a perfect blend of accountability and flexibility.",
+                    briefOverview: "Access our Flagship Hybrid program (Strength, Endurance & Conditioning) via our dedicated app. This features custom nutrition targets, monthly progress check-ins with your coach, and ongoing community support.", 
                     accentColor: "text-blue-600",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
                     requiresCall: true
@@ -546,8 +402,8 @@
             } else {
                 return {
                     title: TIER_3_TITLE,
-                    description: "You are seeking expert-designed, foundational guidance. Get instant access to professionally built, self-paced training plans you can execute on your own schedule.",
-                    briefOverview: "Self-guided access to a growing Library of varied programs (e.g., Dedicated Strength Cycles, Focused Fitness/Conditioning Blocks, WOD Packs & more), lifetime access to purchased plans with and tutorials & movement demos. Perfect for DIY fitness enthusiasts.", 
+                    description: "You are seeking expert-designed, foundational guidance. Gain instant access to professionally built, self-paced training plans you can execute on your own schedule.",
+                    briefOverview: "Gain self-guided access to a library of diverse programs, including strength cycles, conditioning blocks, and WOD packs. Features full tutorials and movement demos—perfect for the independent trainee.", 
                     accentColor: "text-gray-800",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
                     requiresCall: false
@@ -570,46 +426,42 @@
         
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
-            const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'an unknown block';
+            const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
             
-            let goalPhrase;
-            if (rawGoal.includes("Shedding fat")) goalPhrase = "your primary focus on fat loss and physique transformation";
-            else if (rawGoal.includes("Getting strong")) goalPhrase = "your core objective of building solid muscle and strength";
-            else if (rawGoal.includes("Boosting energy")) goalPhrase = "your commitment to boosting overall energy and endurance";
-            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "your vital objective of establishing general health and consistent habits";
-            else goalPhrase = rawGoal;
+            let goalPhrase = rawGoal;
+            if (rawGoal.includes("Shedding fat")) goalPhrase = "your focus on fat loss and physique transformation";
+            else if (rawGoal.includes("Getting strong")) goalPhrase = "your objective of building muscle and strength";
+            else if (rawGoal.includes("Boosting energy")) goalPhrase = "your desire for improved energy and endurance";
+            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "your goal of establishing consistent, healthy habits";
 
-            let barrierPhrase;
-            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "the critical absence of a structured, goal-fitting program";
-            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "a strong need for external accountability and regular coach check-ins";
-            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "the fundamental challenge of optimizing nutrition and diet strategy";
-            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "a persistent struggle with time management and maintaining high motivation";
-            else barrierPhrase = rawBarrier;
+            let barrierPhrase = rawBarrier;
+            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "the lack of a structured program that fits your needs";
+            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "a strong need for external accountability and regular coach feedback";
+            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "the challenge of optimizing your nutrition strategy";
+            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "the difficulty of maintaining motivation and managing your training time";
 
             let keySupportFeature = '';
-            if (recommendationTitle.includes(TIER_1_TITLE)) keySupportFeature = 'maximum 1-on-1 personalized structure and fully customized programming';
-            else if (recommendationTitle.includes(TIER_2_TITLE)) keySupportFeature = 'structured programming delivered with monthly individual check-ins and consistent support';
-            else keySupportFeature = 'immediate access to a vast library of expert-designed training plans that remove the guesswork';
+            if (recommendationTitle.includes(TIER_1_TITLE)) keySupportFeature = 'maximum 1-on-1 personalization and professional programming';
+            else if (recommendationTitle.includes(TIER_2_TITLE)) keySupportFeature = 'structured programming paired with monthly individual check-ins';
+            else keySupportFeature = 'immediate access to expert-designed training plans that remove the guesswork';
 
-            let rationale = '';
-            rationale += `We first acknowledge <strong class="text-black">${goalPhrase}</strong>. `;
-            rationale += `However, it seems your progress is currently stalled by <strong class="text-black">${barrierPhrase}</strong>. `;
-            rationale += `The <strong>${recommendationTitle}</strong> is specifically designed to overcome this by providing <strong class="text-black">${keySupportFeature}</strong> to guarantee you break through your barriers and achieve consistent results.`;
+            let rationale = `We recognize <strong class="text-black">${goalPhrase}</strong> as your priority. `;
+            rationale += `However, it appears your progress is currently hindered by <strong class="text-black">${barrierPhrase}</strong>. `;
+            rationale += `The <strong>${recommendationTitle}</strong> is designed to overcome this by providing <strong class="text-black">${keySupportFeature}</strong> to ensure you achieve consistent, long-term results.`;
             
             return rationale;
         }
 
         function generateAlternativeDescription(primaryRec, alternativeRec) {
             const primaryTitle = primaryRec.title;
-            const alternativeTitle = alternativeRec.title;
             let description = '';
 
             if (primaryTitle.includes(TIER_1_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
-                description = `The **${TIER_2_TITLE}** offers the ideal balance of structure and support without the full 1-1 investment. You still receive structured programming and direct coach check-ins—perfect for achieving consistency.`;
+                description = `The **${TIER_2_TITLE}** offers an ideal balance of structure and support without the full 1-1 investment. It includes high-quality programming and direct coach check-ins—perfect for achieving consistency.`;
             } else if (primaryTitle.includes(TIER_2_TITLE) && alternativeRec.title.includes(TIER_3_TITLE)) {
-                description = `For a tighter budget or those preferring independent training, the **${TIER_3_TITLE}** provides a library of expert-built plans. You gain instant access to high-quality programs designed to deliver results on your schedule.`;
+                description = `If you prefer independent training or are working with a tighter budget, the **${TIER_3_TITLE}** provides expert-built plans. You gain instant access to programs designed to deliver results on your own schedule.`;
             } else if (primaryTitle.includes(TIER_3_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
-                description = `If you feel you require more accountability and personalized feedback than a self-paced plan provides, the **${TIER_2_TITLE}** adds monthly individual coach check-ins to ensure you stick to the plan and maximize results.`;
+                description = `If you feel you need more accountability than a self-paced plan provides, the **${TIER_2_TITLE}** adds monthly individual coach check-ins to ensure you stay on track and maximize your progress.`;
             } else {
                 description = alternativeRec.description;
             }
@@ -617,8 +469,6 @@
             return markdownToHtml(description);
         }
 
-
-        // --- UI RENDER FUNCTIONS ---
         const contentArea = document.getElementById('content-area');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const progressTextLabel = document.getElementById('progress-text-label'); 
@@ -712,7 +562,7 @@
                  <h2 class="text-3xl font-black uppercase leading-tight mb-6 text-center italic tracking-tighter">FINALIZE YOUR RESULTS</h2>
                  <div class="animate-in bg-gray-50 border-2 border-black p-6 rounded-xl relative">
                      <div class="absolute -top-3 -right-3 w-8 h-8 bg-green-500 border-2 border-black"></div>
-                     <p class="text-base font-black uppercase text-black mb-4 tracking-tighter">Enter your first name and agree to the disclaimer below to view your personalized training recommendation based on your answers.</p>
+                     <p class="text-base font-black uppercase text-black mb-4 tracking-tighter">Enter your first name and agree to the disclaimer below to view your personalized recommendation.</p>
                      <form id="personalization-form" class="space-y-4">
                          <div>
                              <label for="client-name-input" class="block text-xs font-bold uppercase mb-1">First Name (Required)</label>
@@ -721,7 +571,7 @@
                          <div class="flex items-start">
                             <input type="checkbox" id="disclaimer-check" name="disclaimer" required class="mt-1 w-5 h-5 border-2 border-black text-green-500 bg-white rounded focus:ring-green-500">
                             <label for="disclaimer-check" class="ml-3 text-sm font-medium text-gray-700 leading-tight">
-                                I have read and agree to the <a href="#disclaimer" class="font-bold underline text-black">general fitness disclaimer</a> below.
+                                I have read and agree to the <a href="#disclaimer" class="font-bold underline text-black">fitness disclaimer</a> below.
                             </label>
                         </div>
                          <button type="submit" id="display-button" disabled class="action-button w-full py-4 mt-2 rounded-lg text-lg">CONFIRM</button>
@@ -772,13 +622,11 @@
             const primaryTitle = primaryRec.title;
 
             if (primaryTitle.includes(TIER_1_TITLE)) {
-                const step2Text = "Before signing up, you need to **submit a quick application form** to share more details about your goals, then **reach out directly to Coach Chris via WhatsApp** for a quick chat to ensure the program is the perfect fit and discuss any final details.";
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Chat with Coach Chris</span><span class="block text-gray-700">${markdownToHtml(step2Text)}</span></li>`;
+                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Consult with Coach Chris</span><span class="block text-gray-700">${markdownToHtml("Before signing up, you will need to **submit a quick application form** to share more detail about your goals. You can then **reach out directly to Coach Chris via WhatsApp** for a brief chat to ensure the program is a perfect fit.")}</span></li>`;
             } else if (primaryTitle.includes(TIER_2_TITLE)) {
-                const step2Text = "You'll first **submit a short application form** to share your current status. After this, you will **follow the on-screen next steps** to complete your sign-up and immediately access the program via the dedicated app. You also have the option to **chat with Coach Chris on WhatsApp** to clarify any last-minute questions before you commit.";
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Access (Optional Chat)</span><span class="block text-gray-700">${markdownToHtml(step2Text)}</span></li>`;
+                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Gain Access (Optional Consultation)</span><span class="block text-gray-700">${markdownToHtml("First, **submit a short application form** to share your current status. Afterward, **follow the on-screen steps** to complete your sign-up and gain immediate app access. You also have the option to **chat with Coach Chris on WhatsApp** if you have any last-minute questions.")}</span></li>`;
             } else {
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Start the Program</span><span class="block text-gray-700">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and be ready to begin your journey immediately.`)}</span></li>`;
+                step2Content = `<li><span class="font-extrabold text-black">Step 2: Start Your Program</span><span class="block text-gray-700">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and can begin your journey straight away.`)}</span></li>`;
             }
 
             contentArea.innerHTML = `
@@ -788,45 +636,45 @@
                         <h1 class="text-4xl font-black uppercase text-black italic leading-tight">STOP GUESSING. START TRAINING WITH PURPOSE.</h1>
                     </div>
                     <div class="text-gray-800 space-y-4 text-base leading-relaxed">
-                        <p>Hey ${clientDisplay},</p>
-                        <p>We've analyzed your data and cut through the confusion. It's time to commit to a defined program that guarantees <strong class="text-green-500">incredible</strong> results.</p>
-                        <p class="text-center font-black text-xl border-y-2 border-black py-3 bg-gray-200">${markdownToHtml(`Your **BEST FIT** Recommended Program:`)} <span class="block text-2xl mt-1 ${primaryRec.accentColor}">${primaryRec.title}</span></p>
+                        <p>Hello ${clientDisplay},</p>
+                        <p>We've analyzed your results and cut through the confusion. It's time to commit to a program that guarantees <strong class="text-green-500">exceptional</strong> results.</p>
+                        <p class="text-center font-black text-xl border-y-2 border-black py-3 bg-gray-200">${markdownToHtml(`Your **BEST FIT** Recommendation:`)} <span class="block text-2xl mt-1 ${primaryRec.accentColor}">${primaryRec.title}</span></p>
                         <div class="p-4 bg-white border border-gray-300 rounded-lg">
-                            <p class="font-extrabold text-black mb-2">Brief Program Overview:</p>
+                            <p class="font-extrabold text-black mb-2">Program Overview:</p>
                             <p class="text-gray-700">${primaryRec.briefOverview}</p>
-                            <p class="mt-3 font-medium text-sm pt-3 border-t border-gray-200"><span class="font-extrabold text-black">Why we think this is a great fit:</span> <span class="block italic text-gray-700 mt-1">${personalizedRationale}</span></p>
+                            <p class="mt-3 font-medium text-sm pt-3 border-t border-gray-200"><span class="font-extrabold text-black">Why this fits your profile:</span> <span class="block italic text-gray-700 mt-1">${personalizedRationale}</span></p>
                         </div>
-                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full flex items-center justify-center py-4 rounded-lg text-lg text-center no-underline" style="box-shadow: 4px 4px 0 0 #000;">GET THE FULL BREAKDOWN: VIEW ${primaryRec.title} DETAILS</a>
+                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full flex items-center justify-center py-4 rounded-lg text-lg text-center no-underline" style="box-shadow: 4px 4px 0 0 #000;">GET THE FULL BREAKDOWN: VIEW ${primaryRec.title}</a>
                         <div class="bg-gray-200 border-2 border-gray-400 p-4 rounded-lg mt-6 text-black">
                             <h3 class="text-lg font-black uppercase mb-3 flex items-center"><svg class="w-5 h-5 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>SUITABLE ALTERNATIVE</h3>
-                            <p class="text-sm font-medium mb-3 text-gray-700">This option provides a different level of commitment, support, or investment to match your needs:</p>
+                            <p class="text-sm font-medium mb-3 text-gray-700">This option provides a different level of support or investment to better match your current needs:</p>
                             <div class="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
                                 <div class="text-center sm:text-left flex-grow w-full sm:w-auto">
                                     <span class="block text-xl font-extrabold ${alternativeRec.accentColor} leading-tight">${alternativeRec.title}</span>
                                     <span class="block text-sm text-gray-700 mt-1 italic font-medium">${alternativeDescriptionText}</span>
                                 </div>
-                                <a href="${alternativeRec.ctaLink}" target="_blank" class="summary-secondary-button py-3 px-5 text-sm rounded-lg w-full sm:w-auto">VIEW ${alternativeRec.title} OVERVIEW</a>
+                                <a href="${alternativeRec.ctaLink}" target="_blank" class="summary-secondary-button py-3 px-5 text-sm rounded-lg w-full sm:w-auto">VIEW DETAILS</a>
                             </div>
                         </div>
                         <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">ACTIONABLE ADVICE</h3>
-                        <p class="font-bold text-black">Success is simple, but it's not easy. Keep these three principles in mind as you start any new program:</p>
+                        <p class="font-bold text-black">Success is simple, but it isn't easy. Keep these three principles in mind as you begin your journey:</p>
                         <ul class="list-disc list-outside ml-5 space-y-2">
-                            <li><strong class="font-extrabold text-black">COMMIT to Consistency, Not Perfection:</strong> A mediocre workout done 5 times a week beats a perfect workout done once.</li>
-                            <li><strong class="font-extrabold text-black">Master the Basics:</strong> Don't chase novelty. Focus on mastering the fundamental movements.</li>
-                            <li><strong class="font-extrabold text-black">Prioritize Sleep & Fueling:</strong> Your body doesn't build muscle or burn fat in the gym; it does it while recovering.</li>
+                            <li><strong class="font-extrabold text-black">Prioritize Consistency Over Perfection:</strong> A solid session completed five times a week beats a "perfect" session done only once.</li>
+                            <li><strong class="font-extrabold text-black">Master the Fundamentals:</strong> Don't get distracted by novelty. Focus on mastering foundational movements first.</li>
+                            <li><strong class="font-extrabold text-black">Recovery is Key:</strong> Your body adapts and builds muscle during rest. Prioritize sleep and quality nutrition.</li>
                         </ul>
                         <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">YOUR NEXT STEPS</h3>
                         <ol class="list-decimal list-inside space-y-3 font-medium">
-                            <li><span class="font-extrabold text-black">Step 1: Get the Full Program Details</span><span class="block text-gray-700">Click the primary link below to view details and pricing.</span></li>
+                            <li><span class="font-extrabold text-black">Step 1: Explore Program Details</span><span class="block text-gray-700">Click the primary link below to review the full curriculum and pricing.</span></li>
                             ${step2Content}
                         </ol>
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4 border-t border-gray-300 items-center justify-center">
-                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full sm:w-2/3 py-4 rounded-lg text-lg text-center no-underline">EXPLORE THE ${primaryRec.title.toUpperCase()}</a>
+                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full sm:w-2/3 py-4 rounded-lg text-lg text-center no-underline">EXPLORE ${primaryRec.title.toUpperCase()}</a>
                         <div class="or-separator w-full sm:w-auto sm:hidden">OR</div>
-                        <a href="${alternativeRec.ctaLink}" target="_blank" class="secondary-button w-full sm:w-1/3 py-4 rounded-lg text-base text-center no-underline">VIEW ${alternativeRec.title} DETAILS</a>
+                        <a href="${alternativeRec.ctaLink}" target="_blank" class="secondary-button w-full sm:w-1/3 py-4 rounded-lg text-xs sm:text-sm text-center no-underline px-2">VIEW ${alternativeRec.title.toUpperCase()}</a>
                     </div>
-                    <button id="restart-button" class="secondary-button w-full py-3 mt-4 rounded-lg text-sm">RESTART QUIZ & ANALYZE AGAIN</button>
+                    <button id="restart-button" class="secondary-button w-full py-3 mt-4 rounded-lg text-sm">RESTART QUIZ</button>
                     <p class="text-sm font-bold pt-4 text-right">— Coach Chris<span class="block font-medium text-xs text-gray-500">CIRCULAR ROOTS COACHING</span></p>
                 </div>
             `;
@@ -858,8 +706,7 @@
         function handlePersonalize(event) {
             event.preventDefault();
             const nameInput = document.getElementById('client-name-input');
-            const name = nameInput.value.trim();
-            clientName = name.split(' ')[0];
+            clientName = nameInput.value.trim().split(' ')[0];
             renderLoadingScreen();
         }
         
@@ -880,4 +727,3 @@
     </script>
 </body>
 </html>
-
