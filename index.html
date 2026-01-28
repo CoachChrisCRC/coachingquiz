@@ -256,7 +256,7 @@
         <div class="mb-10">
             <div class="flex items-center justify-between mb-2">
                 <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-                    QUESTION 1 OF 11
+                    QUESTION 1 OF 12
                 </p>
                 <p id="progress-percent" class="text-[10px] font-black text-green-500 tracking-widest">
                     0%
@@ -319,17 +319,23 @@
             { id: 3, question: "What is your biggest barrier to success?", key: "barrier", options: [{ text: "I don't have a plan that fits my goals", score: 5 }, { text: "I struggle with follow-through and need accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", score: 30 }, { text: "Staying motivated and finding the time to train", score: 10 }] },
             { id: 4, question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
             { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 100 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
-            { id: 6, question: "What is your current level of commitment to investment?", key: "budget", options: [
+            { id: 6, question: "What has been your experience with following a structured plan in the past?", key: "pastExp", options: [
+                { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
+                { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
+                { text: "I’ve worked with a coach before and valued the relationship.", score: 30, category: 'COACHED' },
+                { text: "I’m currently training but feel I’ve hit a plateau.", score: 20, category: 'PLATEAU' }
+            ] },
+            { id: 7, question: "What is your current level of commitment to investment?", key: "budget", options: [
                 { text: "All-In: I need a coach to manage every detail for me (£175+)", score: 30, budgetId: 'PREMIUM' }, 
                 { text: "Guided: I want a solid plan and someone to check my progress (£75)", score: 20, budgetId: 'MID' }, 
                 { text: "Independent: I want the tools to do it myself (£45)", score: 10, budgetId: 'ENTRY' }, 
                 { text: "Undecided: Show me what fits my needs first", score: 25, budgetId: 'FLEX' }
             ] },
-            { id: 7, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
-            { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but focus on consistency", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
-            { id: 9, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
-            { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] },
-            { id: 11, question: "How would you describe your current training experience?", key: "experience", options: [
+            { id: 8, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
+            { id: 9, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but focus on consistency", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
+            { id: 10, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
+            { id: 11, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] },
+            { id: 12, question: "How would you describe your current training experience?", key: "experience", options: [
                 { text: "I am brand new to structured training", score: 5, expId: 'BEGINNER' }, 
                 { text: "I have some experience but lost my way", score: 15, expId: 'RETURNING' }, 
                 { text: "I am an experienced trainee looking for an edge", score: 30, expId: 'EXPERIENCED' }
@@ -390,9 +396,15 @@
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const supportPref = answers.find(a => a.key === 'support')?.answer || '';
+            const pastExp = answers.find(a => a.key === 'pastExp')?.category || 'NEW';
             
             // Override for specialized injuries
             if (medical.includes("specialized training")) {
+                return getProgramDetailsByTitle(TIER_1_TITLE);
+            }
+
+            // Strong push for 1-1 if they valued coaching before and have budget
+            if (pastExp === 'COACHED' && (budgetId === 'PREMIUM' || budgetId === 'FLEX')) {
                 return getProgramDetailsByTitle(TIER_1_TITLE);
             }
 
@@ -400,8 +412,8 @@
                 return getProgramDetailsByTitle(TIER_1_TITLE);
             } 
             
-            if (expId === 'BEGINNER' || expId === 'RETURNING') {
-                if (budgetId === 'ENTRY') return getProgramDetailsByTitle(TIER_3_TITLE);
+            if (expId === 'BEGINNER' || expId === 'RETURNING' || pastExp === 'NEW' || pastExp === 'FRICTION') {
+                if (budgetId === 'ENTRY' && pastExp !== 'FRICTION') return getProgramDetailsByTitle(TIER_3_TITLE);
                 return getProgramDetailsByTitle(FOUNDATIONS_TITLE);
             }
 
@@ -415,7 +427,7 @@
                 return getProgramDetailsByTitle(TIER_3_TITLE);
             }
 
-            const fsbThreshold = isHybridIntent ? 140 : 160;
+            const fsbThreshold = isHybridIntent ? 150 : 170;
 
             if (score >= fsbThreshold && budgetId !== 'ENTRY') {
                 return getProgramDetailsByTitle(TIER_2_TITLE);
@@ -429,7 +441,6 @@
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
 
-            // If injury overrode to 1-1, show the "correct" scoring result as alternative
             if (medical.includes("specialized training") && primary.title.includes(TIER_1_TITLE)) {
                 if (expId === 'EXPERIENCED') return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
                 return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'DOWNGRADE' };
@@ -452,7 +463,7 @@
             }
 
             if (primary.priceId === 'MID') {
-                if (score >= 210 || budgetId === 'FLEX') {
+                if (score >= 230 || budgetId === 'FLEX') {
                     return { ...getProgramDetailsByTitle(TIER_1_TITLE), type: 'UPGRADE' };
                 } else {
                     return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
@@ -468,8 +479,8 @@
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            const pastExp = answers.find(a => a.key === 'pastExp')?.answer || '';
             
-            // Injury Alert Rationale (Option A Blend)
             if (medical.includes("specialized training")) {
                 return `Because you reported an injury requiring specialized attention, I have prioritized the **1-1 Coaching** path for you. A 'one-size-fits-most' approach is a high-risk strategy when your body is sending these signals. By choosing this 1-1 bridge, we don't just 'work around' your limitations—we build through them. This allows me to provide the bio-individual feedback and regressions necessary to ensure you stay in the game for the long run, turning a temporary hurdle into a bulletproof foundation.`;
             }
@@ -500,8 +511,12 @@
 
             let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
+            if (pastExp.includes("struggled to stay consistent")) {
+                rationale += `Because you've found consistency difficult in the past with standalone apps, the <strong>${recommendationTitle}</strong> path is specifically selected to provide the additional support layer you need to break that cycle. `;
+            }
+
             if (budgetId !== 'FLEX') {
-                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, the <strong>${recommendationTitle}</strong> path is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
+                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, this pathway is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
             } else {
                 rationale += `The <strong>${recommendationTitle}</strong> path provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
             }
@@ -761,6 +776,7 @@
                 
                 if (selectedOption.budgetId) answerObj.budgetId = selectedOption.budgetId;
                 if (selectedOption.expId) answerObj.expId = selectedOption.expId;
+                if (selectedOption.category) answerObj.category = selectedOption.category;
                 
                 userAnswers.push(answerObj);
                 totalScore += selectedOption.score; currentStep++;
