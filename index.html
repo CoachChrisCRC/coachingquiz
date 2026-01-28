@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find your path to #Fitter #Stronger #Better | COACH CHRIS</title>
     
-    <!-- --- SOCIAL SHARING METADATA (OPEN GRAPH & TWITTER CARD) --- -->
+    <!-- --- SOCIAL SHARING METADATA --- -->
     <meta property="og:title" content="Find your path to #Fitter #Stronger #Better">
     <meta property="og:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
     <meta property="og:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
@@ -14,12 +14,35 @@
     <meta name="twitter:title" content="Find your path to #Fitter #Stronger #Better">
     <meta name="twitter:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
     <meta name="twitter:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
-    <!-- --- END SOCIAL SHARING METADATA --- -->
 
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        /* --- BACKGROUND GRADIENT & MESH --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Mesh Gradients */
+        .mesh-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 1) 0%, rgba(0, 0, 0, 1) 100%);
+        }
 
         /* --- LOADING SCREEN CSS --- */
         #initial-loader {
@@ -49,7 +72,7 @@
 
         .cycling-text {
             font-family: monospace;
-            color: #22c55e; /* Green-500 */
+            color: #22c55e;
             font-size: 0.75rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -57,190 +80,156 @@
             min-height: 1.2em;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000; /* Black Background */
-            color: #fff;
-            background-image: radial-gradient(#222 1px, transparent 1px);
-            background-size: 40px 40px;
+        /* --- GLASSMORPHISM COMPONENTS --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
-        /* --- BRANDING COMPONENTS --- */
-        
         .quiz-container {
-            max-width: 650px;
+            max-width: 700px;
             min-height: 550px;
-            background-color: #fff;
-            color: #000;
-            border: 4px solid #fff;
-            box-shadow: 10px 10px 0 0 #333; 
             transition: all 0.3s ease-in-out;
         }
 
         .option-button {
-            border: 2px solid #000;
-            background-color: #fff;
-            color: #000;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 0 0 0 0 #000;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .option-button:hover:not(.selected) {
-            transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0 0 #000;
-            background-color: #f3f4f6;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(34, 197, 94, 0.5);
+            transform: translateY(-2px);
         }
 
         .selected {
-            background-color: #000 !important;
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
             color: #fff !important;
-            border-color: #000 !important;
-            transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0 0 #22c55e !important;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
         }
 
         .action-button {
-            background-color: #22c55e;
+            background: #22c55e;
             color: #000;
-            border: 2px solid #000;
-            font-weight: 900;
+            font-weight: 800;
             text-transform: uppercase;
-            box-shadow: 4px 4px 0 0 #fff;
             transition: all 0.2s;
+            box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
         }
         
         .action-button:hover:not(:disabled) {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 0 #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
+            filter: brightness(1.1);
         }
         
         .action-button:disabled {
-            background-color: #e5e7eb;
-            color: #9ca3af;
-            border-color: #d1d5db;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.3);
             box-shadow: none;
             cursor: not-allowed;
         }
         
         .secondary-button {
-            background-color: #fff; 
-            color: #000;
-            border: 2px solid #000;
-            font-weight: 700;
-            text-transform: uppercase;
-            box-shadow: 2px 2px 0 0 #000;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
             transition: all 0.2s;
         }
         .secondary-button:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0 0 #000;
-        }
-        
-        .summary-secondary-button {
-             background-color: #fff; 
-            color: #000;
-            border: 2px solid #000;
-            font-weight: 900;
-            text-transform: uppercase;
-            box-shadow: 4px 4px 0 0 #ccc;
-            transition: all 0.2s;
-        }
-        .summary-secondary-button:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0 0 #999;
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .progress-container {
-            background-color: #000; 
-            height: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            height: 8px;
         }
         .progress-bar-fill {
-            background-color: #22c55e;
-            transition: width 0.3s ease-in-out;
+            background: linear-gradient(90deg, #166534, #22c55e);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .animate-in {
-            animation: slideUpFade 0.4s ease-out;
+            animation: slideUpFade 0.5s ease-out;
         }
 
         @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .custom-input {
-            border: 2px solid #000;
-            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
             transition: all 0.2s;
         }
         .custom-input:focus {
             outline: none;
-            box-shadow: 4px 4px 0 0 #22c55e;
-            border-color: #000;
+            border-color: #22c55e;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
         }
         
         input[type="checkbox"] {
             -webkit-appearance: none;
-            -moz-appearance: none;
             appearance: none;
-            border-radius: 0.25rem; 
-            transition: all 0.2s;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
             cursor: pointer;
-            border: 2px solid #000;
-            background-color: #fff;
-            outline: none;
-            box-shadow: none;
+            position: relative;
         }
-        input[type="checkbox"]:focus {
-             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5); 
-        }
-        
         input[type="checkbox"]:checked {
-            background-color: #22c55e; 
+            background: #22c55e;
             border-color: #22c55e;
-            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 00-1.414 0L6.5 9.086 4.207 6.793a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l5-5a1 1 0 000-1.414z'/%3e%3c/svg%3e");
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
         }
-        
-        .or-separator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.125rem; 
-            font-weight: 900;    
-            text-transform: uppercase;
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
             color: #000;
-            margin: 1rem 0;      
+            font-size: 0.8rem;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-        
+
         .clean-spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #e5e7eb; 
-            border-top: 6px solid #22c55e; 
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(34, 197, 94, 0.1); 
+            border-top: 3px solid #22c55e; 
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); 
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* --- RESULT PAGE SPECIFICS --- */
+        .result-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+    
+    <div class="mesh-gradient"></div>
 
     <!-- SPLASH SCREEN LOADER -->
     <div id="initial-loader">
@@ -258,26 +247,28 @@
     </div>
 
     <!-- Main Quiz Container -->
-    <div id="quiz-app" class="quiz-container w-full rounded-2xl p-6 md:p-10 relative overflow-hidden">
+    <div id="quiz-app" class="quiz-container glass-panel w-full rounded-3xl p-6 md:p-10 relative overflow-hidden">
         
         <!-- Decoration: Green accent line top -->
-        <div class="absolute top-0 left-0 w-full h-2 bg-green-500"></div>
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-800 via-green-400 to-green-800"></div>
 
         <!-- BRANDING BLOCK -->
-        <div class="mb-6 leading-tight animate-in">
-            <h1 class="text-4xl sm:text-5xl font-black text-black uppercase tracking-tighter">
+        <div class="mb-8 leading-tight animate-in">
+            <h1 class="text-4xl sm:text-5xl font-black text-white uppercase tracking-tighter">
                 COACH CHRIS
             </h1>
-            <p class="text-lg font-extrabold uppercase text-neutral-600">
-                CIRCULAR ROOTS COACHING
-            </p>
-            <p class="text-base font-extrabold uppercase text-neutral-700">
-                TRAIN UNCNVNTNL
-            </p>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                <p class="text-xs font-bold uppercase tracking-widest text-green-500">
+                    CIRCULAR ROOTS COACHING
+                </p>
+                <p class="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                    TRAIN UNCNVNTNL
+                </p>
+            </div>
         </div>
 
         <!-- Main Quiz Title -->
-        <h2 class="text-3xl sm:text-4xl font-black text-black mb-4 uppercase italic tracking-tighter">
+        <h2 class="text-2xl sm:text-3xl font-black text-white mb-6 uppercase italic tracking-tight leading-tight">
             FIND YOUR PATH TO BECOMING 
             <span class="text-green-500">#FITTER</span> 
             <span class="text-green-500">#STRONGER</span> 
@@ -285,36 +276,36 @@
         </h2>
         
         <!-- Progress Bar -->
-        <div class="mb-8">
-            <div class="flex items-center space-x-3">
-                <p id="progress-text-label" class="text-sm font-black uppercase tracking-widest text-black whitespace-nowrap">
+        <div class="mb-10">
+            <div class="flex items-center justify-between mb-2">
+                <p id="progress-text-label" class="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
                     QUESTION 1 OF 10
                 </p>
-                <div class="progress-container h-3 flex-grow rounded-full overflow-hidden">
-                    <div id="progress-bar-fill" class="progress-bar-fill h-full" style="width: 0%;"></div>
-                </div>
-                <p id="progress-percent" class="text-sm font-black text-black whitespace-nowrap">
+                <p id="progress-percent" class="text-[10px] font-bold text-green-500">
                     0%
                 </p>
+            </div>
+            <div class="progress-container w-full rounded-full overflow-hidden">
+                <div id="progress-bar-fill" class="progress-bar-fill h-full" style="width: 0%;"></div>
             </div>
         </div>
 
         <!-- Dynamic Content Area -->
         <div id="content-area">
-            <div class="text-center font-bold animate-pulse">LOADING...</div>
+            <div class="text-center font-bold animate-pulse text-neutral-500">LOADING...</div>
         </div>
 
     </div>
     
     <!-- Footer Block -->
     <div class="mt-12 w-full max-w-2xl text-center px-4">
-        <p id="disclaimer" class="text-neutral-400 text-sm mb-6 leading-relaxed">
-            General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime or making changes to your diet. This site provides general information for educational purposes only and is not intended to diagnose or treat any medical condition. You engage in physical activity at your own risk.
+        <p id="disclaimer" class="text-neutral-500 text-[11px] mb-6 leading-relaxed uppercase tracking-wider">
+            General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime. This site provides general information for educational purposes only. You engage in physical activity at your own risk.
         </p>
-        <p class="text-white font-black text-sm uppercase tracking-wider leading-snug">
-            © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL. All rights reserved.
+        <p class="text-neutral-300 font-bold text-[10px] uppercase tracking-[0.3em] leading-snug">
+            © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL
         </p>
-        <p class="text-neutral-500 text-base italic font-medium mt-3">
+        <p class="text-green-500/50 text-xs italic font-medium mt-4 tracking-widest">
             Fitter. Stronger. Better.
         </p>
     </div>
@@ -352,8 +343,8 @@
 
         function markdownToHtml(text) {
             if (!text) return "";
-            let result = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            let result = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+            result = result.replace(/\*(.*?)\*/g, '<em class="text-green-400">$1</em>');
             return result;
         }
 
@@ -386,7 +377,7 @@
                     title: TIER_1_TITLE,
                     description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully tailored solution designed to adapt to your lifestyle and ensure rapid, consistent progress.",
                     briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built specifically for you. Includes weekly in-depth check-ins, unlimited direct messaging with Coach Chris, and dynamic program adjustments.", 
-                    accentColor: "text-green-600",
+                    accentColor: "text-green-400",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
                     requiresCall: true
                 };
@@ -395,7 +386,7 @@
                     title: TIER_2_TITLE,
                     description: "You have clear goals and a moderate level of commitment. This service provides structured programming, personalized check-ins, and a perfect blend of accountability and flexibility.",
                     briefOverview: "Access our Flagship Hybrid program (Strength, Endurance & Conditioning) via our dedicated app. This features custom nutrition targets, monthly progress check-ins with your coach, and ongoing community support.", 
-                    accentColor: "text-blue-600",
+                    accentColor: "text-blue-400",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
                     requiresCall: true
                 };
@@ -404,7 +395,7 @@
                     title: TIER_3_TITLE,
                     description: "You are seeking expert-designed, foundational guidance. Gain instant access to professionally built, self-paced training plans you can execute on your own schedule.",
                     briefOverview: "Gain self-guided access to a library of diverse programs, including strength cycles, conditioning blocks, and WOD packs. Features full tutorials and movement demos—perfect for the independent trainee.", 
-                    accentColor: "text-gray-800",
+                    accentColor: "text-neutral-300",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
                     requiresCall: false
                 };
@@ -445,9 +436,9 @@
             else if (recommendationTitle.includes(TIER_2_TITLE)) keySupportFeature = 'structured programming paired with monthly individual check-ins';
             else keySupportFeature = 'immediate access to expert-designed training plans that remove the guesswork';
 
-            let rationale = `We recognize <strong class="text-black">${goalPhrase}</strong> as your priority. `;
-            rationale += `However, it appears your progress is currently hindered by <strong class="text-black">${barrierPhrase}</strong>. `;
-            rationale += `The <strong>${recommendationTitle}</strong> is designed to overcome this by providing <strong class="text-black">${keySupportFeature}</strong> to ensure you achieve consistent, long-term results.`;
+            let rationale = `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. `;
+            rationale += `However, it appears your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
+            rationale += `The <strong>${recommendationTitle}</strong> is designed to overcome this by providing <span class="text-white font-bold">${keySupportFeature}</span> to ensure you achieve consistent, long-term results.`;
             
             return rationale;
         }
@@ -503,18 +494,18 @@
             
             contentArea.innerHTML = ''; 
 
-            const nextButtonText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
+            const nextButtonText = currentStep === quizData.length - 1 ? 'SUBMIT ASSESSMENT' : 'CONTINUE';
 
             const questionBlock = document.createElement('div');
             questionBlock.className = 'animate-in';
             questionBlock.innerHTML = `
-                <h2 class="text-2xl font-black uppercase leading-tight mb-8">${stepData.question}</h2>
-                <div id="options-container" class="space-y-4"></div>
-                <div class="flex space-x-4 mt-10">
-                    <button id="back-button" class="secondary-button w-1/3 p-4 text-xl rounded-lg">
-                        <span class="hidden sm:inline">GO </span>BACK
+                <h3 class="text-xl sm:text-2xl font-bold text-white leading-snug mb-8">${stepData.question}</h3>
+                <div id="options-container" class="space-y-3"></div>
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-12">
+                    <button id="back-button" class="secondary-button w-full sm:w-1/3 p-4 text-sm font-bold rounded-xl uppercase tracking-widest">
+                        BACK
                     </button>
-                    <button id="next-button" ${selectedOption ? '' : 'disabled'} class="action-button flex-grow p-4 text-xl rounded-lg">
+                    <button id="next-button" ${selectedOption ? '' : 'disabled'} class="action-button flex-grow p-4 text-sm font-bold rounded-xl tracking-widest">
                         ${nextButtonText}
                     </button>
                 </div>
@@ -525,13 +516,13 @@
             const nextButton = document.getElementById('next-button');
             const backButton = document.getElementById('back-button');
 
-            if (currentStep === 0) backButton.classList.add('invisible');
+            if (currentStep === 0) backButton.classList.add('hidden');
             else backButton.addEventListener('click', handleBack);
 
             stepData.options.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option.text;
-                button.className = 'option-button w-full text-left p-5 rounded-lg text-lg';
+                button.className = 'option-button w-full text-left p-5 rounded-xl text-sm sm:text-base';
                 if (selectedOption && option.text === selectedOption.text) button.classList.add('selected');
 
                 button.addEventListener('click', () => {
@@ -553,28 +544,28 @@
 
              contentArea.innerHTML = `
                  <div class="text-center animate-in">
-                     <div class="inline-block p-3 rounded-full border-4 border-black mb-6">
-                         <svg class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <div class="inline-flex items-center justify-center p-4 rounded-full bg-green-500/10 border border-green-500/20 mb-6">
+                         <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                          </svg>
                      </div>
                  </div>
-                 <h2 class="text-3xl font-black uppercase leading-tight mb-6 text-center italic tracking-tighter">FINALIZE YOUR RESULTS</h2>
-                 <div class="animate-in bg-gray-50 border-2 border-black p-6 rounded-xl relative">
-                     <div class="absolute -top-3 -right-3 w-8 h-8 bg-green-500 border-2 border-black"></div>
-                     <p class="text-base font-black uppercase text-black mb-4 tracking-tighter">Enter your first name and agree to the disclaimer below to view your personalized recommendation.</p>
-                     <form id="personalization-form" class="space-y-4">
+                 <h2 class="text-2xl font-black uppercase leading-tight mb-2 text-center italic tracking-tight">FINALIZE YOUR RESULTS</h2>
+                 <p class="text-xs text-neutral-400 text-center mb-8 uppercase tracking-widest">Personalize your recommendation</p>
+                 
+                 <div class="animate-in bg-white/5 border border-white/10 p-6 rounded-2xl relative">
+                     <form id="personalization-form" class="space-y-6">
                          <div>
-                             <label for="client-name-input" class="block text-xs font-bold uppercase mb-1">First Name (Required)</label>
-                             <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-3 bg-white" placeholder="JANE" value="${clientName === 'Warrior' ? '' : clientName}">
+                             <label for="client-name-input" class="block text-[10px] font-bold uppercase mb-2 tracking-widest text-neutral-400">First Name</label>
+                             <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-4 rounded-xl text-lg" placeholder="e.g. ALEX" value="${clientName === 'Warrior' ? '' : clientName}">
                          </div>
                          <div class="flex items-start">
-                            <input type="checkbox" id="disclaimer-check" name="disclaimer" required class="mt-1 w-5 h-5 border-2 border-black text-green-500 bg-white rounded focus:ring-green-500">
-                            <label for="disclaimer-check" class="ml-3 text-sm font-medium text-gray-700 leading-tight">
-                                I have read and agree to the <a href="#disclaimer" class="font-bold underline text-black">fitness disclaimer</a> below.
+                            <input type="checkbox" id="disclaimer-check" name="disclaimer" required class="mt-1">
+                            <label for="disclaimer-check" class="ml-3 text-xs font-medium text-neutral-300 leading-relaxed">
+                                I have read and agree to the <a href="#disclaimer" class="font-bold underline text-green-500 hover:text-green-400">fitness disclaimer</a> and understand that results require consistency.
                             </label>
                         </div>
-                         <button type="submit" id="display-button" disabled class="action-button w-full py-4 mt-2 rounded-lg text-lg">CONFIRM</button>
+                         <button type="submit" id="display-button" disabled class="action-button w-full py-4 rounded-xl text-sm">REVEAL MY RESULTS</button>
                      </form>
                  </div>
              `;
@@ -596,17 +587,16 @@
         }
 
         function renderLoadingScreen() {
-             const loadingText = "ANALYZING YOUR ANSWERS...";
              contentArea.innerHTML = `
                  <div class="text-center animate-in min-h-[300px] flex flex-col items-center justify-center">
-                     <div class="clean-spinner mb-6"></div> 
-                     <p class="text-3xl sm:text-4xl font-black uppercase italic mb-6 leading-none text-black animate-pulse">${loadingText}</p>
-                     <p class="text-lg font-medium text-gray-600">Please wait while we calculate your optimal path.</p>
+                     <div class="clean-spinner mb-8"></div> 
+                     <p class="text-2xl sm:text-3xl font-black uppercase italic mb-4 text-white animate-pulse tracking-tighter">ANALYZING YOUR PROFILE...</p>
+                     <p class="text-sm text-neutral-400 tracking-widest uppercase">Matching you with the perfect program</p>
                  </div>
              `;
              setTimeout(() => {
                  renderFinalProgramSummary();
-                 document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                 document.getElementById('quiz-app').scrollIntoView({ behavior: 'smooth', block: 'start' });
              }, 2500);
         }
 
@@ -622,60 +612,70 @@
             const primaryTitle = primaryRec.title;
 
             if (primaryTitle.includes(TIER_1_TITLE)) {
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Consult with Coach Chris</span><span class="block text-gray-700">${markdownToHtml("Before signing up, you will need to **submit a quick application form** to share more detail about your goals. You can then **reach out directly to Coach Chris via WhatsApp** for a brief chat to ensure the program is a perfect fit.")}</span></li>`;
+                step2Content = `<li><span class="font-bold text-white">Step 2: Apply & Consult</span><span class="block text-neutral-400 mt-1">${markdownToHtml("Submit a quick application. Then, message Coach Chris via WhatsApp to ensure a perfect fit.")}</span></li>`;
             } else if (primaryTitle.includes(TIER_2_TITLE)) {
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Apply & Gain Access (Optional Consultation)</span><span class="block text-gray-700">${markdownToHtml("First, **submit a short application form** to share your current status. Afterward, **follow the on-screen steps** to complete your sign-up and gain immediate app access. You also have the option to **chat with Coach Chris on WhatsApp** if you have any last-minute questions.")}</span></li>`;
+                step2Content = `<li><span class="font-bold text-white">Step 2: Apply & Gain Access</span><span class="block text-neutral-400 mt-1">${markdownToHtml("Submit your short application. Gain immediate app access upon sign-up. WhatsApp chat is optional.")}</span></li>`;
             } else {
-                step2Content = `<li><span class="font-extrabold text-black">Step 2: Start Your Program</span><span class="block text-gray-700">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app and can begin your journey straight away.`)}</span></li>`;
+                step2Content = `<li><span class="font-bold text-white">Step 2: Start Your Program</span><span class="block text-neutral-400 mt-1">${markdownToHtml(`Gain immediate access to the training app and begin your journey.`)}</span></li>`;
             }
 
             contentArea.innerHTML = `
-                <div class="animate-in bg-gray-100 border-2 border-black p-6 rounded-xl relative space-y-5">
-                    <div class="text-center pb-4 border-b border-gray-300">
-                        <p class="text-lg font-extrabold uppercase text-green-600 tracking-widest mb-1">🚀 YOUR RECOMMENDED PATH IS READY, ${clientDisplay}!</p>
-                        <h1 class="text-4xl font-black uppercase text-black italic leading-tight">STOP GUESSING. START TRAINING WITH PURPOSE.</h1>
+                <div class="animate-in space-y-8">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold uppercase text-green-500 tracking-[0.3em] mb-3">RECOMMENDED PATH FOR ${clientDisplay}</p>
+                        <h2 class="text-3xl sm:text-4xl font-black uppercase text-white italic leading-tight tracking-tighter">STOP GUESSING.<br>START TRAINING WITH PURPOSE.</h2>
                     </div>
-                    <div class="text-gray-800 space-y-4 text-base leading-relaxed">
-                        <p>Hello ${clientDisplay},</p>
-                        <p>We've analyzed your results and cut through the confusion. It's time to commit to a program that guarantees <strong class="text-green-500">exceptional</strong> results.</p>
-                        <p class="text-center font-black text-xl border-y-2 border-black py-3 bg-gray-200">${markdownToHtml(`Your **BEST FIT** Recommendation:`)} <span class="block text-2xl mt-1 ${primaryRec.accentColor}">${primaryRec.title}</span></p>
-                        <div class="p-4 bg-white border border-gray-300 rounded-lg">
-                            <p class="font-extrabold text-black mb-2">Program Overview:</p>
-                            <p class="text-gray-700">${primaryRec.briefOverview}</p>
-                            <p class="mt-3 font-medium text-sm pt-3 border-t border-gray-200"><span class="font-extrabold text-black">Why this fits your profile:</span> <span class="block italic text-gray-700 mt-1">${personalizedRationale}</span></p>
+
+                    <div class="result-card p-6 rounded-2xl border-l-4 border-l-green-500">
+                        <p class="text-xs font-bold text-green-500 uppercase tracking-widest mb-2">Best Fit Strategy</p>
+                        <h3 class="text-2xl font-black text-white mb-4 uppercase tracking-tight">${primaryRec.title}</h3>
+                        <p class="text-sm text-neutral-300 leading-relaxed mb-6">${primaryRec.briefOverview}</p>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs font-bold text-white uppercase mb-2 tracking-widest">The Profile Logic:</p>
+                            <p class="text-xs text-neutral-400 leading-relaxed italic">${personalizedRationale}</p>
                         </div>
-                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full flex items-center justify-center py-4 rounded-lg text-lg text-center no-underline" style="box-shadow: 4px 4px 0 0 #000;">GET THE FULL BREAKDOWN: VIEW ${primaryRec.title}</a>
-                        <div class="bg-gray-200 border-2 border-gray-400 p-4 rounded-lg mt-6 text-black">
-                            <h3 class="text-lg font-black uppercase mb-3 flex items-center"><svg class="w-5 h-5 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>SUITABLE ALTERNATIVE</h3>
-                            <p class="text-sm font-medium mb-3 text-gray-700">This option provides a different level of support or investment to better match your current needs:</p>
-                            <div class="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
-                                <div class="text-center sm:text-left flex-grow w-full sm:w-auto">
-                                    <span class="block text-xl font-extrabold ${alternativeRec.accentColor} leading-tight">${alternativeRec.title}</span>
-                                    <span class="block text-sm text-gray-700 mt-1 italic font-medium">${alternativeDescriptionText}</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full py-5 rounded-xl text-center no-underline text-sm tracking-widest">GET THE FULL BREAKDOWN: ${primaryRec.title}</a>
+                        
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
+                             <div class="flex items-center space-x-2 mb-4">
+                                <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h4 class="text-xs font-bold uppercase tracking-widest text-neutral-300">Alternative Option</h4>
+                             </div>
+                             <p class="text-lg font-extrabold text-white mb-2">${alternativeRec.title}</p>
+                             <p class="text-xs text-neutral-400 mb-4 leading-relaxed">${alternativeDescriptionText}</p>
+                             <a href="${alternativeRec.ctaLink}" target="_blank" class="text-xs font-bold text-green-500 uppercase tracking-widest hover:text-green-400 transition-colors inline-flex items-center">VIEW THIS OPTION <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 pt-6 border-t border-white/10">
+                        <h4 class="text-sm font-black uppercase text-white tracking-widest">Next Steps to Success</h4>
+                        <ol class="space-y-6">
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-black text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full mr-3 mt-0.5">1</span>
+                                <div class="flex-grow">
+                                    <p class="text-xs font-bold text-white uppercase tracking-widest">Review Curriculum</p>
+                                    <p class="text-xs text-neutral-400 mt-1">Review the full details of your recommended program.</p>
                                 </div>
-                                <a href="${alternativeRec.ctaLink}" target="_blank" class="summary-secondary-button py-3 px-5 text-sm rounded-lg w-full sm:w-auto">VIEW DETAILS</a>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">ACTIONABLE ADVICE</h3>
-                        <p class="font-bold text-black">Success is simple, but it isn't easy. Keep these three principles in mind as you begin your journey:</p>
-                        <ul class="list-disc list-outside ml-5 space-y-2">
-                            <li><strong class="font-extrabold text-black">Prioritize Consistency Over Perfection:</strong> A solid session completed five times a week beats a "perfect" session done only once.</li>
-                            <li><strong class="font-extrabold text-black">Master the Fundamentals:</strong> Don't get distracted by novelty. Focus on mastering foundational movements first.</li>
-                            <li><strong class="font-extrabold text-black">Recovery is Key:</strong> Your body adapts and builds muscle during rest. Prioritize sleep and quality nutrition.</li>
-                        </ul>
-                        <h3 class="text-xl font-black uppercase pt-4 border-t border-gray-300">YOUR NEXT STEPS</h3>
-                        <ol class="list-decimal list-inside space-y-3 font-medium">
-                            <li><span class="font-extrabold text-black">Step 1: Explore Program Details</span><span class="block text-gray-700">Click the primary link below to review the full curriculum and pricing.</span></li>
-                            ${step2Content}
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-black text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full mr-3 mt-0.5">2</span>
+                                <div class="flex-grow">
+                                    <p class="text-xs font-bold text-white uppercase tracking-widest">Execute Plan</p>
+                                    ${step2Content}
+                                </div>
+                            </li>
                         </ol>
                     </div>
-                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4 border-t border-gray-300 items-center justify-center">
-                        <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full sm:w-2/3 py-4 rounded-lg text-lg text-center no-underline">EXPLORE ${primaryRec.title.toUpperCase()}</a>
-                        <div class="or-separator w-full sm:w-auto sm:hidden">OR</div>
-                        <a href="${alternativeRec.ctaLink}" target="_blank" class="secondary-button w-full sm:w-1/3 py-4 rounded-lg text-xs sm:text-sm text-center no-underline px-2">VIEW ${alternativeRec.title.toUpperCase()}</a>
+
+                    <button id="restart-button" class="secondary-button w-full py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] opacity-50 hover:opacity-100">RESTART ASSESSMENT</button>
+                    
+                    <div class="pt-4 text-right">
+                        <p class="text-xs font-black text-white italic">— Coach Chris</p>
+                        <p class="text-[9px] font-bold text-green-500 uppercase tracking-widest">Circular Roots Coaching</p>
                     </div>
-                    <button id="restart-button" class="secondary-button w-full py-3 mt-4 rounded-lg text-sm">RESTART QUIZ</button>
-                    <p class="text-sm font-bold pt-4 text-right">— Coach Chris<span class="block font-medium text-xs text-gray-500">CIRCULAR ROOTS COACHING</span></p>
                 </div>
             `;
             document.getElementById('restart-button').addEventListener('click', restartQuiz);
@@ -692,14 +692,14 @@
                 userAnswers.push({ key: currentKey, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score });
                 totalScore += selectedOption.score;
                 currentStep++;
-                document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('quiz-app').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 renderQuestion();
             }
         }
         
         function handleBack() {
              currentStep = Math.max(0, currentStep - 1);
-             document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
+             document.getElementById('quiz-app').scrollIntoView({ behavior: 'smooth', block: 'start' });
              renderQuestion();
         }
         
@@ -716,7 +716,7 @@
             selectedOption = null;
             userAnswers = [];
             clientName = "Warrior";
-            document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('quiz-app').scrollIntoView({ behavior: 'smooth', block: 'start' });
             renderQuestion();
         }
 
@@ -727,3 +727,4 @@
     </script>
 </body>
 </html>
+
