@@ -319,7 +319,12 @@
             { id: 3, question: "What is your biggest barrier to success?", key: "barrier", options: [{ text: "I don't have a plan that fits my goals", score: 5 }, { text: "I struggle with follow-through and need accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", score: 30 }, { text: "Staying motivated and finding the time to train", score: 10 }] },
             { id: 4, question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
             { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 30 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
-            { id: 6, question: "What is your budget for coaching?", key: "budget", options: [{ text: "£150+ per month", score: 30 }, { text: "Up to £100 per month", score: 20 }, { text: "Up to £50 per month", score: 10 }, { text: "My budget is flexible", score: 25 }] },
+            { id: 6, question: "What is your current level of commitment to investment?", key: "budget", options: [
+                { text: "All-In: I need a coach to manage every detail for me (£175+)", score: 30, budgetId: 'PREMIUM' }, 
+                { text: "Guided: I want a solid plan and someone to check my progress (£75)", score: 20, budgetId: 'MID' }, 
+                { text: "Independent: I want the tools to do it myself (£45)", score: 10, budgetId: 'ENTRY' }, 
+                { text: "Undecided: Show me what fits my needs first", score: 25, budgetId: 'FLEX' }
+            ] },
             { id: 7, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
             { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but need more structure", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
             { id: 9, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
@@ -340,7 +345,8 @@
                     briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built specifically for you. Includes weekly in-depth check-ins, unlimited direct messaging with Coach Chris, and dynamic program adjustments.", 
                     accentColor: "text-green-400",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
-                    requiresCall: true
+                    requiresCall: true,
+                    priceId: 'PREMIUM'
                 };
             } else if (title.includes(TIER_2_TITLE)) {
                 return {
@@ -349,7 +355,8 @@
                     briefOverview: "Access our Flagship Hybrid program (Strength, Endurance & Conditioning) via our dedicated app. This features custom nutrition targets, monthly progress check-ins with your coach, and ongoing community support.", 
                     accentColor: "text-blue-400",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
-                    requiresCall: true
+                    requiresCall: true,
+                    priceId: 'MID'
                 };
             } else {
                 return {
@@ -358,46 +365,56 @@
                     briefOverview: "Gain self-guided access to a library of diverse programs, including strength cycles, conditioning blocks, and WOD packs. Features full tutorials and movement demos—perfect for the independent trainee.", 
                     accentColor: "text-neutral-300",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
-                    requiresCall: false
+                    requiresCall: false,
+                    priceId: 'ENTRY'
                 };
             }
         }
         
         function getRecommendation(score, answers) {
+            const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             let rec;
-            if (score >= 230) rec = getProgramDetailsByTitle(TIER_1_TITLE);
-            else if (score >= 145) rec = getProgramDetailsByTitle(TIER_2_TITLE);
-            else rec = getProgramDetailsByTitle(TIER_3_TITLE);
 
-            const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
-            
-            if (budgetAnswer.includes("Up to £50")) {
-                rec = getProgramDetailsByTitle(TIER_3_TITLE);
+            // Logic: Only offer 1-1 if PREMIUM budget is selected.
+            if (budgetId === 'PREMIUM') {
+                rec = getProgramDetailsByTitle(TIER_1_TITLE);
             } 
-            else if (budgetAnswer.includes("Up to £100") && rec.title === TIER_1_TITLE) {
+            else if (score >= 145 && budgetId !== 'ENTRY') {
                 rec = getProgramDetailsByTitle(TIER_2_TITLE);
+            }
+            else {
+                rec = getProgramDetailsByTitle(TIER_3_TITLE);
             }
 
             return rec;
         }
         
-        function getAlternativeRecommendation(primaryTitle, answers) {
-            const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
+        function getAlternativeRecommendation(primary, score, answers) {
+            const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             
-            if (primaryTitle.includes(TIER_1_TITLE)) {
-                return getProgramDetailsByTitle(TIER_2_TITLE);
-            } else if (primaryTitle.includes(TIER_2_TITLE)) {
-                return getProgramDetailsByTitle(TIER_3_TITLE);
-            } else {
-                // For Program Library, we always suggest FSB as a potential upgrade path
-                return getProgramDetailsByTitle(TIER_2_TITLE);
+            if (primary.priceId === 'PREMIUM') {
+                // If 1-1 is primary, alternative is a downgrade to FSB
+                return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
+            } 
+            else if (primary.priceId === 'MID') {
+                // If FSB is primary, determine if we upgrade or downgrade
+                // Note: We can still suggest 1-1 as an UPGRADE alternative even if they didn't select the budget
+                if (score >= 200 || budgetId === 'FLEX') {
+                    return { ...getProgramDetailsByTitle(TIER_1_TITLE), type: 'UPGRADE' };
+                } else {
+                    return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
+                }
+            } 
+            else {
+                // If Library is primary, offer upgrade to FSB
+                return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
             }
         }
         
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
-            const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
+            const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             
             let goalPhrase = rawGoal;
             if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
@@ -418,9 +435,8 @@
 
             let rationale = `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
-            // Tasteful integration of budget constraints
-            if (budgetAnswer.includes("Up to £50") || (budgetAnswer.includes("Up to £100") && recommendationTitle !== TIER_1_TITLE)) {
-                rationale += `Working within your <span class="text-white font-bold">preferred budget</span>, the <strong>${recommendationTitle}</strong> is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
+            if (budgetId !== 'FLEX') {
+                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, the <strong>${recommendationTitle}</strong> is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
             } else {
                 rationale += `The <strong>${recommendationTitle}</strong> provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
             }
@@ -430,20 +446,21 @@
 
         function generateAlternativeDescription(primaryRec, altRec, answers) {
             if (!altRec) return "";
-            const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
-            const p = primaryRec.title;
             let d = '';
             
-            if (p.includes(TIER_3_TITLE) && altRec.title.includes(TIER_2_TITLE)) {
-                if (budgetAnswer.includes("Up to £50")) {
-                    d = `If you decide to **increase your investment slightly**, the **${TIER_2_TITLE}** adds professional coach check-ins to the standard programming.`;
+            if (altRec.type === 'UPGRADE') {
+                if (altRec.priceId === 'PREMIUM') {
+                    d = `For **maximum accountability** and total personalization, consider stepping up to **1-1 Coaching**. This is the ultimate fast-track for your specific hurdles.`;
                 } else {
-                    d = `The **${TIER_2_TITLE}** adds coach check-ins and hybrid targets for better long-term accountability.`;
+                    d = `For only **£30 more per month**, the **FSB Subscription** adds professional coach check-ins and hybrid targets to your programming.`;
+                }
+            } else {
+                if (altRec.priceId === 'ENTRY') {
+                    d = `If you prefer a more **budget-conscious, self-guided approach**, the **Program Library** provides our expert training plans at a lower monthly investment.`;
+                } else {
+                    d = `The **FSB Subscription** offers a balance of coach access and structure without the full premium investment of 1-1 coaching.`;
                 }
             }
-            else if (p.includes(TIER_1_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** offers balance without the full 1-1 investment.`;
-            else if (p.includes(TIER_2_TITLE) && altRec.title.includes(TIER_3_TITLE)) d = `The **${TIER_3_TITLE}** provides expert plans for independent trainees.`;
-            else d = altRec.description;
             
             return markdownToHtml(d);
         }
@@ -556,10 +573,11 @@
         function renderFinalProgramSummary() {
             progressTextLabel.textContent = `ANALYSIS COMPLETE`;
             const primary = getRecommendation(totalScore, userAnswers);
-            const alt = getAlternativeRecommendation(primary.title, userAnswers);
+            const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
             const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
             const client = clientName.toUpperCase();
+            const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
             let step2;
             if (primary.title.includes(TIER_1_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></li>`;
@@ -585,7 +603,7 @@
 
                     ${alt ? `
                     <div class="result-card p-6 rounded-3xl">
-                        <h3 class="text-xs font-black uppercase text-white mb-4 tracking-widest opacity-50">Suitable Alternative</h3>
+                        <h3 class="text-xs font-black uppercase text-white mb-4 tracking-widest opacity-50">${altTag}</h3>
                         <div class="flex flex-col gap-4">
                             <div>
                                 <span class="block text-lg font-bold ${alt.accentColor} leading-tight">${alt.title}</span>
@@ -600,7 +618,7 @@
                         <h3 class="text-sm font-black uppercase text-white tracking-widest">Success Principles</h3>
                         <ul class="space-y-4 text-sm text-neutral-400">
                             <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Consistency Over Perfection:</strong> 5 solid sessions beat 1 "perfect" one.</span></li>
-                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Master Fundamentals:</strong> Focus on foundational movements first.</span></li>
+                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Health Screening:</strong> A Par-Q screening is mandatory inside the training app for all new clients.</span></li>
                         </ul>
                     </div>
 
@@ -636,7 +654,17 @@
                 const key = quizData[currentStep].key;
                 const idx = userAnswers.findIndex(a => a.key === key);
                 if (idx !== -1) { totalScore -= userAnswers[idx].score; userAnswers.splice(idx, 1); } 
-                userAnswers.push({ key, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score });
+                
+                const answerObj = { 
+                    key, 
+                    question: quizData[currentStep].question, 
+                    answer: selectedOption.text, 
+                    score: selectedOption.score 
+                };
+                
+                if (selectedOption.budgetId) answerObj.budgetId = selectedOption.budgetId;
+                
+                userAnswers.push(answerObj);
                 totalScore += selectedOption.score; currentStep++;
                 renderQuestion();
             }
