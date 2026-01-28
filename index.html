@@ -318,7 +318,7 @@
             { id: 2, question: "How many days per week can you realistically commit?", key: "commitment", options: [{ text: "I'm ready for 5+ sessions per week (high commitment)", score: 30 }, { text: "I can commit 3-4 days a week easily", score: 20 }, { text: "1-2 days a week is realistic for me right now", score: 10 }, { text: "I need help finding consistency/just starting", score: 5 }] },
             { id: 3, question: "What is your biggest barrier to success?", key: "barrier", options: [{ text: "I don't have a plan that fits my goals", score: 5 }, { text: "I struggle with follow-through and need accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", score: 30 }, { text: "Staying motivated and finding the time to train", score: 10 }] },
             { id: 4, question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
-            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 30 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
+            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 100 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
             { id: 6, question: "What is your current level of commitment to investment?", key: "budget", options: [
                 { text: "All-In: I need a coach to manage every detail for me (£175+)", score: 30, budgetId: 'PREMIUM' }, 
                 { text: "Guided: I want a solid plan and someone to check my progress (£75)", score: 20, budgetId: 'MID' }, 
@@ -388,12 +388,14 @@
         function getRecommendation(score, answers) {
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const supportPref = answers.find(a => a.key === 'support')?.answer || '';
             
-            const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
-            const longTermGoal = answers.find(a => a.key === 'longTerm')?.answer || '';
-            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && longTermGoal.includes("longevity");
-            
+            // Override for specialized injuries
+            if (medical.includes("specialized training")) {
+                return getProgramDetailsByTitle(TIER_1_TITLE);
+            }
+
             if (budgetId === 'PREMIUM') {
                 return getProgramDetailsByTitle(TIER_1_TITLE);
             } 
@@ -402,6 +404,10 @@
                 if (budgetId === 'ENTRY') return getProgramDetailsByTitle(TIER_3_TITLE);
                 return getProgramDetailsByTitle(FOUNDATIONS_TITLE);
             }
+
+            const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
+            const longTermGoal = answers.find(a => a.key === 'longTerm')?.answer || '';
+            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && longTermGoal.includes("longevity");
 
             const isIndependentHybrid = isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("handle the rest"));
 
@@ -421,6 +427,13 @@
         function getAlternativeRecommendation(primary, score, answers) {
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            const medical = answers.find(a => a.key === 'medical')?.answer || '';
+
+            // If injury overrode to 1-1, show the "correct" scoring result as alternative
+            if (medical.includes("specialized training") && primary.title.includes(TIER_1_TITLE)) {
+                if (expId === 'EXPERIENCED') return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
+                return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'DOWNGRADE' };
+            }
             
             if (primary.title.includes(TIER_1_TITLE)) {
                 if (expId === 'EXPERIENCED') return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
@@ -452,9 +465,15 @@
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
+            const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             
+            // Injury Alert Rationale (Option A Blend)
+            if (medical.includes("specialized training")) {
+                return `Because you reported an injury requiring specialized attention, I have prioritized the **1-1 Coaching** path for you. A 'one-size-fits-most' approach is a high-risk strategy when your body is sending these signals. By choosing this 1-1 bridge, we don't just 'work around' your limitations—we build through them. This allows me to provide the bio-individual feedback and regressions necessary to ensure you stay in the game for the long run, turning a temporary hurdle into a bulletproof foundation.`;
+            }
+
             let goalPhrase = rawGoal;
             if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
             else if (rawGoal.includes("Getting strong")) goalPhrase = "building muscle and strength";
@@ -493,8 +512,14 @@
         function generateAlternativeDescription(primaryRec, altRec, answers) {
             if (!altRec) return "";
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            const medical = answers.find(a => a.key === 'medical')?.answer || '';
             let d = '';
             
+            if (medical.includes("specialized training")) {
+                d = `If 1-1 Coaching is not feasible right now, the **${altRec.title}** pathway offers a structured starting point. However, this route requires you to be extra diligent with our movement tutorials and prioritize slow, controlled progression.`;
+                return markdownToHtml(d);
+            }
+
             if (altRec.type === 'UPGRADE') {
                 if (altRec.priceId === 'PREMIUM') {
                     d = `For **maximum accountability** and total personalization, consider stepping up to **1-1 Coaching**. This is the ultimate fast-track for your specific hurdles.`;
@@ -632,6 +657,8 @@
             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
             const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
+            const medical = userAnswers.find(a => a.key === 'medical')?.answer || '';
+            const isInjuryAlert = medical.includes("specialized training");
             const client = clientName.toUpperCase();
             const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
@@ -651,12 +678,18 @@
                         <h1 class="text-3xl font-black uppercase text-white italic leading-tight">Your Optimal Path</h1>
                     </div>
 
-                    <div class="result-card p-6 rounded-3xl border-green-500/20 bg-green-500/[0.02]">
+                    <div class="result-card p-6 rounded-3xl border-green-500/20 bg-green-500/[0.02] relative overflow-hidden">
+                        ${isInjuryAlert ? `
+                        <div class="absolute top-0 right-0 p-3">
+                            <span class="bg-red-500/20 text-red-500 border border-red-500/50 text-[8px] font-black px-2 py-1 rounded uppercase tracking-widest">Safety Override</span>
+                        </div>
+                        ` : ''}
                         <p class="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-4">Best Fit Program</p>
                         <h2 class="text-2xl font-black uppercase ${primary.accentColor} mb-3 leading-tight">${primary.title}</h2>
                         <p class="text-neutral-300 text-sm leading-relaxed mb-6">${primary.briefOverview}</p>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mb-6">
-                            <p class="text-xs italic text-neutral-400 leading-relaxed">${rationale}</p>
+                        <div class="p-4 ${isInjuryAlert ? 'bg-red-500/10 border-red-500/20' : 'bg-white/5 border-white/10'} rounded-2xl border mb-6">
+                            ${isInjuryAlert ? '<p class="text-[9px] font-black text-red-500 uppercase tracking-widest mb-2">Specialized Pathway Activated</p>' : ''}
+                            <p class="text-xs italic text-neutral-400 leading-relaxed">${markdownToHtml(rationale)}</p>
                         </div>
                         <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">${primaryBtnText}</a>
                     </div>
@@ -678,6 +711,7 @@
                         <h3 class="text-sm font-black uppercase text-white tracking-widest">Success Principles</h3>
                         <ul class="space-y-4 text-sm text-neutral-400">
                             <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Consistency Over Perfection:</strong> 5 solid sessions beat 1 "perfect" one.</span></li>
+                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Longevity First:</strong> A bulletproof foundation ensures you stay in the game long-term.</span></li>
                         </ul>
                     </div>
 
