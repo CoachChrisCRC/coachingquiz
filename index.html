@@ -93,6 +93,10 @@
             color: #fff;
             font-weight: 500;
             transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .option-button:hover:not(.selected) {
@@ -106,6 +110,17 @@
             border-color: #22c55e !important;
             color: #fff !important;
             box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+
+        .check-icon {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #22c55e;
+        }
+        .selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .action-button {
@@ -285,7 +300,7 @@
             <span class="text-green-500">#BETTER</span>
         </h2>
         
-        <!-- Progress Bar (The Scroll Target Anchor) -->
+        <!-- Progress Bar -->
         <div id="progress-anchor" class="mb-10">
             <div class="flex items-center justify-between mb-2">
                 <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
@@ -371,7 +386,12 @@
 
             // PART 4: FINAL PROFILING
             { id: 10, section: "Part 4: Final Profiling", question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
-            { id: 11, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] },
+            { id: 11, question: "If you hit your goal 6 months from now, what changes most for you?", key: "theWhy", options: [
+                { text: "My self-confidence and how I feel in my own skin", score: 25, whyId: 'CONFIDENCE' }, 
+                { text: "My energy levels for my kids and family", score: 20, whyId: 'FAMILY' }, 
+                { text: "My health longevity and long-term vitality", score: 30, whyId: 'HEALTH' }, 
+                { text: "My physical performance and absolute strength", score: 5, whyId: 'PERFORMANCE' }
+            ] },
             { id: 12, question: "How would you describe your current training experience?", key: "experience", options: [
                 { text: "I am brand new to structured training", score: 5, expId: 'BEGINNER' }, 
                 { text: "I have some experience but lost my way", score: 15, expId: 'RETURNING' }, 
@@ -445,8 +465,8 @@
             }
 
             const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
-            const longTermGoal = answers.find(a => a.key === 'longTerm')?.answer || '';
-            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && longTermGoal.includes("longevity");
+            const theWhy = answers.find(a => a.key === 'theWhy')?.answer || '';
+            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && theWhy.includes("longevity");
 
             if (isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("handle the rest"))) return getProgramDetailsByTitle(TIER_3_TITLE);
 
@@ -486,6 +506,7 @@
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
+            const theWhyId = answers.find(a => a.key === 'theWhy')?.whyId || 'HEALTH';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
@@ -496,10 +517,29 @@
             }
 
             let goalPhrase = rawGoal;
-            if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
-            else if (rawGoal.includes("Getting strong")) goalPhrase = "building muscle and strength";
-            else if (rawGoal.includes("Boosting energy")) goalPhrase = "improved energy and endurance";
-            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "establishing consistent habits";
+            let quickWin = "";
+            
+            if (rawGoal.includes("Shedding fat")) {
+                goalPhrase = "fat loss and physique transformation";
+                quickWin = "A quick tip to start: **prioritize protein in your first meal today** to help manage those afternoon cravings and stay satiated.";
+            } else if (rawGoal.includes("Getting strong")) {
+                goalPhrase = "building muscle and strength";
+                quickWin = "A quick tip to start: **track your training volume** (reps x sets) this week. If you don't measure it, you can't improve it.";
+            } else if (rawGoal.includes("Boosting energy")) {
+                goalPhrase = "improved energy and endurance";
+                quickWin = "A quick tip to start: **aim for 500ml of water** before your morning coffee to kickstart cellular hydration and mental focus.";
+            } else if (rawGoal.includes("Feeling generally healthier")) {
+                goalPhrase = "establishing consistent habits";
+                quickWin = "A quick tip to start: **set a 10-minute movement timer** for after lunch. Consistency beats intensity every time.";
+            }
+
+            let motivationPhrase = "";
+            switch(theWhyId) {
+                case 'CONFIDENCE': motivationPhrase = "designed to help you reclaim that confidence in how you move and feel"; break;
+                case 'FAMILY': motivationPhrase = "built to get that vital energy back for your family and kids"; break;
+                case 'HEALTH': motivationPhrase = "focused on ensuring your long-term health and vitality"; break;
+                case 'PERFORMANCE': motivationPhrase = "programmed to push your physical performance to the next level"; break;
+            }
 
             let barrierPhrase = rawBarrier;
             if (rawBarrier.includes("don't have a plan")) barrierPhrase = "lack of structure";
@@ -512,24 +552,16 @@
             else if (expId === 'RETURNING') expText = "Since you are <span class='text-green-400'>returning after a break</span>, it's vital to re-establish your fundamentals before pushing high-intensity limits. ";
             else expText = "As an <span class='text-green-400'>experienced trainee looking for an edge</span>, your plan focuses on high-level programming to bypass your current plateau. ";
 
-            let feature = '';
-            if (recommendationTitle.includes(TIER_1_TITLE)) feature = 'maximum 1-on-1 personalization';
-            else if (recommendationTitle.includes(FOUNDATIONS_TITLE)) feature = 'a risk-free trial and group guidance';
-            else if (recommendationTitle.includes(TIER_2_TITLE)) feature = 'structured programming and coach check-ins';
-            else if (expId === 'BEGINNER' || expId === 'RETURNING') feature = 'self-paced beginner plans';
-            else feature = 'expert-designed training plans';
-
-            let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
+            let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. Because you've shared that your motivation is ${motivationPhrase}, we've selected this path specifically to ensure you overcome <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
             if (pastExp.includes("struggled to stay consistent")) {
-                rationale += `Because you've found consistency difficult in the past with standalone apps, the <strong>${recommendationTitle}</strong> path is specifically selected to provide the additional support layer you need to break that cycle. `;
+                rationale += `Since you've found consistency difficult in the past, the <strong>${recommendationTitle}</strong> path is specifically selected to provide the additional support layer you need to break that cycle. `;
             }
 
-            if (budgetId !== 'FLEX') {
-                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, this pathway is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
-            } else {
-                rationale += `The <strong>${recommendationTitle}</strong> path provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
+            if (quickWin) {
+                rationale += `<br><br><span class="block bg-green-500/10 border border-green-500/20 p-3 rounded-xl mt-2 text-white font-medium italic"><span class="text-green-500 font-black uppercase not-italic text-[10px] tracking-widest block mb-1">Coach Chris' Quick Win:</span> ${quickWin}</span>`;
             }
+
             return rationale;
         }
 
@@ -592,20 +624,12 @@
             }
         }
 
-        /**
-         * TARGET: PROGRESS ANCHOR
-         * This provides the best mobile UX by resetting the view to the 
-         * progress context just above each new question.
-         */
         function scrollToTarget() {
             const anchor = document.getElementById('progress-anchor');
             if (anchor) {
-                const offset = 30; // 30px buffer for breathing room at top of viewport
+                const offset = 30; 
                 const elementPosition = anchor.getBoundingClientRect().top + window.pageYOffset;
-                window.scrollTo({
-                    top: elementPosition - offset,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
             }
         }
 
@@ -628,10 +652,10 @@
             }
 
             let helperTextHtml = "";
-            if (currentStep === 9) {
+            if (currentStep === 10) {
                 helperTextHtml = `
                     <div class="mb-6 p-3 bg-green-500/10 border border-green-500/20 rounded-xl animate-in">
-                        <p class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Almost there! Just 3 quick profiling questions left.</p>
+                        <p class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Final deep dive: Let's find your 'Why'.</p>
                     </div>
                 `;
             }
@@ -658,8 +682,13 @@
 
             stepData.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.textContent = opt.text;
-                btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base';
+                btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base group';
+                btn.innerHTML = `
+                    <span>${opt.text}</span>
+                    <svg class="check-icon h-5 w-5 shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                `;
                 if (selectedOption && opt.text === selectedOption.text) btn.classList.add('selected');
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.option-button').forEach(b => b.classList.remove('selected'));
@@ -685,7 +714,6 @@
                      <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Finalize Results</h2>
                  </div>
                  <div class="animate-in glass-panel p-6 rounded-3xl relative overflow-hidden">
-                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-green-500/10 blur-2xl"></div>
                      <p class="text-sm font-medium text-neutral-300 mb-6">Enter your first name and agree to the disclaimer to unlock your recommendation.</p>
                      <form id="personalization-form" class="space-y-6">
                          <div>
@@ -817,7 +845,7 @@
                             </li>
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">3</span>
-                                <div><span class="text-white font-bold">Health Screening</span><span class="block text-neutral-400 text-sm mt-1">To ensure your safety, you'll complete a **Par-Q (Physical Activity Readiness Questionnaire)** inside the training app before we start.</span></div>
+                                <div><span class="text-white font-bold">Health Screening</span><span class="block text-neutral-400 text-sm mt-1">To ensure your safety, you'll complete a **Par-Q** inside the training app before we start.</span></div>
                             </li>
                         </ol>
                     </div>
@@ -843,6 +871,7 @@
                 const answerObj = { key, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score };
                 if (selectedOption.budgetId) answerObj.budgetId = selectedOption.budgetId;
                 if (selectedOption.expId) answerObj.expId = selectedOption.expId;
+                if (selectedOption.whyId) answerObj.whyId = selectedOption.whyId;
                 if (selectedOption.category) answerObj.category = selectedOption.category;
                 userAnswers.push(answerObj);
                 totalScore += selectedOption.score; currentStep++;
@@ -852,16 +881,8 @@
         }
         
         function handleBack() { currentStep = Math.max(0, currentStep - 1); renderQuestion(); scrollToTarget(); }
-        
-        function handlePersonalize(e) { 
-            e.preventDefault(); 
-            clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; 
-            renderLoadingScreen(); 
-            scrollToTarget(); 
-        }
-        
+        function handlePersonalize(e) { e.preventDefault(); clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; renderLoadingScreen(); scrollToTarget(); }
         function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; renderQuestion(); scrollToTarget(); }
-
         document.addEventListener('DOMContentLoaded', () => { updateProgress(); renderQuestion(); });
     </script>
 </body>
