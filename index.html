@@ -256,7 +256,7 @@
         <div class="mb-10">
             <div class="flex items-center justify-between mb-2">
                 <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-                    QUESTION 1 OF 10
+                    QUESTION 1 OF 11
                 </p>
                 <p id="progress-percent" class="text-[10px] font-black text-green-500 tracking-widest">
                     0%
@@ -328,7 +328,12 @@
             { id: 7, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
             { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but need more structure", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
             { id: 9, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
-            { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] }
+            { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] },
+            { id: 11, question: "How would you describe your current training experience?", key: "experience", options: [
+                { text: "I am brand new to structured training", score: 5, expId: 'BEGINNER' }, 
+                { text: "I have some experience but lost my way", score: 15, expId: 'RETURNING' }, 
+                { text: "I am an experienced trainee looking for an edge", score: 30, expId: 'EXPERIENCED' }
+            ] }
         ];
 
         let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior";
@@ -379,7 +384,7 @@
             if (budgetId === 'PREMIUM') {
                 rec = getProgramDetailsByTitle(TIER_1_TITLE);
             } 
-            else if (score >= 145 && budgetId !== 'ENTRY') {
+            else if (score >= 160 && budgetId !== 'ENTRY') {
                 rec = getProgramDetailsByTitle(TIER_2_TITLE);
             }
             else {
@@ -393,20 +398,16 @@
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             
             if (primary.priceId === 'PREMIUM') {
-                // If 1-1 is primary, alternative is a downgrade to FSB
                 return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
             } 
             else if (primary.priceId === 'MID') {
-                // If FSB is primary, determine if we upgrade or downgrade
-                // Note: We can still suggest 1-1 as an UPGRADE alternative even if they didn't select the budget
-                if (score >= 200 || budgetId === 'FLEX') {
+                if (score >= 210 || budgetId === 'FLEX') {
                     return { ...getProgramDetailsByTitle(TIER_1_TITLE), type: 'UPGRADE' };
                 } else {
                     return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
                 }
             } 
             else {
-                // If Library is primary, offer upgrade to FSB
                 return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
             }
         }
@@ -415,6 +416,7 @@
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
+            const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             
             let goalPhrase = rawGoal;
             if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
@@ -428,12 +430,17 @@
             else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "optimizing nutrition";
             else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "managing training time";
 
+            let expText = "";
+            if (expId === 'BEGINNER') expText = "As you are <span class='text-green-400'>brand new to structured training</span>, we want to ensure you build a safe, solid foundation. ";
+            else if (expId === 'RETURNING') expText = "Since you have <span class='text-green-400'>some experience but need to find your rhythm again</span>, we've focused on re-establishing consistency. ";
+            else expText = "As an <span class='text-green-400'>experienced trainee looking for an edge</span>, your plan focuses on high-level programming to bypass your current plateau. ";
+
             let feature = '';
             if (recommendationTitle.includes(TIER_1_TITLE)) feature = 'maximum 1-on-1 personalization';
             else if (recommendationTitle.includes(TIER_2_TITLE)) feature = 'structured programming and coach check-ins';
             else feature = 'expert-designed training plans';
 
-            let rationale = `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
+            let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
             if (budgetId !== 'FLEX') {
                 rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, the <strong>${recommendationTitle}</strong> is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
@@ -663,6 +670,7 @@
                 };
                 
                 if (selectedOption.budgetId) answerObj.budgetId = selectedOption.budgetId;
+                if (selectedOption.expId) answerObj.expId = selectedOption.expId;
                 
                 userAnswers.push(answerObj);
                 totalScore += selectedOption.score; currentStep++;
