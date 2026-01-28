@@ -239,12 +239,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .milestone-tag {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            transition: all 0.3s ease;
-        }
-
         .section-header {
             border-left: 2px solid #22c55e;
             padding-left: 1rem;
@@ -253,6 +247,13 @@
 
         html {
             scroll-behavior: smooth;
+        }
+
+        .summary-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px;
         }
     </style>
 </head>
@@ -273,23 +274,13 @@
         <div class="absolute top-0 left-0 w-full h-1.5 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]"></div>
 
         <!-- BRANDING BLOCK -->
-        <div class="mb-8 animate-in">
+        <div id="branding-block" class="mb-8 animate-in">
             <h1 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">
                 COACH CHRIS
             </h1>
             <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2">
                 <p class="text-xs font-bold uppercase text-neutral-400 tracking-widest">CIRCULAR ROOTS COACHING</p>
                 <p class="text-xs font-bold uppercase text-green-500 tracking-widest">TRAIN UNCNVNTNL</p>
-            </div>
-        </div>
-
-        <!-- Milestone Status Bar -->
-        <div id="milestone-container" class="mb-4 animate-in">
-            <div class="flex items-center gap-2">
-                <div id="milestone-badge" class="milestone-tag px-3 py-1 rounded-full flex items-center gap-2">
-                    <span id="milestone-icon" class="text-green-500">●</span>
-                    <span id="milestone-text" class="text-[9px] font-black uppercase text-green-500 tracking-widest">Assessment Start</span>
-                </div>
             </div>
         </div>
 
@@ -360,13 +351,13 @@
 
         const quizData = [
             // PART 1: GOALS & COMMITMENT
-            { id: 1, section: "Part 1: Your Vision", question: "What is your #1 primary fitness goal right now?", key: "primaryGoal", options: [{ text: "Shedding fat and transforming my physique", score: 30 }, { text: "Getting strong and building solid muscle", score: 20 }, { text: "Boosting energy and improving my fitness/stamina", score: 10 }, { text: "Feeling generally healthier and more consistent", score: 5 }] },
-            { id: 2, question: "How many days per week can you realistically commit?", key: "commitment", options: [{ text: "I'm ready for 5+ sessions per week (high commitment)", score: 30 }, { text: "I can commit 3-4 days a week easily", score: 20 }, { text: "1-2 days a week is realistic for me right now", score: 10 }, { text: "I need help finding consistency/just starting", score: 5 }] },
-            { id: 3, question: "What is your biggest barrier to success?", key: "barrier", options: [{ text: "I don't have a plan that fits my goals", score: 5 }, { text: "I struggle with follow-through and need accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", score: 30 }, { text: "Staying motivated and finding the time to train", score: 10 }] },
+            { id: 1, section: "Part 1: Your Vision", question: "What is your #1 primary fitness goal right now?", key: "primaryGoal", summaryLabel: "Primary Goal", options: [{ text: "Shedding fat and transforming my physique", short: "Fat Loss & Physique", score: 30 }, { text: "Getting strong and building solid muscle", short: "Strength & Muscle", score: 20 }, { text: "Boosting energy and improving my fitness/stamina", short: "Energy & Stamina", score: 10 }, { text: "Feeling generally healthier and more consistent", short: "Health & Consistency", score: 5 }] },
+            { id: 2, question: "How many days per week can you realistically commit?", key: "commitment", summaryLabel: "Commitment", options: [{ text: "I'm ready for 5+ sessions per week (high commitment)", short: "5+ Days / Week", score: 30 }, { text: "I can commit 3-4 days a week easily", short: "3-4 Days / Week", score: 20 }, { text: "1-2 days a week is realistic for me right now", short: "1-2 Days / Week", score: 10 }, { text: "I need help finding consistency/just starting", short: "Seeking Consistency", score: 5 }] },
+            { id: 3, question: "What is your biggest barrier to success?", key: "barrier", summaryLabel: "Main Barrier", options: [{ text: "I don't have a plan that fits my goals", short: "Lack of Structure", score: 5 }, { text: "I struggle with follow-through and need accountability", short: "Accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", short: "Nutrition Strategy", score: 30 }, { text: "Staying motivated and finding the time to train", short: "Time & Motivation", score: 10 }] },
             
             // PART 2: HISTORY & READINESS
             { id: 4, section: "Part 2: Your Background", question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
-            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", options: [{ text: "Yes, I have current injuries requiring specialized training", score: 100 }, { text: "I have minor aches but nothing that stops me from training", score: 20 }, { text: "No, I am generally fit and injury-free", score: 10 }, { text: "I'm not sure about my physical limitations yet", score: 5 }] },
+            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", summaryLabel: "Medical/Injuries", options: [{ text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }] },
             { id: 6, question: "What has been your experience with following a structured plan in the past?", key: "pastExp", options: [
                 { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
                 { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
@@ -375,28 +366,35 @@
             ] },
 
             // PART 3: LIFESTYLE & BUDGET
-            { id: 7, section: "Part 3: Practical Strategy", question: "What is your current level of commitment to investment?", key: "budget", options: [
-                { text: "All-In: I need a coach to manage every detail for me (£175+)", score: 30, budgetId: 'PREMIUM' }, 
-                { text: "Guided: I want a solid plan and someone to check my progress (£75)", score: 20, budgetId: 'MID' }, 
-                { text: "Independent: I want the tools to do it myself (£45)", score: 10, budgetId: 'ENTRY' }, 
-                { text: "Undecided: Show me what fits my needs first", score: 25, budgetId: 'FLEX' }
+            { id: 7, section: "Part 3: Practical Strategy", question: "What is your current level of commitment to investment?", key: "budget", summaryLabel: "Budget Level", options: [
+                { text: "All-In: I need a coach to manage every detail for me (£175+)", short: "All-In (£175+)", score: 30, budgetId: 'PREMIUM' }, 
+                { text: "Guided: I want a solid plan and someone to check my progress (£75)", short: "Guided (£75)", score: 20, budgetId: 'MID' }, 
+                { text: "Independent: I want the tools to do it myself (£45)", short: "Independent (£45)", score: 10, budgetId: 'ENTRY' }, 
+                { text: "Undecided: Show me what fits my needs first", short: "Undecided", score: 25, budgetId: 'FLEX' }
             ] },
             { id: 8, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
             { id: 9, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but focus on consistency", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
 
             // PART 4: FINAL PROFILING
             { id: 10, section: "Part 4: Final Profiling", question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
-            { id: 11, question: "If you hit your goal 6 months from now, what changes most for you?", key: "theWhy", options: [
-                { text: "My self-confidence and how I feel in my own skin", score: 25, whyId: 'CONFIDENCE' }, 
-                { text: "My energy levels for my kids and family", score: 20, whyId: 'FAMILY' }, 
-                { text: "My health longevity and long-term vitality", score: 30, whyId: 'HEALTH' }, 
-                { text: "My physical performance and absolute strength", score: 5, whyId: 'PERFORMANCE' }
+            { id: 11, question: "If you hit your goal 6 months from now, what changes most for you?", key: "theWhy", summaryLabel: "Your 'Why'", options: [
+                { text: "My self-confidence and how I feel in my own skin", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
+                { text: "My energy levels for my kids and family", short: "Family Energy", score: 20, whyId: 'FAMILY' }, 
+                { text: "My health longevity and long-term vitality", short: "Health Longevity", score: 30, whyId: 'HEALTH' }, 
+                { text: "My physical performance and absolute strength", short: "Peak Performance", score: 5, whyId: 'PERFORMANCE' }
             ] },
-            { id: 12, question: "How would you describe your current training experience?", key: "experience", options: [
-                { text: "I am brand new to structured training", score: 5, expId: 'BEGINNER' }, 
-                { text: "I have some experience but lost my way", score: 15, expId: 'RETURNING' }, 
-                { text: "I am an experienced trainee looking for an edge", score: 30, expId: 'EXPERIENCED' }
+            { id: 12, question: "How would you describe your current training experience?", key: "experience", summaryLabel: "Experience", options: [
+                { text: "I am brand new to structured training", short: "Beginner", score: 5, expId: 'BEGINNER' }, 
+                { text: "I have some experience but lost my way", short: "Returning", score: 15, expId: 'RETURNING' }, 
+                { text: "I am an experienced trainee looking for an edge", short: "Experienced", score: 30, expId: 'EXPERIENCED' }
             ] }
+        ];
+
+        // --- PROGRESSIVE DISCLOSURE MILESTONES ---
+        const phaseTransitions = [
+            { triggerIndex: 4, title: "History & Readiness", message: "Great. I've got your vision. Now, let’s look at your training history and physical readiness." },
+            { triggerIndex: 7, title: "Practical Strategy", message: "Understood. Now, let's talk about the logistics: your schedule and budget, so we can find a plan that fits your life." },
+            { triggerIndex: 10, title: "The Finish Line", message: "Almost there. I just need to understand your lifestyle and your 'Why' to tailor the final recommendation." }
         ];
 
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
@@ -421,7 +419,7 @@
                     description: "You need a clear starting line. This pathway is designed specifically for those starting fresh or returning to training. We start with a free trial to build your confidence before moving into our structured group foundations.",
                     briefOverview: "Begin with our **Free 14-Day Fundamentals** trial to master the basics. This leads directly into our **6-Week Foundations Program (£99)**—a coach-guided online group experience that builds your absolute base for long-term health.",
                     accentColor: "text-orange-400",
-                    ctaLink: "https://coachchriscrc.github.io/foundations-lp",
+                    ctaLink: "https://coachchriscrc.github.io/14dayfundamentals-lp",
                     requiresCall: false,
                     priceId: 'ENTRY'
                 };
@@ -590,20 +588,11 @@
             return markdownToHtml(d);
         }
 
-        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior";
+        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior", isTransitioning = false;
         const contentArea = document.getElementById('content-area');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const progressTextLabel = document.getElementById('progress-text-label'); 
         const progressPercent = document.getElementById('progress-percent'); 
-        const milestoneText = document.getElementById('milestone-text');
-        const milestoneIcon = document.getElementById('milestone-icon');
-
-        const milestones = [
-            { start: 0, end: 3, text: "Assessment Start", icon: "●" },
-            { start: 4, end: 6, text: "History & Readiness", icon: "✓" },
-            { start: 7, end: 9, text: "Lifestyle & Budget", icon: "◈" },
-            { start: 10, end: 12, text: "Final Profiling", icon: "★" }
-        ];
 
         function updateProgress() {
             const total = quizData.length;
@@ -613,15 +602,6 @@
             progressPercent.textContent = `${Math.round(progress)}%`;
             if (currentStep < total) progressTextLabel.textContent = `QUESTION ${displayStep} OF ${total}`;
             else progressTextLabel.textContent = `QUIZ COMPLETE`;
-
-            const m = milestones.find(m => currentStep >= m.start && currentStep <= m.end);
-            if (m && milestoneText.textContent !== m.text) {
-                milestoneText.textContent = m.text;
-                milestoneIcon.textContent = m.icon;
-                const badge = document.getElementById('milestone-badge');
-                badge.style.transform = "scale(1.1)";
-                setTimeout(() => badge.style.transform = "scale(1)", 200);
-            }
         }
 
         function scrollToTarget() {
@@ -635,6 +615,7 @@
 
         function renderQuestion() {
             if (currentStep >= quizData.length) { renderNameInputScreen(); return; }
+            
             const stepData = quizData[currentStep];
             const prev = userAnswers.find(a => a.key === stepData.key);
             selectedOption = prev ? stepData.options.find(opt => opt.text === prev.answer) : null;
@@ -700,20 +681,67 @@
             nextBtn.addEventListener('click', handleNext);
             updateProgress();
         }
+
+        function renderTransitionScreen(transition) {
+            isTransitioning = true;
+            contentArea.innerHTML = `
+                <div class="text-center animate-in min-h-[350px] flex flex-col items-center justify-center space-y-8">
+                    <div class="inline-block p-4 rounded-full border border-green-500/30 bg-green-500/10 mb-2">
+                        <svg class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-2">Milestone Reached</p>
+                        <h2 class="text-3xl font-black uppercase text-white italic tracking-tighter mb-4">${transition.title}</h2>
+                        <p class="text-neutral-400 text-base max-w-sm mx-auto leading-relaxed">${transition.message}</p>
+                    </div>
+                    <button id="continue-milestone" class="action-button px-10 py-4 rounded-2xl text-xs tracking-widest">CONTINUE ASSESSMENT</button>
+                </div>
+            `;
+            document.getElementById('continue-milestone').addEventListener('click', () => {
+                isTransitioning = false;
+                renderQuestion();
+                scrollToTarget();
+            });
+        }
         
         function renderNameInputScreen() {
              currentStep = quizData.length; updateProgress();
-             milestoneText.textContent = "Almost Ready";
+
+             // Summary Grid Logic
+             const summaryAnswers = quizData.filter(q => q.summaryLabel).map(q => {
+                 const answer = userAnswers.find(a => a.key === q.key);
+                 return { label: q.summaryLabel, value: answer ? (answer.short || answer.answer) : '—' };
+             });
+
+             let summaryGridHtml = '<div class="grid grid-cols-2 gap-3 mb-8">';
+             summaryAnswers.forEach(ans => {
+                 summaryGridHtml += `
+                    <div class="summary-tag">
+                        <p class="text-[8px] font-black uppercase text-neutral-500 tracking-widest mb-1">${ans.label}</p>
+                        <p class="text-[10px] font-bold text-green-500 truncate whitespace-nowrap overflow-hidden">${ans.value}</p>
+                    </div>
+                 `;
+             });
+             summaryGridHtml += '</div>';
+
              contentArea.innerHTML = `
                  <div class="text-center animate-in mb-8">
                      <div class="inline-block p-4 rounded-full border border-green-500/30 bg-green-500/10 mb-6">
                          <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                          </svg>
                      </div>
-                     <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Finalize Results</h2>
+                     <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Review Your Profile</h2>
+                     <p class="text-xs text-neutral-400 mt-2 uppercase tracking-widest">Verifying optimal training path...</p>
                  </div>
-                 <div class="animate-in glass-panel p-6 rounded-3xl relative overflow-hidden">
+                 
+                 <div class="animate-in">
+                    ${summaryGridHtml}
+                 </div>
+
+                 <div class="animate-in glass-panel p-6 rounded-3xl relative overflow-hidden border-green-500/20">
                      <p class="text-sm font-medium text-neutral-300 mb-6">Enter your first name and agree to the disclaimer to unlock your recommendation.</p>
                      <form id="personalization-form" class="space-y-6">
                          <div>
@@ -739,7 +767,6 @@
         }
 
         function renderLoadingScreen() {
-             milestoneText.textContent = "Processing";
              contentArea.innerHTML = `
                  <div class="text-center animate-in min-h-[350px] flex flex-col items-center justify-center">
                      <div class="clean-spinner mb-8"></div> 
@@ -752,8 +779,6 @@
 
         function renderFinalProgramSummary() {
             progressTextLabel.textContent = `ANALYSIS COMPLETE`;
-            milestoneText.textContent = "Success";
-            milestoneIcon.textContent = "★";
             const primary = getRecommendation(totalScore, userAnswers);
             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
@@ -763,7 +788,7 @@
             const client = clientName.toUpperCase();
             const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
-            const whatsappNumber = "447000000000"; 
+            const whatsappNumber = "447925116794"; 
             const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the coaching quiz and my result was ${primary.title}. I'd like to chat about getting started.`);
             const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
             const showWhatsApp = primary.title.includes(TIER_1_TITLE) || primary.title.includes(TIER_2_TITLE);
@@ -864,25 +889,42 @@
         }
 
         function handleNext() {
-            if (selectedOption !== null) {
+            if (selectedOption !== null && !isTransitioning) {
                 const key = quizData[currentStep].key;
                 const idx = userAnswers.findIndex(a => a.key === key);
                 if (idx !== -1) { totalScore -= userAnswers[idx].score; userAnswers.splice(idx, 1); } 
-                const answerObj = { key, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score };
+                const answerObj = { 
+                    key, 
+                    question: quizData[currentStep].question, 
+                    answer: selectedOption.text, 
+                    short: selectedOption.short, 
+                    score: selectedOption.score 
+                };
                 if (selectedOption.budgetId) answerObj.budgetId = selectedOption.budgetId;
                 if (selectedOption.expId) answerObj.expId = selectedOption.expId;
                 if (selectedOption.whyId) answerObj.whyId = selectedOption.whyId;
                 if (selectedOption.category) answerObj.category = selectedOption.category;
                 userAnswers.push(answerObj);
-                totalScore += selectedOption.score; currentStep++;
-                renderQuestion();
-                scrollToTarget();
+                totalScore += selectedOption.score; 
+                
+                currentStep++;
+
+                // Check for transition trigger
+                const transition = phaseTransitions.find(t => t.triggerIndex === currentStep);
+                if (transition) {
+                    renderTransitionScreen(transition);
+                    updateProgress();
+                    scrollToTarget();
+                } else {
+                    renderQuestion();
+                    scrollToTarget();
+                }
             }
         }
         
-        function handleBack() { currentStep = Math.max(0, currentStep - 1); renderQuestion(); scrollToTarget(); }
+        function handleBack() { currentStep = Math.max(0, currentStep - 1); isTransitioning = false; renderQuestion(); scrollToTarget(); }
         function handlePersonalize(e) { e.preventDefault(); clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; renderLoadingScreen(); scrollToTarget(); }
-        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; renderQuestion(); scrollToTarget(); }
+        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; isTransitioning = false; renderQuestion(); scrollToTarget(); }
         document.addEventListener('DOMContentLoaded', () => { updateProgress(); renderQuestion(); });
     </script>
 </body>
