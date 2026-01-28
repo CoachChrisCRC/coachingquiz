@@ -364,20 +364,16 @@
         }
         
         function getRecommendation(score, answers) {
-            // STEP 1: Determine original recommendation based on score
             let rec;
             if (score >= 230) rec = getProgramDetailsByTitle(TIER_1_TITLE);
             else if (score >= 145) rec = getProgramDetailsByTitle(TIER_2_TITLE);
             else rec = getProgramDetailsByTitle(TIER_3_TITLE);
 
-            // STEP 2: Logic Improvement #1 - Budget Hard Stop
             const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
             
-            // If they can only afford £50, they cannot do 1-1 or FSB
             if (budgetAnswer.includes("Up to £50")) {
                 rec = getProgramDetailsByTitle(TIER_3_TITLE);
             } 
-            // If they can only afford £100, they cannot do 1-1
             else if (budgetAnswer.includes("Up to £100") && rec.title === TIER_1_TITLE) {
                 rec = getProgramDetailsByTitle(TIER_2_TITLE);
             }
@@ -393,11 +389,7 @@
             } else if (primaryTitle.includes(TIER_2_TITLE)) {
                 return getProgramDetailsByTitle(TIER_3_TITLE);
             } else {
-                // If they are in the library, the alternative is usually FSB 
-                // UNLESS their budget prohibits it
-                if (budgetAnswer.includes("Up to £50")) {
-                    return null; // No affordable alternative at this time
-                }
+                // For Program Library, we always suggest FSB as a potential upgrade path
                 return getProgramDetailsByTitle(TIER_2_TITLE);
             }
         }
@@ -424,24 +416,35 @@
             else if (recommendationTitle.includes(TIER_2_TITLE)) feature = 'structured programming and coach check-ins';
             else feature = 'expert-designed training plans';
 
-            let rationale = `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. The <strong>${recommendationTitle}</strong> provides <span class="text-white font-bold">${feature}</span> to ensure results.`;
+            let rationale = `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
-            // Add a note if they were budget-capped
+            // Tasteful integration of budget constraints
             if (budgetAnswer.includes("Up to £50") || (budgetAnswer.includes("Up to £100") && recommendationTitle !== TIER_1_TITLE)) {
-                rationale += `<br><br><span class="text-neutral-400 text-[10px] uppercase font-bold tracking-widest">Note: Program selected based on your current budget preference.</span>`;
+                rationale += `Working within your <span class="text-white font-bold">preferred budget</span>, the <strong>${recommendationTitle}</strong> is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
+            } else {
+                rationale += `The <strong>${recommendationTitle}</strong> provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
             }
 
             return rationale;
         }
 
-        function generateAlternativeDescription(primaryRec, altRec) {
+        function generateAlternativeDescription(primaryRec, altRec, answers) {
             if (!altRec) return "";
+            const budgetAnswer = answers.find(a => a.key === 'budget')?.answer || '';
             const p = primaryRec.title;
             let d = '';
-            if (p.includes(TIER_1_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** offers balance without the full 1-1 investment.`;
+            
+            if (p.includes(TIER_3_TITLE) && altRec.title.includes(TIER_2_TITLE)) {
+                if (budgetAnswer.includes("Up to £50")) {
+                    d = `If you decide to **increase your investment slightly**, the **${TIER_2_TITLE}** adds professional coach check-ins to the standard programming.`;
+                } else {
+                    d = `The **${TIER_2_TITLE}** adds coach check-ins and hybrid targets for better long-term accountability.`;
+                }
+            }
+            else if (p.includes(TIER_1_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** offers balance without the full 1-1 investment.`;
             else if (p.includes(TIER_2_TITLE) && altRec.title.includes(TIER_3_TITLE)) d = `The **${TIER_3_TITLE}** provides expert plans for independent trainees.`;
-            else if (p.includes(TIER_3_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** adds coach check-ins for better accountability.`;
             else d = altRec.description;
+            
             return markdownToHtml(d);
         }
 
@@ -555,7 +558,7 @@
             const primary = getRecommendation(totalScore, userAnswers);
             const alt = getAlternativeRecommendation(primary.title, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
-            const altDesc = alt ? generateAlternativeDescription(primary, alt) : null; 
+            const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
             const client = clientName.toUpperCase();
             
             let step2;
