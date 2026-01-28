@@ -336,8 +336,6 @@
             ] }
         ];
 
-        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior";
-
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
         const TIER_2_TITLE = "FITTER STRONGER BETTER SUBSCRIPTION";
         const TIER_3_TITLE = "ONLINE PROGRAM LIBRARY";
@@ -390,24 +388,36 @@
         function getRecommendation(score, answers) {
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            const supportPref = answers.find(a => a.key === 'support')?.answer || '';
+            
+            // --- HYBRID FILTER TRIGGER ---
+            const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
+            const longTermGoal = answers.find(a => a.key === 'longTerm')?.answer || '';
+            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && longTermGoal.includes("longevity");
             
             // 1. High-Support Override: Budget £175+ always gets 1-1 Coaching
             if (budgetId === 'PREMIUM') {
                 return getProgramDetailsByTitle(TIER_1_TITLE);
             } 
             
-            // 2. Beginner/Returner Route
+            // 2. Beginner/Returner Route (Safety First)
             if (expId === 'BEGINNER' || expId === 'RETURNING') {
-                // If they chose Independent (£45), send them to the Library's self-guided beginner plans
-                if (budgetId === 'ENTRY') {
-                    return getProgramDetailsByTitle(TIER_3_TITLE);
-                }
-                // Otherwise, they get the guided Foundations path
+                if (budgetId === 'ENTRY') return getProgramDetailsByTitle(TIER_3_TITLE);
                 return getProgramDetailsByTitle(FOUNDATIONS_TITLE);
             }
 
-            // 3. Experienced/Standard Route
-            if (score >= 160 && budgetId !== 'ENTRY') {
+            // 3. Experienced/Hybrid Route 
+            // If they are Independent OR want to "handle the rest" themselves, the Library is now the primary hybrid choice.
+            const isIndependentHybrid = isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("handle the rest"));
+
+            if (isIndependentHybrid) {
+                return getProgramDetailsByTitle(TIER_3_TITLE);
+            }
+
+            // Standard Experienced Logic (with score weighting for FSB)
+            const fsbThreshold = isHybridIntent ? 140 : 160;
+
+            if (score >= fsbThreshold && budgetId !== 'ENTRY') {
                 return getProgramDetailsByTitle(TIER_2_TITLE);
             }
             
@@ -424,12 +434,10 @@
             } 
             
             if (primary.title.includes(FOUNDATIONS_TITLE)) {
-                // If Foundations is primary, alternative is Library for independent approach
                 return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
             }
 
             if (primary.title.includes(TIER_3_TITLE)) {
-                // If Library is primary for a beginner, alternative is the Guided Foundations
                 if (expId === 'BEGINNER' || expId === 'RETURNING') {
                     return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'UPGRADE' };
                 }
@@ -518,6 +526,7 @@
             return markdownToHtml(d);
         }
 
+        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior";
         const contentArea = document.getElementById('content-area');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const progressTextLabel = document.getElementById('progress-text-label'); 
