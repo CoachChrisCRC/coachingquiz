@@ -326,7 +326,7 @@
                 { text: "Undecided: Show me what fits my needs first", score: 25, budgetId: 'FLEX' }
             ] },
             { id: 7, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
-            { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but need more structure", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
+            { id: 8, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but focus on consistency", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
             { id: 9, question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
             { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] },
             { id: 11, question: "How would you describe your current training experience?", key: "experience", options: [
@@ -390,31 +390,25 @@
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const supportPref = answers.find(a => a.key === 'support')?.answer || '';
             
-            // --- HYBRID FILTER TRIGGER ---
             const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
             const longTermGoal = answers.find(a => a.key === 'longTerm')?.answer || '';
             const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && longTermGoal.includes("longevity");
             
-            // 1. High-Support Override: Budget £175+ always gets 1-1 Coaching
             if (budgetId === 'PREMIUM') {
                 return getProgramDetailsByTitle(TIER_1_TITLE);
             } 
             
-            // 2. Beginner/Returner Route (Safety First)
             if (expId === 'BEGINNER' || expId === 'RETURNING') {
                 if (budgetId === 'ENTRY') return getProgramDetailsByTitle(TIER_3_TITLE);
                 return getProgramDetailsByTitle(FOUNDATIONS_TITLE);
             }
 
-            // 3. Experienced/Hybrid Route 
-            // If they are Independent OR want to "handle the rest" themselves, the Library is now the primary hybrid choice.
             const isIndependentHybrid = isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("handle the rest"));
 
             if (isIndependentHybrid) {
                 return getProgramDetailsByTitle(TIER_3_TITLE);
             }
 
-            // Standard Experienced Logic (with score weighting for FSB)
             const fsbThreshold = isHybridIntent ? 140 : 160;
 
             if (score >= fsbThreshold && budgetId !== 'ENTRY') {
@@ -645,10 +639,10 @@
             if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START FREE 14-DAY FUNDAMENTALS";
 
             let step2;
-            if (primary.title.includes(TIER_1_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></li>`;
-            else if (primary.title.includes(FOUNDATIONS_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Secure Your Intake</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Complete the free fundamentals and **secure your spot** in the next group intake.")}</span></li>`;
-            else if (primary.title.includes(TIER_2_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></li>`;
-            else step2 = `<li><span class="text-white font-bold">Step 2: Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></li>`;
+            if (primary.title.includes(TIER_1_TITLE)) step2 = `<div><span class="text-white font-bold">Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></div>`;
+            else if (primary.title.includes(FOUNDATIONS_TITLE)) step2 = `<div><span class="text-white font-bold">Secure Your Intake</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Complete the free fundamentals and **secure your spot** in the next group intake.")}</span></div>`;
+            else if (primary.title.includes(TIER_2_TITLE)) step2 = `<div><span class="text-white font-bold">Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></div>`;
+            else step2 = `<div><span class="text-white font-bold">Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></div>`;
 
             contentArea.innerHTML = `
                 <div class="animate-in space-y-8">
@@ -684,7 +678,6 @@
                         <h3 class="text-sm font-black uppercase text-white tracking-widest">Success Principles</h3>
                         <ul class="space-y-4 text-sm text-neutral-400">
                             <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Consistency Over Perfection:</strong> 5 solid sessions beat 1 "perfect" one.</span></li>
-                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Health Screening:</strong> A Par-Q screening is mandatory inside the training app for all new clients.</span></li>
                         </ul>
                     </div>
 
@@ -697,7 +690,11 @@
                             </li>
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">2</span>
-                                <div>${step2}</div>
+                                ${step2}
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">3</span>
+                                <div><span class="text-white font-bold">Health Screening</span><span class="block text-neutral-400 text-sm mt-1">To ensure your safety, you'll complete a **Par-Q (Physical Activity Readiness Questionnaire)** inside the training app before we start.</span></div>
                             </li>
                         </ol>
                     </div>
