@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find your path to #Fitter #Stronger #Better | COACH CHRIS</title>
     
-    <!-- --- SOCIAL SHARING METADATA (OPEN GRAPH & TWITTER CARD) --- -->
+    <!-- --- SOCIAL SHARING METADATA --- -->
     <meta property="og:title" content="Find your path to #Fitter #Stronger #Better">
     <meta property="og:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
     <meta property="og:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
@@ -14,21 +14,57 @@
     <meta name="twitter:title" content="Find your path to #Fitter #Stronger #Better">
     <meta name="twitter:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
     <meta name="twitter:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
-    <!-- --- END SOCIAL SHARING METADATA --- -->
 
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
-        /* --- LOADING SCREEN CSS --- */
+        /* --- BACKGROUND & GLASSMORPHISM CORE --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #1a1a1a 0%, #000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background blobs for depth */
+        body::before, body::after {
+            content: "";
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.15);
+            filter: blur(100px);
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        body::after {
+            background: rgba(34, 197, 94, 0.1);
+            right: -10%;
+            top: 20%;
+            animation-delay: -5s;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(10%, 10%); }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* --- LOADING SCREEN --- */
         #initial-loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #050505;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -37,19 +73,9 @@
             transition: opacity 0.5s ease-out;
         }
 
-        .loader-content {
-            text-align: center;
-            animation: pulse-slow 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.02); }
-        }
-
         .cycling-text {
             font-family: monospace;
-            color: #22c55e; /* Green-500 */
+            color: #22c55e;
             font-size: 0.75rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -57,55 +83,31 @@
             min-height: 1.2em;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #fff;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 40%);
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
-
-        /* --- GLASSMORPHISM COMPONENTS --- */
-        
+        /* --- QUIZ SPECIFIC STYLES --- */
         .quiz-container {
             max-width: 650px;
             min-height: 550px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(4px);
-            border-radius: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .option-button {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
             color: #fff;
             font-weight: 500;
-            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.2s ease;
         }
 
         .option-button:hover:not(.selected) {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-color: rgba(34, 197, 94, 0.5);
-            transform: translateY(-2px);
+            transform: translateX(4px);
         }
 
         .selected {
             background: rgba(34, 197, 94, 0.2) !important;
-            color: #22c55e !important;
             border-color: #22c55e !important;
+            color: #fff !important;
             box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
         }
 
@@ -115,20 +117,20 @@
             font-weight: 800;
             text-transform: uppercase;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
         
         .action-button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.6);
             filter: brightness(1.1);
         }
         
         .action-button:disabled {
             background: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.3);
-            cursor: not-allowed;
             box-shadow: none;
+            cursor: not-allowed;
         }
         
         .secondary-button {
@@ -140,152 +142,110 @@
         }
         .secondary-button:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .summary-secondary-button {
-            background: transparent;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-weight: 700;
-            text-transform: uppercase;
-            transition: all 0.2s;
-        }
-        .summary-secondary-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #fff;
         }
 
         .progress-container {
-            background: rgba(255, 255, 255, 0.1); 
-            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
         }
         .progress-bar-fill {
-            background: linear-gradient(90deg, #166534, #22c55e);
+            background: linear-gradient(90deg, #22c55e, #4ade80);
             box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .animate-in {
-            animation: slideUpFade 0.5s ease-out;
+            animation: slideUpFade 0.5s ease-out forwards;
         }
 
         @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .custom-input {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            color: white;
             transition: all 0.2s;
         }
         .custom-input:focus {
             outline: none;
             border-color: #22c55e;
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
         }
         
         input[type="checkbox"] {
             -webkit-appearance: none;
             appearance: none;
-            width: 1.25rem;
-            height: 1.25rem;
-            background: rgba(255, 255, 255, 0.1);
+            width: 1.25rem; height: 1.25rem;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
             cursor: pointer;
             position: relative;
         }
-        
         input[type="checkbox"]:checked {
-            background-color: #22c55e;
+            background: #22c55e;
             border-color: #22c55e;
         }
-        
         input[type="checkbox"]:checked::after {
             content: '✓';
             position: absolute;
-            color: #000;
-            font-weight: 900;
+            color: black;
+            font-weight: bold;
             font-size: 0.8rem;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
         
-        .or-separator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem; 
-            font-weight: 800;    
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            margin: 1rem 0;      
-        }
-        
         .clean-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.1); 
-            border-top: 4px solid #22c55e; 
+            width: 50px; height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #22c55e;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Results specific glass styling */
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+<body class="flex flex-col items-center justify-center p-4 sm:p-6">
 
     <!-- SPLASH SCREEN LOADER -->
     <div id="initial-loader">
         <div class="loader-content flex flex-col items-center">
-            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic" style="font-family: sans-serif;">
-                COACHING QUIZ
-            </h1>
-            <div id="loader-pulse-text" class="text-green-500 font-bold text-xl uppercase tracking-widest mt-2" style="font-family: sans-serif;">
-                Loading...
-            </div>
-            <div id="loader-sub-text" class="cycling-text">
-                Initializing assessment...
-            </div>
+            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">COACHING QUIZ</h1>
+            <div id="loader-pulse-text" class="text-green-500 font-bold text-xl uppercase tracking-widest mt-2">Loading...</div>
+            <div id="loader-sub-text" class="cycling-text">Initializing assessment...</div>
         </div>
     </div>
 
     <!-- Main Quiz Container -->
-    <div id="quiz-app" class="quiz-container w-full rounded-3xl p-6 md:p-10 relative overflow-hidden">
+    <div id="quiz-app" class="quiz-container glass-panel w-full rounded-3xl p-6 md:p-10 relative overflow-hidden">
         
-        <!-- Decoration: Green accent glow top -->
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent opacity-50"></div>
+        <!-- Decoration: Glowing Green line top -->
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]"></div>
 
         <!-- BRANDING BLOCK -->
-        <div class="mb-8 leading-tight animate-in">
-            <h1 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter">
+        <div class="mb-8 animate-in">
+            <h1 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">
                 COACH CHRIS
             </h1>
-            <p class="text-xs sm:text-sm font-bold uppercase text-green-500 tracking-widest">
-                CIRCULAR ROOTS COACHING
-            </p>
-            <p class="text-[10px] sm:text-xs font-medium uppercase text-white/50 tracking-[0.2em] mt-1">
-                TRAIN UNCNVNTNL
-            </p>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                <p class="text-xs font-bold uppercase text-neutral-400 tracking-widest">CIRCULAR ROOTS COACHING</p>
+                <p class="text-xs font-bold uppercase text-green-500 tracking-widest">TRAIN UNCNVNTNL</p>
+            </div>
         </div>
 
         <!-- Main Quiz Title -->
-        <h2 class="text-2xl sm:text-3xl font-black text-white mb-6 uppercase italic tracking-tighter leading-tight">
+        <h2 class="text-2xl sm:text-3xl font-black text-white mb-6 uppercase italic tracking-tight leading-tight">
             FIND YOUR PATH TO BECOMING 
             <span class="text-green-500">#FITTER</span> 
             <span class="text-green-500">#STRONGER</span> 
@@ -295,76 +255,62 @@
         <!-- Progress Bar -->
         <div class="mb-10">
             <div class="flex items-center justify-between mb-2">
-                <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">
+                <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
                     QUESTION 1 OF 10
                 </p>
                 <p id="progress-percent" class="text-[10px] font-black text-green-500 tracking-widest">
                     0%
                 </p>
             </div>
-            <div class="progress-container w-full rounded-full overflow-hidden">
+            <div class="progress-container h-1.5 w-full rounded-full overflow-hidden">
                 <div id="progress-bar-fill" class="progress-bar-fill h-full" style="width: 0%;"></div>
             </div>
         </div>
 
         <!-- Dynamic Content Area -->
         <div id="content-area">
-            <div class="text-center font-bold text-white/20 animate-pulse tracking-widest">LOADING...</div>
+            <div class="text-center font-bold animate-pulse text-neutral-500">LOADING...</div>
         </div>
-
     </div>
     
     <!-- Footer Block -->
     <div class="mt-12 w-full max-w-2xl text-center px-4">
-        <p id="disclaimer" class="text-white/30 text-[11px] mb-6 leading-relaxed uppercase tracking-wider">
-            General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime or making changes to your diet. This site provides general information for educational purposes only and is not intended to diagnose or treat any medical condition. You engage in physical activity at your own risk.
+        <p id="disclaimer" class="text-neutral-500 text-xs mb-6 leading-relaxed max-w-xl mx-auto">
+            General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime. This site provides general information for educational purposes only. You engage in physical activity at your own risk.
         </p>
-        <p class="text-white/60 font-bold text-[10px] uppercase tracking-[0.2em] leading-snug">
-            © 2025 COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL.
+        <p class="text-neutral-400 font-bold text-[10px] uppercase tracking-[0.25em]">
+            © <span id="current-year">2025</span> COACH CHRIS | CIRCULAR ROOTS COACHING
         </p>
-        <div class="flex items-center justify-center space-x-2 mt-4 opacity-40">
-            <span class="h-px w-8 bg-white/20"></span>
-            <p class="text-white text-[10px] tracking-[0.3em] uppercase">Fitter. Stronger. Better.</p>
-            <span class="h-px w-8 bg-white/20"></span>
-        </div>
+        <p class="text-green-500/50 text-sm italic font-semibold mt-2 tracking-widest">
+            Fitter. Stronger. Better.
+        </p>
     </div>
 
 
     <script>
+        // Set dynamic year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
         // Loading Screen Animation Logic
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const subText = document.getElementById('loader-sub-text');
-            
-            const cycleMessages = [
-                "Loading quiz questions...",
-                "Configuring assessment logic...",
-                "Ready."
-            ];
-            
+            const cycleMessages = ["Loading questions...", "Configuring logic...", "Ready."];
             let i = 0;
             const cycleInterval = setInterval(() => {
-                if (i < cycleMessages.length) {
-                    subText.textContent = cycleMessages[i];
-                    i++;
-                } else {
-                    clearInterval(cycleInterval);
-                }
+                if (i < cycleMessages.length) { subText.textContent = cycleMessages[i++]; }
+                else { clearInterval(cycleInterval); }
             }, 500);
-
             setTimeout(() => {
                 loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500);
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
             }, 1800);
         });
 
         function markdownToHtml(text) {
             if (!text) return "";
-            let result = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
-            result = result.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
-            return result;
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
+                       .replace(/\*(.*?)\*/g, '<em class="text-neutral-300 font-medium">$1</em>');
         }
 
         const quizData = [
@@ -380,11 +326,7 @@
             { id: 10, question: "What is your long-term health objective?", key: "longTerm", options: [{ text: "Maximize longevity and long-term vitality", score: 25 }, { text: "Improve aesthetics and physical appearance", score: 20 }, { text: "Perform at an elite level (sports/professional need)", score: 30 }, { text: "Maintain my current health and fitness level", score: 5 }] }
         ];
 
-        let currentStep = 0;
-        let totalScore = 0;
-        let selectedOption = null;
-        let userAnswers = []; 
-        let clientName = "Warrior"; 
+        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior";
 
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
         const TIER_2_TITLE = "FITTER STRONGER BETTER SUBSCRIPTION";
@@ -396,7 +338,7 @@
                     title: TIER_1_TITLE,
                     description: "Your goals require maximum accountability and highly specific programming. This is the premium, fully tailored solution designed to adapt to your lifestyle and ensure rapid, consistent progress.",
                     briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built specifically for you. Includes weekly in-depth check-ins, unlimited direct messaging with Coach Chris, and dynamic program adjustments.", 
-                    accentColor: "text-green-500",
+                    accentColor: "text-green-400",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
                     requiresCall: true
                 };
@@ -414,7 +356,7 @@
                     title: TIER_3_TITLE,
                     description: "You are seeking expert-designed, foundational guidance. Gain instant access to professionally built, self-paced training plans you can execute on your own schedule.",
                     briefOverview: "Gain self-guided access to a library of diverse programs, including strength cycles, conditioning blocks, and WOD packs. Features full tutorials and movement demos—perfect for the independent trainee.", 
-                    accentColor: "text-gray-300",
+                    accentColor: "text-neutral-300",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
                     requiresCall: false
                 };
@@ -422,61 +364,48 @@
         }
         
         function getRecommendation(score) {
-            const s = parseInt(score, 10); 
-            if (s >= 230) return getProgramDetailsByTitle(TIER_1_TITLE);
-            else if (s >= 145) return getProgramDetailsByTitle(TIER_2_TITLE);
-            else return getProgramDetailsByTitle(TIER_3_TITLE);
+            if (score >= 230) return getProgramDetailsByTitle(TIER_1_TITLE);
+            else if (score >= 145) return getProgramDetailsByTitle(TIER_2_TITLE);
+            return getProgramDetailsByTitle(TIER_3_TITLE);
         }
         
-        function getAlternativeRecommendation(primaryRecommendationTitle) {
-            if (primaryRecommendationTitle.includes(TIER_1_TITLE)) return getProgramDetailsByTitle(TIER_2_TITLE);
-            else if (primaryRecommendationTitle.includes(TIER_2_TITLE)) return getProgramDetailsByTitle(TIER_3_TITLE);
-            else return getProgramDetailsByTitle(TIER_2_TITLE);
+        function getAlternativeRecommendation(primaryTitle) {
+            if (primaryTitle.includes(TIER_1_TITLE)) return getProgramDetailsByTitle(TIER_2_TITLE);
+            else if (primaryTitle.includes(TIER_2_TITLE)) return getProgramDetailsByTitle(TIER_3_TITLE);
+            return getProgramDetailsByTitle(TIER_2_TITLE);
         }
         
         function generatePersonalizedRationale(answers, recommendationTitle) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
-            
             let goalPhrase = rawGoal;
-            if (rawGoal.includes("Shedding fat")) goalPhrase = "your focus on fat loss and physique transformation";
-            else if (rawGoal.includes("Getting strong")) goalPhrase = "your objective of building muscle and strength";
-            else if (rawGoal.includes("Boosting energy")) goalPhrase = "your desire for improved energy and endurance";
-            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "your goal of establishing consistent, healthy habits";
+            if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
+            else if (rawGoal.includes("Getting strong")) goalPhrase = "building muscle and strength";
+            else if (rawGoal.includes("Boosting energy")) goalPhrase = "improved energy and endurance";
+            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "establishing consistent habits";
 
             let barrierPhrase = rawBarrier;
-            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "the lack of a structured program that fits your needs";
-            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "a strong need for external accountability and regular coach feedback";
-            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "the challenge of optimizing your nutrition strategy";
-            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "the difficulty of maintaining motivation and managing your training time";
+            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "lack of structure";
+            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "need for external accountability";
+            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "optimizing nutrition";
+            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "managing training time";
 
-            let keySupportFeature = '';
-            if (recommendationTitle.includes(TIER_1_TITLE)) keySupportFeature = 'maximum 1-on-1 personalization and professional programming';
-            else if (recommendationTitle.includes(TIER_2_TITLE)) keySupportFeature = 'structured programming paired with monthly individual check-ins';
-            else keySupportFeature = 'immediate access to expert-designed training plans that remove the guesswork';
+            let feature = '';
+            if (recommendationTitle.includes(TIER_1_TITLE)) feature = 'maximum 1-on-1 personalization';
+            else if (recommendationTitle.includes(TIER_2_TITLE)) feature = 'structured programming and coach check-ins';
+            else feature = 'expert-designed training plans';
 
-            let rationale = `We recognize <strong class="text-white">${goalPhrase}</strong> as your priority. `;
-            rationale += `However, it appears your progress is currently hindered by <strong class="text-white">${barrierPhrase}</strong>. `;
-            rationale += `The <strong>${recommendationTitle}</strong> is designed to overcome this by providing <strong class="text-white">${keySupportFeature}</strong> to ensure you achieve consistent, long-term results.`;
-            
-            return rationale;
+            return `We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. The <strong>${recommendationTitle}</strong> provides <span class="text-white font-bold">${feature}</span> to ensure results.`;
         }
 
-        function generateAlternativeDescription(primaryRec, alternativeRec) {
-            const primaryTitle = primaryRec.title;
-            let description = '';
-
-            if (primaryTitle.includes(TIER_1_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
-                description = `The **${TIER_2_TITLE}** offers an ideal balance of structure and support without the full 1-1 investment. It includes high-quality programming and direct coach check-ins—perfect for achieving consistency.`;
-            } else if (primaryTitle.includes(TIER_2_TITLE) && alternativeRec.title.includes(TIER_3_TITLE)) {
-                description = `If you prefer independent training or are working with a tighter budget, the **${TIER_3_TITLE}** provides expert-built plans. You gain instant access to programs designed to deliver results on your own schedule.`;
-            } else if (primaryTitle.includes(TIER_3_TITLE) && alternativeRec.title.includes(TIER_2_TITLE)) {
-                description = `If you feel you need more accountability than a self-paced plan provides, the **${TIER_2_TITLE}** adds monthly individual coach check-ins to ensure you stay on track and maximize your progress.`;
-            } else {
-                description = alternativeRec.description;
-            }
-            
-            return markdownToHtml(description);
+        function generateAlternativeDescription(primaryRec, altRec) {
+            const p = primaryRec.title;
+            let d = '';
+            if (p.includes(TIER_1_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** offers balance without the full 1-1 investment.`;
+            else if (p.includes(TIER_2_TITLE) && altRec.title.includes(TIER_3_TITLE)) d = `The **${TIER_3_TITLE}** provides expert plans for independent trainees.`;
+            else if (p.includes(TIER_3_TITLE) && altRec.title.includes(TIER_2_TITLE)) d = `The **${TIER_2_TITLE}** adds coach check-ins for better accountability.`;
+            else d = altRec.description;
+            return markdownToHtml(d);
         }
 
         const contentArea = document.getElementById('content-area');
@@ -485,218 +414,175 @@
         const progressPercent = document.getElementById('progress-percent'); 
 
         function updateProgress() {
-            const totalQuestions = quizData.length;
-            const displayStep = currentStep === totalQuestions ? totalQuestions : currentStep + 1;
-            const progress = (currentStep / totalQuestions) * 100;
-            const percentageDisplay = Math.round(progress);
-
+            const total = quizData.length;
+            const displayStep = currentStep === total ? total : currentStep + 1;
+            const progress = (currentStep / total) * 100;
             progressBarFill.style.width = `${progress}%`;
-            progressPercent.textContent = `${percentageDisplay}%`;
-
-            if (currentStep < totalQuestions) {
-                progressTextLabel.textContent = `QUESTION ${displayStep} OF ${totalQuestions}`;
-            } else {
-                 progressBarFill.style.width = `100%`;
-                 progressTextLabel.textContent = `QUIZ COMPLETE`; 
-            }
+            progressPercent.textContent = `${Math.round(progress)}%`;
+            if (currentStep < total) progressTextLabel.textContent = `QUESTION ${displayStep} OF ${total}`;
+            else progressTextLabel.textContent = `QUIZ COMPLETE`;
         }
 
         function renderQuestion() {
-            if (currentStep >= quizData.length) {
-                renderNameInputScreen();
-                return;
-            }
-
+            if (currentStep >= quizData.length) { renderNameInputScreen(); return; }
             const stepData = quizData[currentStep];
-            const previousAnswer = userAnswers.find(a => a.key === stepData.key);
-            selectedOption = previousAnswer ? stepData.options.find(opt => opt.text === previousAnswer.answer) : null;
-            
+            const prev = userAnswers.find(a => a.key === stepData.key);
+            selectedOption = prev ? stepData.options.find(opt => opt.text === prev.answer) : null;
             contentArea.innerHTML = ''; 
+            const nextText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
 
-            const nextButtonText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
-
-            const questionBlock = document.createElement('div');
-            questionBlock.className = 'animate-in';
-            questionBlock.innerHTML = `
-                <h2 class="text-xl sm:text-2xl font-black uppercase leading-tight mb-8 text-white">${stepData.question}</h2>
+            const div = document.createElement('div');
+            div.className = 'animate-in';
+            div.innerHTML = `
+                <h2 class="text-xl sm:text-2xl font-bold text-white leading-snug mb-8">${stepData.question}</h2>
                 <div id="options-container" class="space-y-3"></div>
-                <div class="flex space-x-3 mt-10">
-                    <button id="back-button" class="secondary-button w-1/3 p-4 text-sm rounded-xl">
-                        BACK
-                    </button>
-                    <button id="next-button" ${selectedOption ? '' : 'disabled'} class="action-button flex-grow p-4 text-sm rounded-xl">
-                        ${nextButtonText}
-                    </button>
+                <div class="flex space-x-4 mt-12">
+                    <button id="back-button" class="secondary-button w-1/3 p-4 text-sm uppercase tracking-widest rounded-2xl">BACK</button>
+                    <button id="next-button" ${selectedOption ? '' : 'disabled'} class="action-button flex-grow p-4 text-sm uppercase tracking-widest rounded-2xl">${nextText}</button>
                 </div>
             `;
-            contentArea.appendChild(questionBlock);
+            contentArea.appendChild(div);
 
-            const optionsContainer = document.getElementById('options-container');
-            const nextButton = document.getElementById('next-button');
-            const backButton = document.getElementById('back-button');
+            const container = document.getElementById('options-container');
+            const nextBtn = document.getElementById('next-button');
+            const backBtn = document.getElementById('back-button');
+            if (currentStep === 0) backBtn.classList.add('invisible');
+            else backBtn.addEventListener('click', handleBack);
 
-            if (currentStep === 0) backButton.classList.add('invisible');
-            else backButton.addEventListener('click', handleBack);
-
-            stepData.options.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = option.text;
-                button.className = 'option-button w-full text-left p-4 rounded-xl text-sm sm:text-base';
-                if (selectedOption && option.text === selectedOption.text) button.classList.add('selected');
-
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
-                    button.classList.add('selected');
-                    selectedOption = option; 
-                    nextButton.disabled = false;
+            stepData.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.textContent = opt.text;
+                btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base';
+                if (selectedOption && opt.text === selectedOption.text) btn.classList.add('selected');
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.option-button').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedOption = opt; nextBtn.disabled = false;
                 });
-                optionsContainer.appendChild(button);
+                container.appendChild(btn);
             });
-            
-            nextButton.addEventListener('click', handleNext);
+            nextBtn.addEventListener('click', handleNext);
             updateProgress();
         }
         
         function renderNameInputScreen() {
-             currentStep = quizData.length;
-             updateProgress();
-
+             currentStep = quizData.length; updateProgress();
              contentArea.innerHTML = `
-                 <div class="text-center animate-in">
+                 <div class="text-center animate-in mb-8">
                      <div class="inline-block p-4 rounded-full border border-green-500/30 bg-green-500/10 mb-6">
                          <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                          </svg>
                      </div>
+                     <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Finalize Results</h2>
                  </div>
-                 <h2 class="text-2xl font-black uppercase leading-tight mb-6 text-center italic tracking-tighter text-white">FINALIZE YOUR RESULTS</h2>
-                 <div class="animate-in glass-card p-6 md:p-8 relative">
-                     <p class="text-sm font-medium text-white/70 mb-6 text-center">Enter your first name and agree to the disclaimer below to view your personalized recommendation.</p>
+                 <div class="animate-in glass-panel p-6 rounded-3xl relative overflow-hidden">
+                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-green-500/10 blur-2xl"></div>
+                     <p class="text-sm font-medium text-neutral-300 mb-6">Enter your first name and agree to the disclaimer to unlock your recommendation.</p>
                      <form id="personalization-form" class="space-y-6">
                          <div>
-                             <label for="client-name-input" class="block text-[10px] font-black uppercase mb-2 tracking-[0.2em] text-white/50">First Name</label>
-                             <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-4 rounded-xl text-lg" placeholder="JANE" value="${clientName === 'Warrior' ? '' : clientName}">
+                             <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">First Name</label>
+                             <input type="text" id="client-name-input" required class="custom-input block w-full p-4 rounded-xl" placeholder="E.G. JANE" value="${clientName === 'Warrior' ? '' : clientName}">
                          </div>
                          <div class="flex items-start">
-                            <input type="checkbox" id="disclaimer-check" name="disclaimer" required class="mt-1">
-                            <label for="disclaimer-check" class="ml-3 text-xs font-medium text-white/60 leading-relaxed">
+                            <input type="checkbox" id="disclaimer-check" required class="mt-1">
+                            <label for="disclaimer-check" class="ml-3 text-xs text-neutral-400 leading-snug">
                                 I have read and agree to the <a href="#disclaimer" class="font-bold underline text-white">fitness disclaimer</a>.
                             </label>
                         </div>
-                         <button type="submit" id="display-button" disabled class="action-button w-full py-4 rounded-xl text-sm tracking-[0.1em]">GENERATE ANALYSIS</button>
+                         <button type="submit" id="display-button" disabled class="action-button w-full py-5 rounded-2xl text-sm tracking-widest">VIEW ANALYSIS</button>
                      </form>
                  </div>
              `;
-             
              document.getElementById('personalization-form').addEventListener('submit', handlePersonalize);
-             const nameInput = document.getElementById('client-name-input');
-             const disclaimerCheck = document.getElementById('disclaimer-check');
-             const confirmButton = document.getElementById('display-button');
-             
-             const updateButtonState = () => {
-                 const isNameValid = nameInput.value.trim().length > 0;
-                 const isChecked = disclaimerCheck.checked;
-                 confirmButton.disabled = !(isNameValid && isChecked);
-             };
-
-             nameInput.addEventListener('input', updateButtonState);
-             disclaimerCheck.addEventListener('change', updateButtonState);
-             updateButtonState(); 
+             const nameIn = document.getElementById('client-name-input');
+             const check = document.getElementById('disclaimer-check');
+             const btn = document.getElementById('display-button');
+             const upd = () => btn.disabled = !(nameIn.value.trim().length > 0 && check.checked);
+             nameIn.addEventListener('input', upd); check.addEventListener('change', upd); upd(); 
         }
 
         function renderLoadingScreen() {
              contentArea.innerHTML = `
-                 <div class="text-center animate-in min-h-[300px] flex flex-col items-center justify-center">
+                 <div class="text-center animate-in min-h-[350px] flex flex-col items-center justify-center">
                      <div class="clean-spinner mb-8"></div> 
-                     <p class="text-2xl sm:text-3xl font-black uppercase italic mb-4 leading-none text-white tracking-tighter animate-pulse">ANALYZING YOUR ANSWERS...</p>
-                     <p class="text-sm font-medium text-white/40 tracking-widest uppercase">Calculating optimal path</p>
+                     <p class="text-2xl font-black uppercase italic tracking-tighter text-white animate-pulse">Analyzing Answers...</p>
+                     <p class="text-xs text-neutral-500 tracking-widest mt-4">CALCULATING OPTIMAL PATH</p>
                  </div>
              `;
-             setTimeout(() => {
-                 renderFinalProgramSummary();
-                 document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
-             }, 2500);
+             setTimeout(() => { renderFinalProgramSummary(); window.scrollTo({top: 0, behavior: 'smooth'}); }, 2500);
         }
 
         function renderFinalProgramSummary() {
             progressTextLabel.textContent = `ANALYSIS COMPLETE`;
-            const primaryRec = getRecommendation(totalScore);
-            const alternativeRec = getAlternativeRecommendation(primaryRec.title);
-            const personalizedRationale = generatePersonalizedRationale(userAnswers, primaryRec.title);
-            const alternativeDescriptionText = generateAlternativeDescription(primaryRec, alternativeRec); 
-            const clientDisplay = clientName.toUpperCase();
+            const primary = getRecommendation(totalScore);
+            const alt = getAlternativeRecommendation(primary.title);
+            const rationale = generatePersonalizedRationale(userAnswers, primary.title);
+            const altDesc = generateAlternativeDescription(primary, alt); 
+            const client = clientName.toUpperCase();
             
-            let step2Content;
-            const primaryTitle = primaryRec.title;
-
-            if (primaryTitle.includes(TIER_1_TITLE)) {
-                step2Content = `<li><span class="font-bold text-white">Step 2: Apply & Consult</span><span class="block text-white/60 text-sm mt-1">${markdownToHtml("Before signing up, you will need to **submit a quick application form**. You can then **reach out directly via WhatsApp** for a brief chat.")}</span></li>`;
-            } else if (primaryTitle.includes(TIER_2_TITLE)) {
-                step2Content = `<li><span class="font-bold text-white">Step 2: Apply & Gain Access</span><span class="block text-white/60 text-sm mt-1">${markdownToHtml("First, **submit a short application form**. Afterward, **follow the on-screen steps** to complete your sign-up.")}</span></li>`;
-            } else {
-                step2Content = `<li><span class="font-bold text-white">Step 2: Start Your Program</span><span class="block text-white/60 text-sm mt-1">${markdownToHtml(`Once you purchase the **${primaryRec.title}**, you will gain immediate access to the training app.`)}</span></li>`;
-            }
+            let step2;
+            if (primary.title.includes(TIER_1_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></li>`;
+            else if (primary.title.includes(TIER_2_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></li>`;
+            else step2 = `<li><span class="text-white font-bold">Step 2: Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></li>`;
 
             contentArea.innerHTML = `
-                <div class="animate-in space-y-6">
-                    <div class="text-center pb-6 border-b border-white/10">
-                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-2">RECOMMENDED PATH FOR ${clientDisplay}</p>
-                        <h1 class="text-2xl sm:text-3xl font-black uppercase text-white italic leading-tight tracking-tighter">STOP GUESSING. START TRAINING WITH PURPOSE.</h1>
+                <div class="animate-in space-y-8">
+                    <div class="text-center">
+                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-2">Recommendation for ${client}</p>
+                        <h1 class="text-3xl font-black uppercase text-white italic leading-tight">Your Optimal Path</h1>
                     </div>
-                    
-                    <div class="glass-card p-6 border-green-500/20 bg-green-500/5">
-                        <p class="text-[10px] font-black text-green-500 uppercase tracking-widest mb-2">Your Best Fit:</p>
-                        <h2 class="text-2xl font-black text-white leading-tight uppercase mb-4">${primaryRec.title}</h2>
-                        <div class="space-y-4">
-                            <p class="text-sm text-white/70 leading-relaxed italic">${primaryRec.briefOverview}</p>
-                            <div class="p-4 bg-white/5 rounded-xl border border-white/10">
-                                <p class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Why this fits your profile:</p>
-                                <p class="text-xs text-white/80 leading-relaxed">${personalizedRationale}</p>
-                            </div>
+
+                    <div class="result-card p-6 rounded-3xl border-green-500/20 bg-green-500/[0.02]">
+                        <p class="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-4">Best Fit Program</p>
+                        <h2 class="text-2xl font-black uppercase ${primary.accentColor} mb-3 leading-tight">${primary.title}</h2>
+                        <p class="text-neutral-300 text-sm leading-relaxed mb-6">${primary.briefOverview}</p>
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mb-6">
+                            <p class="text-xs italic text-neutral-400 leading-relaxed">${rationale}</p>
                         </div>
+                        <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">GET THE FULL BREAKDOWN</a>
                     </div>
 
-                    <a href="${primaryRec.ctaLink}" target="_blank" class="action-button w-full flex items-center justify-center py-5 rounded-2xl text-base text-center no-underline tracking-widest">VIEW FULL PROGRAM DETAILS</a>
-
-                    <div class="glass-card p-6 border-white/10">
-                        <h3 class="text-xs font-black uppercase mb-4 text-white/40 tracking-[0.2em]">SUITABLE ALTERNATIVE</h3>
-                        <div class="space-y-4">
+                    <div class="result-card p-6 rounded-3xl">
+                        <h3 class="text-xs font-black uppercase text-white mb-4 tracking-widest opacity-50">Suitable Alternative</h3>
+                        <div class="flex flex-col gap-4">
                             <div>
-                                <span class="block text-lg font-black text-white leading-tight">${alternativeRec.title}</span>
-                                <span class="block text-xs text-white/50 mt-2 leading-relaxed">${alternativeDescriptionText}</span>
+                                <span class="block text-lg font-bold ${alt.accentColor} leading-tight">${alt.title}</span>
+                                <span class="block text-xs text-neutral-400 mt-2">${altDesc}</span>
                             </div>
-                            <a href="${alternativeRec.ctaLink}" target="_blank" class="summary-secondary-button w-full block py-3 text-center text-xs rounded-xl">EXPLORE ALTERNATIVE</a>
+                            <a href="${alt.ctaLink}" target="_blank" class="secondary-button py-3 px-5 text-xs rounded-xl text-center no-underline tracking-widest">VIEW DETAILS</a>
                         </div>
                     </div>
 
-                    <div class="space-y-8 pt-6 border-t border-white/10">
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-black uppercase text-white tracking-[0.2em]">SUCCESS PRINCIPLES</h3>
-                            <ul class="space-y-3 text-sm text-white/70">
-                                <li class="flex items-start"><span class="text-green-500 mr-2">/</span> Consistency over perfection.</li>
-                                <li class="flex items-start"><span class="text-green-500 mr-2">/</span> Master the fundamentals first.</li>
-                                <li class="flex items-start"><span class="text-green-500 mr-2">/</span> Recovery is where the progress happens.</li>
-                            </ul>
-                        </div>
+                    <div class="space-y-6 pt-4 border-t border-white/10">
+                        <h3 class="text-sm font-black uppercase text-white tracking-widest">Success Principles</h3>
+                        <ul class="space-y-4 text-sm text-neutral-400">
+                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Consistency Over Perfection:</strong> 5 solid sessions beat 1 "perfect" one.</span></li>
+                            <li class="flex gap-3"><span class="text-green-500 font-black">•</span> <span><strong class="text-white">Master Fundamentals:</strong> Focus on foundational movements first.</span></li>
+                        </ul>
+                    </div>
 
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-black uppercase text-white tracking-[0.2em]">NEXT STEPS</h3>
-                            <ol class="space-y-4 text-sm">
-                                <li class="flex flex-col">
-                                    <span class="font-bold text-white">Step 1: Review Curriculum</span>
-                                    <span class="text-white/60 text-sm mt-1">Review full pricing and scheduling.</span>
-                                </li>
-                                ${step2Content}
-                            </ol>
-                        </div>
+                    <div class="space-y-6 pt-4 border-t border-white/10">
+                        <h3 class="text-sm font-black uppercase text-white tracking-widest">Next Steps</h3>
+                        <ol class="space-y-6">
+                            <li class="flex gap-4">
+                                <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">1</span>
+                                <div><span class="text-white font-bold">Explore Curriculum</span><span class="block text-neutral-400 text-sm mt-1">Review full program details and pricing.</span></div>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">2</span>
+                                <div>${step2}</div>
+                            </li>
+                        </ol>
                     </div>
 
                     <div class="pt-6">
-                        <button id="restart-button" class="secondary-button w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.2em] opacity-40 hover:opacity-100">RESTART ASSESSMENT</button>
-                        <div class="mt-8 text-right">
-                             <p class="text-xs font-black text-white tracking-widest uppercase italic">— Coach Chris</p>
-                             <p class="text-[9px] font-bold text-green-500 uppercase tracking-[0.2em] mt-1">CIRCULAR ROOTS COACHING</p>
-                        </div>
+                        <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-xs tracking-[0.2em] uppercase">RESTART QUIZ</button>
+                    </div>
+                    
+                    <div class="text-right pt-4">
+                        <p class="text-sm font-black text-white italic">— Coach Chris</p>
+                        <p class="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">CIRCULAR ROOTS COACHING</p>
                     </div>
                 </div>
             `;
@@ -705,47 +591,22 @@
 
         function handleNext() {
             if (selectedOption !== null) {
-                const currentKey = quizData[currentStep].key;
-                const existingIndex = userAnswers.findIndex(a => a.key === currentKey);
-                if (existingIndex !== -1) {
-                    totalScore -= userAnswers[existingIndex].score;
-                    userAnswers.splice(existingIndex, 1);
-                } 
-                userAnswers.push({ key: currentKey, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score });
-                totalScore += selectedOption.score;
-                currentStep++;
-                document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const key = quizData[currentStep].key;
+                const idx = userAnswers.findIndex(a => a.key === key);
+                if (idx !== -1) { totalScore -= userAnswers[idx].score; userAnswers.splice(idx, 1); } 
+                userAnswers.push({ key, question: quizData[currentStep].question, answer: selectedOption.text, score: selectedOption.score });
+                totalScore += selectedOption.score; currentStep++;
                 renderQuestion();
             }
         }
         
-        function handleBack() {
-             currentStep = Math.max(0, currentStep - 1);
-             document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
-             renderQuestion();
-        }
+        function handleBack() { currentStep = Math.max(0, currentStep - 1); renderQuestion(); }
         
-        function handlePersonalize(event) {
-            event.preventDefault();
-            const nameInput = document.getElementById('client-name-input');
-            clientName = nameInput.value.trim().split(' ')[0];
-            renderLoadingScreen();
-        }
+        function handlePersonalize(e) { e.preventDefault(); clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; renderLoadingScreen(); }
         
-        function restartQuiz() {
-            currentStep = 0;
-            totalScore = 0;
-            selectedOption = null;
-            userAnswers = [];
-            clientName = "Warrior";
-            document.getElementById('progress-text-label').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            renderQuestion();
-        }
+        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; renderQuestion(); }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateProgress();
-            renderQuestion();
-        });
+        document.addEventListener('DOMContentLoaded', () => { updateProgress(); renderQuestion(); });
     </script>
 </body>
 </html>
