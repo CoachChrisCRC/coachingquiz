@@ -341,6 +341,7 @@
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
         const TIER_2_TITLE = "FITTER STRONGER BETTER SUBSCRIPTION";
         const TIER_3_TITLE = "ONLINE PROGRAM LIBRARY";
+        const FOUNDATIONS_TITLE = "14-DAY FUNDAMENTALS & 6-WEEK FOUNDATIONS";
         
         function getProgramDetailsByTitle(title) {
             if (title.includes(TIER_1_TITLE)) {
@@ -352,6 +353,16 @@
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
                     requiresCall: true,
                     priceId: 'PREMIUM'
+                };
+            } else if (title.includes(FOUNDATIONS_TITLE)) {
+                return {
+                    title: FOUNDATIONS_TITLE,
+                    description: "You need a clear starting line. This pathway is designed specifically for those starting fresh or returning to training. We start with a free trial to build your confidence before moving into our structured group foundations.",
+                    briefOverview: "Begin with our **Free 14-Day Fundamentals** trial to master the basics. This leads directly into our **6-Week Foundations Program (£99)**—a coach-guided online group experience that builds your absolute base for long-term health.",
+                    accentColor: "text-orange-400",
+                    ctaLink: "https://coachchriscrc.github.io/foundations-lp",
+                    requiresCall: false,
+                    priceId: 'ENTRY'
                 };
             } else if (title.includes(TIER_2_TITLE)) {
                 return {
@@ -378,38 +389,62 @@
         
         function getRecommendation(score, answers) {
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
-            let rec;
-
-            // Logic: Only offer 1-1 if PREMIUM budget is selected.
+            const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            
+            // 1. High-Support Override: Budget £175+ always gets 1-1 Coaching
             if (budgetId === 'PREMIUM') {
-                rec = getProgramDetailsByTitle(TIER_1_TITLE);
+                return getProgramDetailsByTitle(TIER_1_TITLE);
             } 
-            else if (score >= 160 && budgetId !== 'ENTRY') {
-                rec = getProgramDetailsByTitle(TIER_2_TITLE);
-            }
-            else {
-                rec = getProgramDetailsByTitle(TIER_3_TITLE);
+            
+            // 2. Beginner/Returner Route
+            if (expId === 'BEGINNER' || expId === 'RETURNING') {
+                // If they chose Independent (£45), send them to the Library's self-guided beginner plans
+                if (budgetId === 'ENTRY') {
+                    return getProgramDetailsByTitle(TIER_3_TITLE);
+                }
+                // Otherwise, they get the guided Foundations path
+                return getProgramDetailsByTitle(FOUNDATIONS_TITLE);
             }
 
-            return rec;
+            // 3. Experienced/Standard Route
+            if (score >= 160 && budgetId !== 'ENTRY') {
+                return getProgramDetailsByTitle(TIER_2_TITLE);
+            }
+            
+            return getProgramDetailsByTitle(TIER_3_TITLE);
         }
         
         function getAlternativeRecommendation(primary, score, answers) {
             const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
+            const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             
-            if (primary.priceId === 'PREMIUM') {
-                return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
+            if (primary.title.includes(TIER_1_TITLE)) {
+                if (expId === 'EXPERIENCED') return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
+                return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'DOWNGRADE' };
             } 
-            else if (primary.priceId === 'MID') {
+            
+            if (primary.title.includes(FOUNDATIONS_TITLE)) {
+                // If Foundations is primary, alternative is Library for independent approach
+                return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
+            }
+
+            if (primary.title.includes(TIER_3_TITLE)) {
+                // If Library is primary for a beginner, alternative is the Guided Foundations
+                if (expId === 'BEGINNER' || expId === 'RETURNING') {
+                    return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'UPGRADE' };
+                }
+                return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
+            }
+
+            if (primary.priceId === 'MID') {
                 if (score >= 210 || budgetId === 'FLEX') {
                     return { ...getProgramDetailsByTitle(TIER_1_TITLE), type: 'UPGRADE' };
                 } else {
                     return { ...getProgramDetailsByTitle(TIER_3_TITLE), type: 'DOWNGRADE' };
                 }
             } 
-            else {
-                return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
-            }
+            
+            return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
         }
         
         function generatePersonalizedRationale(answers, recommendationTitle) {
@@ -431,21 +466,23 @@
             else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "managing training time";
 
             let expText = "";
-            if (expId === 'BEGINNER') expText = "As you are <span class='text-green-400'>brand new to structured training</span>, we want to ensure you build a safe, solid foundation. ";
-            else if (expId === 'RETURNING') expText = "Since you have <span class='text-green-400'>some experience but need to find your rhythm again</span>, we've focused on re-establishing consistency. ";
+            if (expId === 'BEGINNER') expText = "As you are <span class='text-green-400'>brand new to structured training</span>, building a safe and competent base is our first priority. ";
+            else if (expId === 'RETURNING') expText = "Since you are <span class='text-green-400'>returning after a break</span>, it's vital to re-establish your fundamentals before pushing high-intensity limits. ";
             else expText = "As an <span class='text-green-400'>experienced trainee looking for an edge</span>, your plan focuses on high-level programming to bypass your current plateau. ";
 
             let feature = '';
             if (recommendationTitle.includes(TIER_1_TITLE)) feature = 'maximum 1-on-1 personalization';
+            else if (recommendationTitle.includes(FOUNDATIONS_TITLE)) feature = 'a risk-free trial and group guidance';
             else if (recommendationTitle.includes(TIER_2_TITLE)) feature = 'structured programming and coach check-ins';
+            else if (expId === 'BEGINNER' || expId === 'RETURNING') feature = 'self-paced beginner plans';
             else feature = 'expert-designed training plans';
 
             let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. However, your progress is currently hindered by <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
             
             if (budgetId !== 'FLEX') {
-                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, the <strong>${recommendationTitle}</strong> is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
+                rationale += `Working within your <span class="text-white font-bold">preferred commitment level</span>, the <strong>${recommendationTitle}</strong> path is the most effective way to access <span class="text-white font-bold">${feature}</span> without over-extending, keeping your focus on sustainable results.`;
             } else {
-                rationale += `The <strong>${recommendationTitle}</strong> provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
+                rationale += `The <strong>${recommendationTitle}</strong> path provides <span class="text-white font-bold">${feature}</span> to ensure you bypass these hurdles and see real progress.`;
             }
 
             return rationale;
@@ -453,17 +490,26 @@
 
         function generateAlternativeDescription(primaryRec, altRec, answers) {
             if (!altRec) return "";
+            const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             let d = '';
             
             if (altRec.type === 'UPGRADE') {
                 if (altRec.priceId === 'PREMIUM') {
                     d = `For **maximum accountability** and total personalization, consider stepping up to **1-1 Coaching**. This is the ultimate fast-track for your specific hurdles.`;
+                } else if (altRec.title.includes(FOUNDATIONS_TITLE)) {
+                    d = `If you prefer **guided coach support** and a risk-free trial, consider the **Foundations** path instead of self-guided training.`;
                 } else {
-                    d = `For only **£30 more per month**, the **FSB Subscription** adds professional coach check-ins and hybrid targets to your programming.`;
+                    d = `Once you've mastered the fundamentals, the **FSB Subscription** is the long-term home for hybrid strength and conditioning.`;
                 }
             } else {
                 if (altRec.priceId === 'ENTRY') {
-                    d = `If you prefer a more **budget-conscious, self-guided approach**, the **Program Library** provides our expert training plans at a lower monthly investment.`;
+                    if (altRec.title.includes(FOUNDATIONS_TITLE)) {
+                        d = `For a more **guided entry** back into fitness, start with our **Free 14-Day Fundamentals**.`;
+                    } else if (expId === 'BEGINNER' || expId === 'RETURNING') {
+                        d = `If you prefer a **self-paced, independent approach**, the **Program Library** offers expert-built beginner plans without the live intakes.`;
+                    } else {
+                        d = `If you prefer a more **budget-conscious, self-guided approach**, the **Program Library** provides our expert training plans at a lower monthly investment.`;
+                    }
                 } else {
                     d = `The **FSB Subscription** offers a balance of coach access and structure without the full premium investment of 1-1 coaching.`;
                 }
@@ -586,8 +632,12 @@
             const client = clientName.toUpperCase();
             const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
+            let primaryBtnText = "GET THE FULL BREAKDOWN";
+            if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START FREE 14-DAY FUNDAMENTALS";
+
             let step2;
             if (primary.title.includes(TIER_1_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></li>`;
+            else if (primary.title.includes(FOUNDATIONS_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Secure Your Intake</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Complete the free fundamentals and **secure your spot** in the next group intake.")}</span></li>`;
             else if (primary.title.includes(TIER_2_TITLE)) step2 = `<li><span class="text-white font-bold">Step 2: Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></li>`;
             else step2 = `<li><span class="text-white font-bold">Step 2: Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></li>`;
 
@@ -605,7 +655,7 @@
                         <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mb-6">
                             <p class="text-xs italic text-neutral-400 leading-relaxed">${rationale}</p>
                         </div>
-                        <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">GET THE FULL BREAKDOWN</a>
+                        <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">${primaryBtnText}</a>
                     </div>
 
                     ${alt ? `
@@ -634,7 +684,7 @@
                         <ol class="space-y-6">
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">1</span>
-                                <div><span class="text-white font-bold">Explore Curriculum</span><span class="block text-neutral-400 text-sm mt-1">Review full program details and pricing.</span></div>
+                                <div><span class="text-white font-bold">Explore Curriculum</span><span class="block text-neutral-400 text-sm mt-1">Review full program details and pricing on the landing page.</span></div>
                             </li>
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">2</span>
