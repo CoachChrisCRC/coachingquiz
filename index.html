@@ -611,6 +611,9 @@
             return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
         }
         
+        /**
+         * IMPLEMENTATION OF SUGGESTION 1: Transformation vs. Information Logic
+         */
         function generatePersonalizedRationale(answers, recommendationTitle, isCleanText = false) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
@@ -625,40 +628,27 @@
             }
 
             let goalPhrase = rawGoal;
-            
-            if (rawGoal.includes("Shedding fat")) {
-                goalPhrase = "fat loss and physique transformation";
-            } else if (rawGoal.includes("Getting strong")) {
-                goalPhrase = "building muscle and strength";
-            } else if (rawGoal.includes("Boosting energy")) {
-                goalPhrase = "improved energy and endurance";
-            } else if (rawGoal.includes("Feeling generally healthier")) {
-                goalPhrase = "establishing consistent habits";
-            }
-
-            let motivationPhrase = "";
-            switch(theWhyId) {
-                case 'CONFIDENCE': motivationPhrase = "designed to help you reclaim that confidence in how you move and feel"; break;
-                case 'FAMILY': motivationPhrase = "built to get that vital energy back for your family and kids"; break;
-                case 'HEALTH': motivationPhrase = "focused on ensuring your long-term health and vitality"; break;
-                case 'PERFORMANCE': motivationPhrase = "programmed to push your physical performance to the next level"; break;
-            }
+            if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
+            else if (rawGoal.includes("Getting strong")) goalPhrase = "building muscle and strength";
+            else if (rawGoal.includes("Boosting energy")) goalPhrase = "improved energy and endurance";
+            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "establishing consistent habits";
 
             let barrierPhrase = rawBarrier;
-            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "lack of structure";
-            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "need for external accountability";
-            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "optimizing nutrition";
-            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "managing training time";
+            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "the lack of structure that causes plateaus";
+            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "the accountability gap that has held you back";
+            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "the nutritional friction in your daily routine";
+            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "the inconsistency and time-management hurdles";
 
             let expText = "";
-            if (expId === 'BEGINNER') expText = "As you are brand new to structured training, building a safe and competent base is our first priority. ";
-            else if (expId === 'RETURNING') expText = "Since you are returning after a break, it's vital to re-establish your fundamentals before pushing high-intensity limits. ";
-            else expText = "As an experienced trainee looking for an edge, your plan focuses on high-level programming to bypass your current plateau. ";
+            if (expId === 'BEGINNER') expText = "As you are brand new to structured training, build competency over complexity. ";
+            else if (expId === 'RETURNING') expText = "Since you are returning after a break, we prioritize re-establishing your physical baseline. ";
+            else expText = "As an experienced trainee, your path focuses on refined precision to bypass your current plateau. ";
 
-            let rationale = `${expText}We recognize ${goalPhrase} as your priority. Because you've shared that your motivation is ${motivationPhrase}, we've selected this path specifically to ensure you overcome ${barrierPhrase}. `;
+            // Logic focus: "We aren't just looking for a plan; we are looking to solve [Barrier]"
+            let rationale = `${expText}Based on your profile, we aren't just looking for a general workout plan; we are specifically looking to solve **${barrierPhrase}**. The **${recommendationTitle}** path is strategically designed to bridge the gap between your current baseline and your priority of **${goalPhrase}**. By focusing on this transformation rather than just information, we ensure that your progress is both rapid and sustainable.`;
             
             if (pastExp.includes("struggled to stay consistent")) {
-                rationale += `Since you've found consistency difficult in the past, the ${recommendationTitle} path is specifically selected to provide the additional support layer you need to break that cycle. `;
+                rationale += ` Since you've found consistency difficult in the past, this pathway includes the specific support layers required to break that cycle once and for all.`;
             }
 
             return isCleanText ? rationale : markdownToHtml(rationale);
@@ -982,47 +972,52 @@
         async function triggerWeb3FormsSubmission(primary, rationale, vision) {
             const formData = new FormData();
             formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            formData.append("subject", `Assessment Results for ${clientName}`);
-            formData.append("from_name", "COACH CHRIS Assessment");
+            formData.append("subject", `Your Path to #Fitter #Stronger #Better | Results for ${clientName}`);
+            formData.append("from_name", "COACH CHRIS");
             formData.append("name", clientName);
             formData.append("email", clientEmail);
 
-            // --- TEMPLATE 1: CLIENT RESULTS EMAIL ---
+            const expLabel = userAnswers.find(a => a.key === 'experience')?.short || "Beginner";
+            const goalLabel = userAnswers.find(a => a.key === 'primaryGoal')?.answer || "Fitness Improvement";
+            const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
+            
+            const whatsappNumber = "447925116794"; 
+            const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
+            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
+
             const clientEmailContent = `
-HI ${clientName.toUpperCase()},
+Hi ${clientName},
+Thank you for completing your digital consultation with Coach Chris.
 
-YOU RECENTLY COMPLETED THE COACH CHRIS DIGITAL ASSESSMENT. 
+Based on your current baseline of ${expLabel} and your primary goal of ${goalLabel}, I have analyzed your profile to find the most effective path forward.
 
-BASED ON YOUR ANSWERS, YOUR OPTIMAL TRAINING PATH IS:
-🚀 ${primary.title}
+YOUR RECOMMENDED PATH:
+${primary.title}
+${alt ? `Or\n${alt.title}` : ''}
 
-YOUR PERSONALIZED RATIONALE:
-"${rationale}"
+The Rationale: ${rationale}
 
-YOUR 3-MONTH VISION:
-"${vision}"
+Your 3-Month Vision: "${vision}"
 
-YOUR NEXT STEPS TO GETTING STARTED:
-1. REVIEW THE PROGRAM DETAILS: ${primary.ctaLink}
-2. APPLY VIA THE WEBSITE OR REPLY TO THIS EMAIL WITH ANY QUESTIONS.
-3. PREPARE FOR YOUR INITIAL CONSULTATION.
+NEXT STEPS TO GET STARTED:
+Review the Program Details: [Click here to view your full program breakdown](${primary.ctaLink})
+Consult with Coach Chris: If you have questions before diving in, message me directly on WhatsApp here: ${whatsappLink}
 
-LETS GET TO WORK.
+I’m looking forward to helping you reach your goals.
 
-#FITTER #STRONGER #BETTER
-COACH CHRIS
-CIRCULAR ROOTS COACHING
+— Coach Chris
+Circular Roots Coaching
+Fitter. Stronger. Better.
             `;
-            formData.append("Message_For_Client", clientEmailContent);
+            formData.append("message", clientEmailContent);
 
-            // --- TEMPLATE 2: COACH NOTIFICATION EMAIL ---
             const coachEmailContent = `
 NEW ASSESSMENT SUBMITTED
-
 CLIENT: ${clientName}
 EMAIL: ${clientEmail}
-TOTAL SCORE: ${totalScore}
-RECOMMENDED: ${primary.title}
+SCORE: ${totalScore}
+PRIMARY: ${primary.title}
+${alt ? `ALT: ${alt.title}` : ''}
 
 FULL BREAKDOWN:
 ${userAnswers.map(ans => `- ${ans.label || ans.key}: ${ans.answer}`).join('\n')}
@@ -1086,7 +1081,6 @@ ${vision}
                                  primary.title.includes(TIER_2_TITLE) || 
                                  primary.title.includes(FOUNDATIONS_TITLE);
 
-            // Refined button text for "Start 14 Day Fundamentals" to ensure fit
             let primaryBtnText = "GET THE FULL BREAKDOWN";
             if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START 14-DAY FUNDAMENTALS";
 
@@ -1144,7 +1138,6 @@ ${vision}
                         </div>
                     </div>
 
-                    <!-- 3-Month Vision Block -->
                     <div class="p-6 rounded-3xl bg-green-500/[0.03] border border-green-500/20">
                         <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-4">Your 3-Month Vision</p>
                         <p class="text-sm text-neutral-200 font-medium leading-relaxed italic">"${vision}"</p>
@@ -1183,10 +1176,6 @@ ${vision}
 
                     <div class="pt-8 space-y-4">
                         <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-[10px] tracking-[0.2em] uppercase">RESTART ASSESSMENT</button>
-                        <div class="text-center">
-                            <p class="text-sm font-black text-white italic">— Coach Chris</p>
-                            <p class="text-[8px] font-bold text-neutral-500 uppercase tracking-widest mt-1">CIRCULAR ROOTS COACHING</p>
-                        </div>
                     </div>
                 </div>
             `;
