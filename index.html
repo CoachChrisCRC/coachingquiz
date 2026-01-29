@@ -725,13 +725,19 @@
             return markdownToHtml(d);
         }
 
-        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior", clientEmail = "", isTransitioning = false;
+        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior", clientEmail = "", isTransitioning = false, isAtWelcome = true;
         const contentArea = document.getElementById('content-area');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const progressTextLabel = document.getElementById('progress-text-label'); 
         const progressPercent = document.getElementById('progress-percent'); 
 
         function updateProgress() {
+            if (isAtWelcome) {
+                progressBarFill.style.width = '0%';
+                progressPercent.textContent = '0%';
+                progressTextLabel.textContent = 'CONSULTATION INITIALIZED';
+                return;
+            }
             const total = quizData.length;
             const displayStep = currentStep === total ? total : currentStep + 1;
             const progress = (currentStep / total) * 100;
@@ -750,7 +756,62 @@
             }
         }
 
+        function renderWelcomeScreen() {
+            isAtWelcome = true;
+            updateProgress();
+            contentArea.innerHTML = `
+                <div class="animate-in space-y-8">
+                    <div class="space-y-4">
+                        <p class="text-neutral-300 text-lg leading-relaxed">
+                            Stop guessing. Start training with intent. 
+                        </p>
+                        <p class="text-neutral-400 text-sm leading-relaxed">
+                            This 2-minute digital assessment is designed to map your current baseline against your ultimate fitness goals. At the end, I will provide you with a tailored roadmap to becoming <strong class="text-white">#Fitter #Stronger #Better</strong>.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-black uppercase text-green-500 tracking-widest">What you'll receive:</h3>
+                        <div class="grid gap-3">
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="bg-green-500/20 p-2 rounded-lg">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V6m0 0l5.447 2.724m0 0l5.447-2.724m0 0L21 9m-12-3v3.382l5.447 2.724M17 16l4 2m0 0l-4 2m4-2l-4-2M9 3h.01" /></svg>
+                                </div>
+                                <span class="text-xs font-bold text-white uppercase tracking-tight">Personalized Training Path</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="bg-green-500/20 p-2 rounded-lg">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                </div>
+                                <span class="text-xs font-bold text-white uppercase tracking-tight">Your 3-Month Vision Analysis</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="bg-green-500/20 p-2 rounded-lg">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                </div>
+                                <span class="text-xs font-bold text-white uppercase tracking-tight">Direct Performance Strategy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button id="start-btn" class="action-button w-full py-5 rounded-2xl text-sm tracking-widest flex items-center justify-center gap-3 group">
+                            START ASSESSMENT
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                        </button>
+                        <p class="text-[9px] text-neutral-500 text-center mt-4 uppercase tracking-widest">Takes approximately 2 minutes to complete</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('start-btn').addEventListener('click', () => {
+                isAtWelcome = false;
+                renderQuestion();
+                scrollToTarget();
+            });
+        }
+
         function renderQuestion() {
+            if (isAtWelcome) { renderWelcomeScreen(); return; }
             if (currentStep >= quizData.length) { renderNameInputScreen(); return; }
             
             const stepData = quizData[currentStep];
@@ -803,8 +864,8 @@
             const container = document.getElementById('options-container');
             const nextBtn = document.getElementById('next-button');
             const backBtn = document.getElementById('back-button');
-            if (currentStep === 0) backBtn.classList.add('invisible');
-            else backBtn.addEventListener('click', handleBack);
+            
+            backBtn.addEventListener('click', handleBack);
 
             stepData.options.forEach(opt => {
                 const btn = document.createElement('button');
@@ -1127,7 +1188,17 @@
             }
         }
         
-        function handleBack() { currentStep = Math.max(0, currentStep - 1); isTransitioning = false; renderQuestion(); scrollToTarget(); }
+        function handleBack() { 
+            if (currentStep === 0) {
+                isAtWelcome = true;
+                renderWelcomeScreen();
+            } else {
+                currentStep = Math.max(0, currentStep - 1); 
+                isTransitioning = false; 
+                renderQuestion(); 
+            }
+            scrollToTarget(); 
+        }
         
         function handlePersonalize(e) { 
             e.preventDefault(); 
@@ -1137,8 +1208,8 @@
             scrollToTarget(); 
         }
         
-        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; clientEmail = ""; isTransitioning = false; renderQuestion(); scrollToTarget(); }
-        document.addEventListener('DOMContentLoaded', () => { updateProgress(); renderQuestion(); });
+        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; clientEmail = ""; isTransitioning = false; isAtWelcome = true; renderWelcomeScreen(); scrollToTarget(); }
+        document.addEventListener('DOMContentLoaded', () => { renderWelcomeScreen(); });
     </script>
 </body>
 </html>
