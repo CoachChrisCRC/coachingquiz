@@ -1082,13 +1082,13 @@ ${vision}
             const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
             const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
             
-            // Logic updated to include 14-Day Fundamentals/Foundations in WhatsApp visibility
             const showWhatsApp = primary.title.includes(TIER_1_TITLE) || 
                                  primary.title.includes(TIER_2_TITLE) || 
                                  primary.title.includes(FOUNDATIONS_TITLE);
 
+            // Refined button text for "Start 14 Day Fundamentals" to ensure fit
             let primaryBtnText = "GET THE FULL BREAKDOWN";
-            if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START FREE 14-DAY FUNDAMENTALS";
+            if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START 14-DAY FUNDAMENTALS";
 
             let step2;
             if (primary.title.includes(TIER_1_TITLE)) step2 = `<div><span class="text-white font-bold">Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></div>`;
@@ -1123,7 +1123,9 @@ ${vision}
                             </div>
 
                             <div class="flex flex-col gap-3 pt-2">
-                                <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">${primaryBtnText}</a>
+                                <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-6 sm:py-5 px-4 rounded-2xl text-[12px] sm:text-sm text-center no-underline tracking-widest leading-none flex items-center justify-center min-h-[64px]">
+                                    ${primaryBtnText}
+                                </a>
                                 ${showWhatsApp ? `
                                 <div class="relative py-2">
                                     <div class="absolute inset-0 flex items-center" aria-hidden="true">
