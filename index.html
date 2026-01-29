@@ -519,7 +519,7 @@
             },
             { 
                 id: 11, 
-                question: "If you hit your goal 6 months from now, what changes most for you?", 
+                question: "If you hit your goal 3 months from now, what changes most for you?", 
                 key: "theWhy", 
                 summaryLabel: "Your 'Why'", 
                 options: [
@@ -718,27 +718,27 @@
             return styledRationale;
         }
 
-        function generateSixMonthVision(answers) {
+        function generateThreeMonthVision(answers) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
             const theWhyId = answers.find(a => a.key === 'theWhy')?.whyId || 'HEALTH';
             
-            let vision = "Six months from now, if you remain consistent on this path: ";
+            let vision = "Three months (90 days) from now, if you remain consistent on this path: ";
             
             if (rawGoal.includes("Shedding fat")) {
-                vision += "You will have fundamentally shifted your body composition. You won't just 'look' different; you'll have mastered the nutritional habits that keep the weight off for good, feeling leaner and more capable in every daily movement.";
+                vision += "You will have completed your first successful 12-week transformation cycle. You'll notice clothes fitting significantly better and have locked in the daily nutritional habits that make this change sustainable, rather than just another temporary fix.";
             } else if (rawGoal.includes("Getting strong")) {
-                vision += "You will have built a significant 'strength reserve.' Your primary lifts will have stabilized, and you'll notice a distinct change in your physical presence and posture, feeling solid and capable of handling heavier loads both in and out of the gym.";
+                vision += "You will have established a rock-solid foundation of movement mechanics. You'll be lifting with more confidence and intent, and you'll already be seeing the first real signs of physical lean muscle development in the mirror.";
             } else if (rawGoal.includes("Boosting energy")) {
-                vision += "Your metabolic health will have transformed. You'll likely find that 'afternoon slumps' are a thing of the past, and your recovery between sessions—and between life's stressors—is significantly faster.";
+                vision += "Your daily energy levels will have stabilized. You'll notice that you no longer need that afternoon caffeine hit to get through the day, and your capacity for work—both inside and outside the gym—will have noticeably increased.";
             } else {
-                vision += "You will have turned 'exercise' into a core pillar of your identity. You will no longer be someone 'trying' to get fit, but someone who is fit, with the discipline and resilience to maintain your results for years to come.";
+                vision += "The 'friction' of starting will be gone. You will have successfully integrated training into your weekly routine, moving from 'trying' to exercise to it being a non-negotiable part of your high-performance lifestyle.";
             }
 
             switch(theWhyId) {
-                case 'CONFIDENCE': vision += " Most importantly, that quiet confidence you seek will be your default state of mind."; break;
-                case 'FAMILY': vision += " You'll be the high-energy parent or partner you aspire to be, leading by example."; break;
-                case 'HEALTH': vision += " You'll have added high-quality 'life to your years,' knowing you're investing in your future self."; break;
-                case 'PERFORMANCE': vision += " You'll be hitting performance numbers you previously thought were out of reach."; break;
+                case 'CONFIDENCE': vision += " Most importantly, you'll have proven to yourself that you can follow through, rebuilding that internal trust and confidence."; break;
+                case 'FAMILY': vision += " You'll feel the difference when playing with your kids or showing up for your partner—you'll simply have more of yourself to give."; break;
+                case 'HEALTH': vision += " You'll have successfully completed the most important quarter of your health journey: the one where you started."; break;
+                case 'PERFORMANCE': vision += " You'll be measuring progress in numbers and PRs, having built the momentum required for elite results."; break;
             }
 
             return vision;
@@ -944,7 +944,7 @@
                          <div>
                              <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">Email Address</label>
                              <input type="email" id="client-email-input" name="email" required class="custom-input block w-full p-4 rounded-xl" placeholder="EMAIL@DOMAIN.COM" value="${clientEmail}">
-                             <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">We'll email your result & 6-month vision for your records.</p>
+                             <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">We'll email your result & 3-month vision for your records.</p>
                          </div>
                          <div class="flex items-start py-2">
                             <input type="checkbox" id="disclaimer-check" required class="mt-1">
@@ -982,7 +982,7 @@
             formData.append("Recommended_Program", primary.title);
             formData.append("Total_Score", totalScore);
             formData.append("Personalized_Rationale", rationale);
-            formData.append("Six_Month_Vision", vision);
+            formData.append("Three_Month_Vision", vision);
             
             userAnswers.forEach(ans => {
                 formData.append(`Q_${ans.key}`, ans.answer);
@@ -1003,13 +1003,13 @@
                  <div class="text-center animate-in min-h-[350px] flex flex-col items-center justify-center">
                      <div class="clean-spinner mb-8"></div> 
                      <p class="text-2xl font-black uppercase italic tracking-tighter text-white animate-pulse">Analyzing Answers...</p>
-                     <p class="text-xs text-neutral-500 tracking-widest mt-4">CUSTOMIZING YOUR 6-MONTH VISION</p>
+                     <p class="text-xs text-neutral-500 tracking-widest mt-4">CUSTOMIZING YOUR 3-MONTH VISION</p>
                  </div>
              `;
              
              const primary = getRecommendation(totalScore, userAnswers);
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
-             const vision = generateSixMonthVision(userAnswers);
+             const vision = generateThreeMonthVision(userAnswers);
              
              triggerWeb3FormsSubmission(primary, cleanRationale, vision);
 
@@ -1024,7 +1024,7 @@
             const primary = getRecommendation(totalScore, userAnswers);
             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
-            const vision = generateSixMonthVision(userAnswers);
+            const vision = generateThreeMonthVision(userAnswers);
             const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
             const medical = userAnswers.find(a => a.key === 'medical')?.answer || '';
             const isInjuryAlert = medical.includes("specialized training");
@@ -1080,9 +1080,9 @@
                         </div>
                     </div>
 
-                    <!-- 6-Month Vision Block -->
+                    <!-- 3-Month Vision Block -->
                     <div class="p-6 rounded-3xl bg-green-500/10 border border-green-500/30">
-                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-4">Your 6-Month Vision</p>
+                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-4">Your 3-Month Vision</p>
                         <p class="text-sm text-white font-medium leading-relaxed italic">"${vision}"</p>
                     </div>
 
@@ -1112,7 +1112,7 @@
                         <ol class="space-y-6">
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">1</span>
-                                <div><span class="text-white font-bold">Check Your Inbox</span><span class="block text-neutral-400 text-sm mt-1">We've sent a copy of this rationale and your 6-month vision to your email for easy access.</span></div>
+                                <div><span class="text-white font-bold">Check Your Inbox</span><span class="block text-neutral-400 text-sm mt-1">We've sent a copy of this rationale and your 3-month vision to your email for easy access.</span></div>
                             </li>
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">2</span>
