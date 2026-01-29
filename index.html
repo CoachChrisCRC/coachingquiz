@@ -611,13 +611,9 @@
             return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
         }
         
-        /**
-         * IMPLEMENTATION OF SUGGESTION 1: Transformation vs. Information Logic
-         */
         function generatePersonalizedRationale(answers, recommendationTitle, isCleanText = false) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
-            const theWhyId = answers.find(a => a.key === 'theWhy')?.whyId || 'HEALTH';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const pastExp = answers.find(a => a.key === 'pastExp')?.answer || '';
@@ -644,7 +640,6 @@
             else if (expId === 'RETURNING') expText = "Since you are returning after a break, we prioritize re-establishing your physical baseline. ";
             else expText = "As an experienced trainee, your path focuses on refined precision to bypass your current plateau. ";
 
-            // Logic focus: "We aren't just looking for a plan; we are looking to solve [Barrier]"
             let rationale = `${expText}Based on your profile, we aren't just looking for a general workout plan; we are specifically looking to solve **${barrierPhrase}**. The **${recommendationTitle}** path is strategically designed to bridge the gap between your current baseline and your priority of **${goalPhrase}**. By focusing on this transformation rather than just information, we ensure that your progress is both rapid and sustainable.`;
             
             if (pastExp.includes("struggled to stay consistent")) {
@@ -719,11 +714,10 @@
                 return;
             }
             const total = quizData.length;
-            const displayStep = currentStep === total ? total : currentStep + 1;
             const progress = (currentStep / total) * 100;
             progressBarFill.style.width = `${progress}%`;
             progressPercent.textContent = `${Math.round(progress)}%`;
-            if (currentStep < total) progressTextLabel.textContent = `QUESTION ${displayStep} OF ${total}`;
+            if (currentStep < total) progressTextLabel.textContent = `QUESTION ${currentStep + 1} OF ${total}`;
             else progressTextLabel.textContent = `CONSULTATION COMPLETE`;
         }
 
@@ -985,28 +979,33 @@
             const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
             const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
 
+            // --- REPLACED WITH NEW TEMPLATE ---
             const clientEmailContent = `
 Hi ${clientName},
 Thank you for completing your digital consultation with Coach Chris.
 
-Based on your current baseline of ${expLabel} and your primary goal of ${goalLabel}, I have analyzed your profile to find the most effective path forward.
+Based on your current baseline of ${expLabel} and your primary goal of ${goalLabel}, I have analyzed your profile to find the most effective path forward so you can stop guessing & start training with intent.
 
 YOUR RECOMMENDED PATH:
 ${primary.title}
-${alt ? `Or\n${alt.title}` : ''}
+${alt ? `Or\n[${alt.title}]` : ''}
 
 The Rationale: ${rationale}
 
 Your 3-Month Vision: "${vision}"
 
 NEXT STEPS TO GET STARTED:
-Review the Program Details: [Click here to view your full program breakdown](${primary.ctaLink})
-Consult with Coach Chris: If you have questions before diving in, message me directly on WhatsApp here: ${whatsappLink}
+Review the recommend Program Details: [Click here to view your full program breakdown](${primary.ctaLink})
+${alt ? `Or view the (Alternative)[${alt.ctaLink}]` : ''}
+
+Consult with Coach Chris: If you have questions before diving in, message me directly on (WhatsApp)[${whatsappLink}]
+
+App Setup: Once you choose your path, you'll receive your login to the training app where you'll complete your Par-Q, set up your account and start the process. 
 
 I’m looking forward to helping you reach your goals.
 
-— Coach Chris
-Circular Roots Coaching
+— Coach Chris 
+Circular Roots Coaching 
 Fitter. Stronger. Better.
             `;
             formData.append("message", clientEmailContent);
