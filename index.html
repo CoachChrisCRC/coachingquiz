@@ -332,6 +332,7 @@
 
     <script>
         const WEB3FORMS_ACCESS_KEY = "d24713b2-01ff-4c31-ae52-e49edd41e2c1";
+        const COACH_EMAIL = "coachchris.crc@gmail.com"; // Your receiving email
 
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -963,79 +964,66 @@
              upd(); 
         }
 
-        async function triggerWeb3FormsSubmission(primary, rationale, vision) {
-            const formData = new FormData();
-            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            formData.append("subject", `Your Path to #Fitter #Stronger #Better | Results for ${clientName}`);
-            formData.append("from_name", "COACH CHRIS");
-            formData.append("name", clientName);
-            formData.append("email", clientEmail);
-
-            const expLabel = userAnswers.find(a => a.key === 'experience')?.short || "Beginner";
-            const goalLabel = userAnswers.find(a => a.key === 'primaryGoal')?.answer || "Fitness Improvement";
+        async function triggerDualServiceSubmission(primary, rationale, vision) {
             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
-            
-            const whatsappNumber = "447925116794"; 
-            const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
-            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
+            const coachEmailAddress = COACH_EMAIL;
+            const emailSubject = encodeURIComponent(`Question about my ${primary.title} assessment results`);
 
-            // --- REPLACED WITH NEW TEMPLATE ---
-            const clientEmailContent = `
-Hi ${clientName},
-Thank you for completing your digital consultation with Coach Chris.
+            // 1. WEB3FORMS (FOR CLIENT)
+            const clientData = new FormData();
+            clientData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            clientData.append("from_name", "Coach Chris");
+            clientData.append("name", "Coach Chris");
+            clientData.append("email", clientEmail); // Sending receipt TO client
+            clientData.append("subject", `Your Assessment Results: ${primary.title}`);
+            clientData.append("message", `
+Hi ${clientName}, 
 
-Based on your current baseline of ${expLabel} and your primary goal of ${goalLabel}, I have analyzed your profile to find the most effective path forward so you can stop guessing & start training with intent.
+Thank you for completing your fitness assessment. Based on your profile, here is your roadmap:
 
-YOUR RECOMMENDED PATH:
-${primary.title}
-${alt ? `Or\n[${alt.title}]` : ''}
+YOUR PATHWAY: ${primary.title}
+WHY THIS WORKS: ${rationale}
+3-MONTH VISION: ${vision}
 
-The Rationale: ${rationale}
+NEXT STEPS:
+- View your full program details here: ${primary.ctaLink}
+- Have questions? Simply hit reply to this email or click here to start a thread: mailto:${coachEmailAddress}?subject=${emailSubject}
 
-Your 3-Month Vision: "${vision}"
+Train Unconventional,
+Coach Chris
+            `);
 
-NEXT STEPS TO GET STARTED:
-Review the recommend Program Details: [Click here to view your full program breakdown](${primary.ctaLink})
-${alt ? `Or view the (Alternative)[${alt.ctaLink}]` : ''}
-
-Consult with Coach Chris: If you have questions before diving in, message me directly on (WhatsApp)[${whatsappLink}]
-
-App Setup: Once you choose your path, you'll receive your login to the training app where you'll complete your Par-Q, set up your account and start the process. 
-
-I’m looking forward to helping you reach your goals.
-
-— Coach Chris 
-Circular Roots Coaching 
-Fitter. Stronger. Better.
-            `;
-            formData.append("message", clientEmailContent);
-
-            const coachEmailContent = `
-NEW ASSESSMENT SUBMITTED
-CLIENT: ${clientName}
-EMAIL: ${clientEmail}
-SCORE: ${totalScore}
-PRIMARY: ${primary.title}
-${alt ? `ALT: ${alt.title}` : ''}
-
-FULL BREAKDOWN:
-${userAnswers.map(ans => `- ${ans.label || ans.key}: ${ans.answer}`).join('\n')}
-
-RATIONALE GENERATED:
-${rationale}
-
-VISION GENERATED:
-${vision}
-            `;
-            formData.append("Coach_Internal_Notice", coachEmailContent);
+            // 2. FORMSUBMIT (FOR COACH)
+            const coachData = {
+                _subject: `🔥 NEW LEAD: ${clientName} (${primary.title})`,
+                _template: "table",
+                Name: clientName,
+                Email: clientEmail,
+                Path: primary.title,
+                Score: totalScore,
+                Rationale: rationale,
+                Vision: vision,
+                // Automatically include all quiz answers in the table
+                ...Object.fromEntries(userAnswers.map(a => [a.question, a.answer]))
+            };
 
             try {
+                // Dispatch to Client (Web3Forms)
                 await fetch("https://api.web3forms.com/submit", {
                     method: "POST",
-                    body: formData
+                    body: clientData
                 });
+
+                // Dispatch to Coach (FormSubmit)
+                await fetch(`https://formsubmit.co/ajax/${coachEmailAddress}`, {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(coachData)
+                });
+
+                console.log("Dual-dispatch successful.");
             } catch (error) {
-                console.error("Submission error", error);
+                console.error("Submission failed", error);
             }
         }
 
@@ -1052,7 +1040,7 @@ ${vision}
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
              const vision = generateThreeMonthVision(userAnswers);
              
-             triggerWeb3FormsSubmission(primary, cleanRationale, vision);
+             triggerDualServiceSubmission(primary, cleanRationale, vision);
 
              setTimeout(() => { 
                 renderFinalProgramSummary(); 
