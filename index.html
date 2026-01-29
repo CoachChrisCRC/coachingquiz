@@ -262,7 +262,7 @@
     <!-- SPLASH SCREEN LOADER -->
     <div id="initial-loader">
         <div class="loader-content flex flex-col items-center">
-            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">COACHING QUIZ</h1>
+            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">DIGITAL CONSULTATION</h1>
             <div id="loader-pulse-text" class="text-green-500 font-bold text-xl uppercase tracking-widest mt-2">Loading...</div>
             <div id="loader-sub-text" class="cycling-text">Initializing assessment...</div>
         </div>
@@ -355,7 +355,7 @@
         }
 
         const quizData = [
-            // PART 1: IDENTITY & BARRIERS (IMPROVEMENT 1: FLIPPED)
+            // PART 1: IDENTITY & BARRIERS
             { 
                 id: 1, 
                 section: "Part 1: Your Baseline", 
@@ -431,7 +431,7 @@
                 ] 
             },
 
-            // PART 3: LIFESTYLE (DYNAMIC WORDING)
+            // PART 3: LIFESTYLE
             { 
                 id: 7, 
                 section: "Part 3: Lifestyle Strategy", 
@@ -483,7 +483,7 @@
                 ] 
             },
 
-            // PART 4: BUDGET & MISSION (IMPROVEMENT 2: MICRO-COPY ADJ)
+            // PART 4: BUDGET & MISSION
             { 
                 id: 10, 
                 section: "Part 4: Final Profiling", 
@@ -542,7 +542,6 @@
             }
         ];
 
-        // --- PROGRESSIVE DISCLOSURE MILESTONES ---
         const phaseTransitions = [
             { triggerIndex: 3, title: "Vision & Goals", message: "Thanks for that context. Now, let’s define exactly what we are aiming for over the next 12 weeks." },
             { triggerIndex: 6, title: "History & Habits", message: "Understood. Now, let's look at your training history and physical readiness to ensure we build a safe path." },
@@ -977,22 +976,15 @@
             formData.append("access_key", WEB3FORMS_ACCESS_KEY);
             formData.append("subject", `Coach Chris Assessment Results for ${clientName}`);
             formData.append("from_name", "Coach Chris Assessment");
-            
-            // Standard Fields - web3forms uses 'email' field for autoresponder
             formData.append("name", clientName);
             formData.append("email", clientEmail);
-            
-            // Result Payload
             formData.append("Recommended_Program", primary.title);
             formData.append("Total_Score", totalScore);
             formData.append("Personalized_Rationale", rationale);
             formData.append("Three_Month_Vision", vision);
-            
-            // Detailed Quiz Responses
             userAnswers.forEach(ans => {
                 formData.append(`${ans.label || ans.key}`, ans.answer);
             });
-
             try {
                 await fetch("https://api.web3forms.com/submit", {
                     method: "POST",
@@ -1037,7 +1029,7 @@
             const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
             const whatsappNumber = "447925116794"; 
-            const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the coaching quiz and my result was ${primary.title}. I'd like to chat about getting started.`);
+            const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
             const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
             const showWhatsApp = primary.title.includes(TIER_1_TITLE) || primary.title.includes(TIER_2_TITLE);
 
@@ -1131,7 +1123,7 @@
                     </div>
 
                     <div class="pt-6">
-                        <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-xs tracking-[0.2em] uppercase">RESTART QUIZ</button>
+                        <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-xs tracking-[0.2em] uppercase">RESTART ASSESSMENT</button>
                     </div>
                     
                     <div class="text-right pt-4">
