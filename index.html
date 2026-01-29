@@ -325,11 +325,12 @@
         </p>
     </div>
 
-    <!-- Hidden Form for Email Handling -->
-    <form id="coach-form" action="https://formsubmit.co/ajax/circularrootscoaching@gmail.com" method="POST" style="display:none;"></form>
-    <form id="user-form" action="https://formsubmit.co/ajax/" method="POST" style="display:none;"></form>
+    <!-- Web3Forms Implementation -->
+    <script src="https://web3forms.com/client/script.js" async defer></script>
 
     <script>
+        const WEB3FORMS_ACCESS_KEY = "d24713b2-01ff-4c31-ae52-e49edd41e2c1";
+
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
         window.addEventListener('load', () => {
@@ -938,11 +939,11 @@
                      <form id="personalization-form" class="space-y-5">
                          <div>
                              <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">First Name</label>
-                             <input type="text" id="client-name-input" required class="custom-input block w-full p-4 rounded-xl" placeholder="E.G. JANE" value="${clientName === 'Warrior' ? '' : clientName}">
+                             <input type="text" id="client-name-input" name="name" required class="custom-input block w-full p-4 rounded-xl" placeholder="E.G. JANE" value="${clientName === 'Warrior' ? '' : clientName}">
                          </div>
                          <div>
                              <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">Email Address</label>
-                             <input type="email" id="client-email-input" required class="custom-input block w-full p-4 rounded-xl" placeholder="EMAIL@DOMAIN.COM" value="${clientEmail}">
+                             <input type="email" id="client-email-input" name="email" required class="custom-input block w-full p-4 rounded-xl" placeholder="EMAIL@DOMAIN.COM" value="${clientEmail}">
                              <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">We'll email your result & 6-month vision for your records.</p>
                          </div>
                          <div class="flex items-start py-2">
@@ -971,42 +972,30 @@
              upd(); 
         }
 
-        async function triggerEmailSubmissions(primary, rationale, vision) {
-            // Setup Coach Email
-            const coachForm = document.getElementById('coach-form');
-            coachForm.innerHTML = `
-                <input type="hidden" name="_subject" value="NEW QUIZ SUBMISSION: ${clientName}">
-                <input type="hidden" name="Name" value="${clientName}">
-                <input type="hidden" name="Email" value="${clientEmail}">
-                <input type="hidden" name="Recommended_Program" value="${primary.title}">
-                <input type="hidden" name="Total_Score" value="${totalScore}">
-                <input type="hidden" name="_template" value="table">
-            `;
+        async function triggerWeb3FormsSubmission(primary, rationale, vision) {
+            const formData = new FormData();
+            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            formData.append("subject", `NEW QUIZ SUBMISSION: ${clientName}`);
+            formData.append("from_name", "Coach Chris Assessment");
+            formData.append("Name", clientName);
+            formData.append("Email", clientEmail);
+            formData.append("Recommended_Program", primary.title);
+            formData.append("Total_Score", totalScore);
+            formData.append("Personalized_Rationale", rationale);
+            formData.append("Six_Month_Vision", vision);
+            
             userAnswers.forEach(ans => {
-                const input = document.createElement('input');
-                input.type = "hidden";
-                input.name = `Q_${ans.key}`;
-                input.value = ans.answer;
-                coachForm.appendChild(input);
+                formData.append(`Q_${ans.key}`, ans.answer);
             });
 
-            // Setup User Email
-            const userForm = document.getElementById('user-form');
-            userForm.action = `https://formsubmit.co/ajax/${clientEmail}`;
-            userForm.innerHTML = `
-                <input type="hidden" name="_subject" value="Your Path to #Fitter #Stronger #Better - Coach Chris">
-                <input type="hidden" name="Greeting" value="Hi ${clientName}, here is your customized training analysis.">
-                <input type="hidden" name="Recommended_Path" value="${primary.title}">
-                <input type="hidden" name="Rationale" value="${rationale}">
-                <input type="hidden" name="Your_6_Month_Vision" value="${vision}">
-                <input type="hidden" name="Next_Step" value="View more details here: ${primary.ctaLink}">
-                <input type="hidden" name="_template" value="basic">
-                <input type="hidden" name="_cc" value="circularrootscoaching@gmail.com">
-            `;
-
-            // Fire and forget (don't wait for success to show results to user)
-            fetch(coachForm.action, { method: 'POST', body: new FormData(coachForm) });
-            fetch(userForm.action, { method: 'POST', body: new FormData(userForm) });
+            try {
+                await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                });
+            } catch (error) {
+                console.error("Submission error", error);
+            }
         }
 
         function renderLoadingScreen() {
@@ -1022,7 +1011,7 @@
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
              const vision = generateSixMonthVision(userAnswers);
              
-             triggerEmailSubmissions(primary, cleanRationale, vision);
+             triggerWeb3FormsSubmission(primary, cleanRationale, vision);
 
              setTimeout(() => { 
                 renderFinalProgramSummary(); 
