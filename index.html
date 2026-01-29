@@ -325,6 +325,10 @@
         </p>
     </div>
 
+    <!-- Hidden Form for Email Handling -->
+    <form id="coach-form" action="https://formsubmit.co/ajax/circularrootscoaching@gmail.com" method="POST" style="display:none;"></form>
+    <form id="user-form" action="https://formsubmit.co/ajax/" method="POST" style="display:none;"></form>
+
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -648,17 +652,17 @@
             return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'UPGRADE' };
         }
         
-        function generatePersonalizedRationale(answers, recommendationTitle) {
+        function generatePersonalizedRationale(answers, recommendationTitle, isCleanText = false) {
             const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || 'an ambitious fitness goal';
             const rawBarrier = answers.find(a => a.key === 'barrier')?.answer || 'a specific obstacle';
             const theWhyId = answers.find(a => a.key === 'theWhy')?.whyId || 'HEALTH';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
-            const budgetId = answers.find(a => a.key === 'budget')?.budgetId || 'FLEX';
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const pastExp = answers.find(a => a.key === 'pastExp')?.answer || '';
             
             if (medical.includes("specialized training")) {
-                return `Because you reported an injury requiring specialized attention, I have prioritized the **1-1 Coaching** path for you. A 'one-size-fits-most' approach is a high-risk strategy when your body is sending these signals. By choosing this 1-1 bridge, we don't just 'work around' your limitations—we build through them. This allows me to provide the bio-individual feedback and regressions necessary to ensure you stay in the game for the long run, turning a temporary hurdle into a bulletproof foundation.`;
+                let txt = `Because you reported an injury requiring specialized attention, I have prioritized the 1-1 Coaching path for you. A 'one-size-fits-most' approach is a high-risk strategy when your body is sending these signals. By choosing this 1-1 bridge, we don't just 'work around' your limitations—we build through them. This allows me to provide the bio-individual feedback and regressions necessary to ensure you stay in the game for the long run, turning a temporary hurdle into a bulletproof foundation.`;
+                return isCleanText ? txt : markdownToHtml(txt);
             }
 
             let goalPhrase = rawGoal;
@@ -666,16 +670,16 @@
             
             if (rawGoal.includes("Shedding fat")) {
                 goalPhrase = "fat loss and physique transformation";
-                quickWin = "A quick tip to start: **prioritize protein in your first meal today** to help manage those afternoon cravings and stay satiated.";
+                quickWin = "A quick tip to start: prioritize protein in your first meal today to help manage those afternoon cravings and stay satiated.";
             } else if (rawGoal.includes("Getting strong")) {
                 goalPhrase = "building muscle and strength";
-                quickWin = "A quick tip to start: **track your training volume** (reps x sets) this week. If you don't measure it, you can't improve it.";
+                quickWin = "A quick tip to start: track your training volume (reps x sets) this week. If you don't measure it, you can't improve it.";
             } else if (rawGoal.includes("Boosting energy")) {
                 goalPhrase = "improved energy and endurance";
-                quickWin = "A quick tip to start: **aim for 500ml of water** before your morning coffee to kickstart cellular hydration and mental focus.";
+                quickWin = "A quick tip to start: aim for 500ml of water before your morning coffee to kickstart cellular hydration and mental focus.";
             } else if (rawGoal.includes("Feeling generally healthier")) {
                 goalPhrase = "establishing consistent habits";
-                quickWin = "A quick tip to start: **set a 10-minute movement timer** for after lunch. Consistency beats intensity every time.";
+                quickWin = "A quick tip to start: set a 10-minute movement timer for after lunch. Consistency beats intensity every time.";
             }
 
             let motivationPhrase = "";
@@ -693,21 +697,50 @@
             else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "managing training time";
 
             let expText = "";
-            if (expId === 'BEGINNER') expText = "As you are <span class='text-green-400'>brand new to structured training</span>, building a safe and competent base is our first priority. ";
-            else if (expId === 'RETURNING') expText = "Since you are <span class='text-green-400'>returning after a break</span>, it's vital to re-establish your fundamentals before pushing high-intensity limits. ";
-            else expText = "As an <span class='text-green-400'>experienced trainee looking for an edge</span>, your plan focuses on high-level programming to bypass your current plateau. ";
+            if (expId === 'BEGINNER') expText = "As you are brand new to structured training, building a safe and competent base is our first priority. ";
+            else if (expId === 'RETURNING') expText = "Since you are returning after a break, it's vital to re-establish your fundamentals before pushing high-intensity limits. ";
+            else expText = "As an experienced trainee looking for an edge, your plan focuses on high-level programming to bypass your current plateau. ";
 
-            let rationale = `${expText}We recognize <span class="text-green-400 font-bold">${goalPhrase}</span> as your priority. Because you've shared that your motivation is ${motivationPhrase}, we've selected this path specifically to ensure you overcome <span class="text-green-400 font-bold">${barrierPhrase}</span>. `;
+            let rationale = `${expText}We recognize ${goalPhrase} as your priority. Because you've shared that your motivation is ${motivationPhrase}, we've selected this path specifically to ensure you overcome ${barrierPhrase}. `;
             
             if (pastExp.includes("struggled to stay consistent")) {
-                rationale += `Since you've found consistency difficult in the past, the <strong>${recommendationTitle}</strong> path is specifically selected to provide the additional support layer you need to break that cycle. `;
+                rationale += `Since you've found consistency difficult in the past, the ${recommendationTitle} path is specifically selected to provide the additional support layer you need to break that cycle. `;
             }
 
+            if (isCleanText) return rationale;
+
+            let styledRationale = markdownToHtml(rationale);
             if (quickWin) {
-                rationale += `<br><br><span class="block bg-green-500/10 border border-green-500/20 p-3 rounded-xl mt-2 text-white font-medium italic"><span class="text-green-500 font-black uppercase not-italic text-[10px] tracking-widest block mb-1">Coach Chris' Quick Win:</span> ${quickWin}</span>`;
+                styledRationale += `<br><br><span class="block bg-green-500/10 border border-green-500/20 p-3 rounded-xl mt-2 text-white font-medium italic"><span class="text-green-500 font-black uppercase not-italic text-[10px] tracking-widest block mb-1">Coach Chris' Quick Win:</span> ${quickWin}</span>`;
             }
 
-            return rationale;
+            return styledRationale;
+        }
+
+        function generateSixMonthVision(answers) {
+            const rawGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
+            const theWhyId = answers.find(a => a.key === 'theWhy')?.whyId || 'HEALTH';
+            
+            let vision = "Six months from now, if you remain consistent on this path: ";
+            
+            if (rawGoal.includes("Shedding fat")) {
+                vision += "You will have fundamentally shifted your body composition. You won't just 'look' different; you'll have mastered the nutritional habits that keep the weight off for good, feeling leaner and more capable in every daily movement.";
+            } else if (rawGoal.includes("Getting strong")) {
+                vision += "You will have built a significant 'strength reserve.' Your primary lifts will have stabilized, and you'll notice a distinct change in your physical presence and posture, feeling solid and capable of handling heavier loads both in and out of the gym.";
+            } else if (rawGoal.includes("Boosting energy")) {
+                vision += "Your metabolic health will have transformed. You'll likely find that 'afternoon slumps' are a thing of the past, and your recovery between sessions—and between life's stressors—is significantly faster.";
+            } else {
+                vision += "You will have turned 'exercise' into a core pillar of your identity. You will no longer be someone 'trying' to get fit, but someone who is fit, with the discipline and resilience to maintain your results for years to come.";
+            }
+
+            switch(theWhyId) {
+                case 'CONFIDENCE': vision += " Most importantly, that quiet confidence you seek will be your default state of mind."; break;
+                case 'FAMILY': vision += " You'll be the high-energy parent or partner you aspire to be, leading by example."; break;
+                case 'HEALTH': vision += " You'll have added high-quality 'life to your years,' knowing you're investing in your future self."; break;
+                case 'PERFORMANCE': vision += " You'll be hitting performance numbers you previously thought were out of reach."; break;
+            }
+
+            return vision;
         }
 
         function generateAlternativeDescription(primaryRec, altRec, answers) {
@@ -735,7 +768,7 @@
             return markdownToHtml(d);
         }
 
-        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior", isTransitioning = false;
+        let currentStep = 0, totalScore = 0, selectedOption = null, userAnswers = [], clientName = "Warrior", clientEmail = "", isTransitioning = false;
         const contentArea = document.getElementById('content-area');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const progressTextLabel = document.getElementById('progress-text-label'); 
@@ -894,7 +927,7 @@
                          </svg>
                      </div>
                      <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Review Your Profile</h2>
-                     <p class="text-xs text-neutral-400 mt-2 uppercase tracking-widest">Verifying optimal training path...</p>
+                     <p class="text-xs text-neutral-400 mt-2 uppercase tracking-widest">Where should we send your results?</p>
                  </div>
                  
                  <div class="animate-in">
@@ -902,28 +935,78 @@
                  </div>
 
                  <div class="animate-in glass-panel p-6 rounded-3xl relative overflow-hidden border-green-500/20">
-                     <p class="text-sm font-medium text-neutral-300 mb-6">Enter your first name and agree to the disclaimer to unlock your recommendation.</p>
-                     <form id="personalization-form" class="space-y-6">
+                     <form id="personalization-form" class="space-y-5">
                          <div>
                              <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">First Name</label>
                              <input type="text" id="client-name-input" required class="custom-input block w-full p-4 rounded-xl" placeholder="E.G. JANE" value="${clientName === 'Warrior' ? '' : clientName}">
                          </div>
-                         <div class="flex items-start">
+                         <div>
+                             <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">Email Address</label>
+                             <input type="email" id="client-email-input" required class="custom-input block w-full p-4 rounded-xl" placeholder="EMAIL@DOMAIN.COM" value="${clientEmail}">
+                             <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">We'll email your result & 6-month vision for your records.</p>
+                         </div>
+                         <div class="flex items-start py-2">
                             <input type="checkbox" id="disclaimer-check" required class="mt-1">
                             <label for="disclaimer-check" class="ml-3 text-xs text-neutral-400 leading-snug">
-                                I have read and agree to the <a href="#disclaimer" class="font-bold underline text-white">fitness disclaimer</a>.
+                                I agree to the <a href="#disclaimer" class="font-bold underline text-white">fitness disclaimer</a> and wish to receive my analysis.
                             </label>
                         </div>
-                         <button type="submit" id="display-button" disabled class="action-button w-full py-5 rounded-2xl text-sm tracking-widest">VIEW ANALYSIS</button>
+                         <button type="submit" id="display-button" disabled class="action-button w-full py-5 rounded-2xl text-sm tracking-widest">VIEW ANALYSIS & EMAIL ME</button>
                      </form>
                  </div>
              `;
              document.getElementById('personalization-form').addEventListener('submit', handlePersonalize);
              const nameIn = document.getElementById('client-name-input');
+             const emailIn = document.getElementById('client-email-input');
              const check = document.getElementById('disclaimer-check');
              const btn = document.getElementById('display-button');
-             const upd = () => btn.disabled = !(nameIn.value.trim().length > 0 && check.checked);
-             nameIn.addEventListener('input', upd); check.addEventListener('change', upd); upd(); 
+             
+             const upd = () => {
+                 const isEmailValid = emailIn.value.includes('@') && emailIn.value.includes('.');
+                 btn.disabled = !(nameIn.value.trim().length > 0 && isEmailValid && check.checked);
+             };
+             nameIn.addEventListener('input', upd); 
+             emailIn.addEventListener('input', upd);
+             check.addEventListener('change', upd); 
+             upd(); 
+        }
+
+        async function triggerEmailSubmissions(primary, rationale, vision) {
+            // Setup Coach Email
+            const coachForm = document.getElementById('coach-form');
+            coachForm.innerHTML = `
+                <input type="hidden" name="_subject" value="NEW QUIZ SUBMISSION: ${clientName}">
+                <input type="hidden" name="Name" value="${clientName}">
+                <input type="hidden" name="Email" value="${clientEmail}">
+                <input type="hidden" name="Recommended_Program" value="${primary.title}">
+                <input type="hidden" name="Total_Score" value="${totalScore}">
+                <input type="hidden" name="_template" value="table">
+            `;
+            userAnswers.forEach(ans => {
+                const input = document.createElement('input');
+                input.type = "hidden";
+                input.name = `Q_${ans.key}`;
+                input.value = ans.answer;
+                coachForm.appendChild(input);
+            });
+
+            // Setup User Email
+            const userForm = document.getElementById('user-form');
+            userForm.action = `https://formsubmit.co/ajax/${clientEmail}`;
+            userForm.innerHTML = `
+                <input type="hidden" name="_subject" value="Your Path to #Fitter #Stronger #Better - Coach Chris">
+                <input type="hidden" name="Greeting" value="Hi ${clientName}, here is your customized training analysis.">
+                <input type="hidden" name="Recommended_Path" value="${primary.title}">
+                <input type="hidden" name="Rationale" value="${rationale}">
+                <input type="hidden" name="Your_6_Month_Vision" value="${vision}">
+                <input type="hidden" name="Next_Step" value="View more details here: ${primary.ctaLink}">
+                <input type="hidden" name="_template" value="basic">
+                <input type="hidden" name="_cc" value="circularrootscoaching@gmail.com">
+            `;
+
+            // Fire and forget (don't wait for success to show results to user)
+            fetch(coachForm.action, { method: 'POST', body: new FormData(coachForm) });
+            fetch(userForm.action, { method: 'POST', body: new FormData(userForm) });
         }
 
         function renderLoadingScreen() {
@@ -931,10 +1014,20 @@
                  <div class="text-center animate-in min-h-[350px] flex flex-col items-center justify-center">
                      <div class="clean-spinner mb-8"></div> 
                      <p class="text-2xl font-black uppercase italic tracking-tighter text-white animate-pulse">Analyzing Answers...</p>
-                     <p class="text-xs text-neutral-500 tracking-widest mt-4">CALCULATING OPTIMAL PATH</p>
+                     <p class="text-xs text-neutral-500 tracking-widest mt-4">CUSTOMIZING YOUR 6-MONTH VISION</p>
                  </div>
              `;
-             setTimeout(() => { renderFinalProgramSummary(); window.scrollTo({top: 0, behavior: 'smooth'}); }, 2500);
+             
+             const primary = getRecommendation(totalScore, userAnswers);
+             const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
+             const vision = generateSixMonthVision(userAnswers);
+             
+             triggerEmailSubmissions(primary, cleanRationale, vision);
+
+             setTimeout(() => { 
+                renderFinalProgramSummary(); 
+                window.scrollTo({top: 0, behavior: 'smooth'}); 
+             }, 2500);
         }
 
         function renderFinalProgramSummary() {
@@ -942,6 +1035,7 @@
             const primary = getRecommendation(totalScore, userAnswers);
             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
             const rationale = generatePersonalizedRationale(userAnswers, primary.title);
+            const vision = generateSixMonthVision(userAnswers);
             const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
             const medical = userAnswers.find(a => a.key === 'medical')?.answer || '';
             const isInjuryAlert = medical.includes("specialized training");
@@ -967,6 +1061,7 @@
                     <div class="text-center">
                         <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-2">Recommendation for ${client}</p>
                         <h1 class="text-3xl font-black uppercase text-white italic leading-tight">Your Optimal Path</h1>
+                        <p class="text-[9px] text-neutral-500 uppercase tracking-widest mt-2">Results also sent to ${clientEmail}</p>
                     </div>
 
                     <div class="result-card p-6 rounded-3xl border-green-500/20 bg-green-500/[0.02] relative overflow-hidden">
@@ -980,7 +1075,7 @@
                         <p class="text-neutral-300 text-sm leading-relaxed mb-6">${primary.briefOverview}</p>
                         <div class="p-4 ${isInjuryAlert ? 'bg-red-500/10 border-red-500/20' : 'bg-white/5 border-white/10'} rounded-2xl border mb-6">
                             ${isInjuryAlert ? '<p class="text-[9px] font-black text-red-500 uppercase tracking-widest mb-2">Specialized Pathway Activated</p>' : ''}
-                            <p class="text-xs italic text-neutral-400 leading-relaxed">${markdownToHtml(rationale)}</p>
+                            <p class="text-xs italic text-neutral-400 leading-relaxed">${rationale}</p>
                         </div>
                         <div class="flex flex-col gap-3">
                             <a href="${primary.ctaLink}" target="_blank" class="action-button w-full block py-5 rounded-2xl text-sm text-center no-underline tracking-widest">${primaryBtnText}</a>
@@ -988,12 +1083,18 @@
                             <div class="relative">
                                 <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2 bg-black text-neutral-500 text-[8px] font-black uppercase tracking-widest">OR</div>
                                 <a href="${whatsappLink}" target="_blank" class="whatsapp-button w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-xs text-center no-underline tracking-widest">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.347.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                                     ASK COACH CHRIS A QUESTION
                                 </a>
                             </div>
                             ` : ''}
                         </div>
+                    </div>
+
+                    <!-- 6-Month Vision Block -->
+                    <div class="p-6 rounded-3xl bg-green-500/10 border border-green-500/30">
+                        <p class="text-[10px] font-black uppercase text-green-500 tracking-[0.3em] mb-4">Your 6-Month Vision</p>
+                        <p class="text-sm text-white font-medium leading-relaxed italic">"${vision}"</p>
                     </div>
 
                     ${alt ? `
@@ -1022,7 +1123,7 @@
                         <ol class="space-y-6">
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">1</span>
-                                <div><span class="text-white font-bold">Learn more about ${primary.title}</span><span class="block text-neutral-400 text-sm mt-1">Review the full program details, pricing, and access options via the button above.</span></div>
+                                <div><span class="text-white font-bold">Check Your Inbox</span><span class="block text-neutral-400 text-sm mt-1">We've sent a copy of this rationale and your 6-month vision to your email for easy access.</span></div>
                             </li>
                             <li class="flex gap-4">
                                 <span class="bg-white/10 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0">2</span>
@@ -1082,8 +1183,16 @@
         }
         
         function handleBack() { currentStep = Math.max(0, currentStep - 1); isTransitioning = false; renderQuestion(); scrollToTarget(); }
-        function handlePersonalize(e) { e.preventDefault(); clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; renderLoadingScreen(); scrollToTarget(); }
-        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; isTransitioning = false; renderQuestion(); scrollToTarget(); }
+        
+        function handlePersonalize(e) { 
+            e.preventDefault(); 
+            clientName = document.getElementById('client-name-input').value.trim().split(' ')[0]; 
+            clientEmail = document.getElementById('client-email-input').value.trim();
+            renderLoadingScreen(); 
+            scrollToTarget(); 
+        }
+        
+        function restartQuiz() { currentStep = 0; totalScore = 0; selectedOption = null; userAnswers = []; clientName = "Warrior"; clientEmail = ""; isTransitioning = false; renderQuestion(); scrollToTarget(); }
         document.addEventListener('DOMContentLoaded', () => { updateProgress(); renderQuestion(); });
     </script>
 </body>
