@@ -992,18 +992,58 @@
         async function triggerWeb3FormsSubmission(primary, rationale, vision) {
             const formData = new FormData();
             formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            formData.append("subject", `Coach Chris Consultation Results for ${clientName}`);
-            formData.append("from_name", "Coach Chris Digital Consultation");
+            formData.append("subject", `Assessment Results for ${clientName}`);
+            formData.append("from_name", "COACH CHRIS Assessment");
             formData.append("name", clientName);
             formData.append("email", clientEmail);
-            formData.append("Recommended_Program", primary.title);
-            formData.append("Total_Score", totalScore);
-            formData.append("Personalized_Rationale", rationale);
-            formData.append("Three_Month_Vision", vision);
-            
-            userAnswers.forEach(ans => {
-                formData.append(`${ans.label || ans.key}`, ans.answer);
-            });
+
+            // --- TEMPLATE 1: CLIENT RESULTS EMAIL ---
+            const clientEmailContent = `
+HI ${clientName.toUpperCase()},
+
+YOU RECENTLY COMPLETED THE COACH CHRIS DIGITAL ASSESSMENT. 
+
+BASED ON YOUR ANSWERS, YOUR OPTIMAL TRAINING PATH IS:
+🚀 ${primary.title}
+
+YOUR PERSONALIZED RATIONALE:
+"${rationale}"
+
+YOUR 3-MONTH VISION:
+"${vision}"
+
+YOUR NEXT STEPS TO GETTING STARTED:
+1. REVIEW THE PROGRAM DETAILS: ${primary.ctaLink}
+2. APPLY VIA THE WEBSITE OR REPLY TO THIS EMAIL WITH ANY QUESTIONS.
+3. PREPARE FOR YOUR INITIAL CONSULTATION.
+
+LETS GET TO WORK.
+
+#FITTER #STRONGER #BETTER
+COACH CHRIS
+CIRCULAR ROOTS COACHING
+            `;
+            formData.append("Message_For_Client", clientEmailContent);
+
+            // --- TEMPLATE 2: COACH NOTIFICATION EMAIL ---
+            const coachEmailContent = `
+NEW ASSESSMENT SUBMITTED
+
+CLIENT: ${clientName}
+EMAIL: ${clientEmail}
+TOTAL SCORE: ${totalScore}
+RECOMMENDED: ${primary.title}
+
+FULL BREAKDOWN:
+${userAnswers.map(ans => `- ${ans.label || ans.key}: ${ans.answer}`).join('\n')}
+
+RATIONALE GENERATED:
+${rationale}
+
+VISION GENERATED:
+${vision}
+            `;
+            formData.append("Coach_Internal_Notice", coachEmailContent);
 
             try {
                 await fetch("https://api.web3forms.com/submit", {
