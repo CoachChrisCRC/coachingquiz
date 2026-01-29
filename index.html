@@ -623,20 +623,15 @@
             }
 
             let goalPhrase = rawGoal;
-            let quickWin = "";
             
             if (rawGoal.includes("Shedding fat")) {
                 goalPhrase = "fat loss and physique transformation";
-                quickWin = "A quick tip to start: prioritize protein in your first meal today to help manage those afternoon cravings and stay satiated.";
             } else if (rawGoal.includes("Getting strong")) {
                 goalPhrase = "building muscle and strength";
-                quickWin = "A quick tip to start: track your training volume (reps x sets) this week. If you don't measure it, you can't improve it.";
             } else if (rawGoal.includes("Boosting energy")) {
                 goalPhrase = "improved energy and endurance";
-                quickWin = "A quick tip to start: aim for 500ml of water before your morning coffee to kickstart cellular hydration and mental focus.";
             } else if (rawGoal.includes("Feeling generally healthier")) {
                 goalPhrase = "establishing consistent habits";
-                quickWin = "A quick tip to start: set a 10-minute movement timer for after lunch. Consistency beats intensity every time.";
             }
 
             let motivationPhrase = "";
@@ -664,14 +659,7 @@
                 rationale += `Since you've found consistency difficult in the past, the ${recommendationTitle} path is specifically selected to provide the additional support layer you need to break that cycle. `;
             }
 
-            if (isCleanText) return rationale;
-
-            let styledRationale = markdownToHtml(rationale);
-            if (quickWin) {
-                styledRationale += `<br><br><span class="block bg-green-500/10 border border-green-500/20 p-3 rounded-xl mt-2 text-white font-medium italic"><span class="text-green-500 font-black uppercase not-italic text-[10px] tracking-widest block mb-1">Coach Chris' Quick Win:</span> ${quickWin}</span>`;
-            }
-
-            return styledRationale;
+            return isCleanText ? rationale : markdownToHtml(rationale);
         }
 
         function generateThreeMonthVision(answers) {
@@ -832,7 +820,7 @@
             if (stepData.section) {
                 sectionHtml = `
                     <div class="section-header animate-in">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-green-500 mb-1">New Phase</p>
+                        <p class="text-[10px] font-black uppercase text-green-500 mb-1">New Phase</p>
                         <h3 class="text-lg font-black uppercase text-white tracking-tight">${stepData.section}</h3>
                     </div>
                 `;
