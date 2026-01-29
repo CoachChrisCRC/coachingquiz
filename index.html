@@ -350,51 +350,179 @@
         }
 
         const quizData = [
-            // PART 1: GOALS & COMMITMENT
-            { id: 1, section: "Part 1: Your Vision", question: "What is your #1 primary fitness goal right now?", key: "primaryGoal", summaryLabel: "Primary Goal", options: [{ text: "Shedding fat and transforming my physique", short: "Fat Loss & Physique", score: 30 }, { text: "Getting strong and building solid muscle", short: "Strength & Muscle", score: 20 }, { text: "Boosting energy and improving my fitness/stamina", short: "Energy & Stamina", score: 10 }, { text: "Feeling generally healthier and more consistent", short: "Health & Consistency", score: 5 }] },
-            { id: 2, question: "How many days per week can you realistically commit?", key: "commitment", summaryLabel: "Commitment", options: [{ text: "I'm ready for 5+ sessions per week (high commitment)", short: "5+ Days / Week", score: 30 }, { text: "I can commit 3-4 days a week easily", short: "3-4 Days / Week", score: 20 }, { text: "1-2 days a week is realistic for me right now", short: "1-2 Days / Week", score: 10 }, { text: "I need help finding consistency/just starting", short: "Seeking Consistency", score: 5 }] },
-            { id: 3, question: "What is your biggest barrier to success?", key: "barrier", summaryLabel: "Main Barrier", options: [{ text: "I don't have a plan that fits my goals", short: "Lack of Structure", score: 5 }, { text: "I struggle with follow-through and need accountability", short: "Accountability", score: 20 }, { text: "My diet is my biggest weakness (need a strategy)", short: "Nutrition Strategy", score: 30 }, { text: "Staying motivated and finding the time to train", short: "Time & Motivation", score: 10 }] },
+            // PART 1: IDENTITY & BARRIERS (IMPROVEMENT 1: FLIPPED)
+            { 
+                id: 1, 
+                section: "Part 1: Your Baseline", 
+                question: "How would you describe your current training experience?", 
+                key: "experience", 
+                summaryLabel: "Experience", 
+                options: [
+                    { text: "I am brand new to structured training", short: "Beginner", score: 5, expId: 'BEGINNER' }, 
+                    { text: "I have some experience but lost my way", short: "Returning", score: 15, expId: 'RETURNING' }, 
+                    { text: "I am an experienced trainee looking for an edge", short: "Experienced", score: 30, expId: 'EXPERIENCED' }
+                ] 
+            },
+            { 
+                id: 2, 
+                question: "What is your biggest barrier to success right now?", 
+                key: "barrier", 
+                summaryLabel: "Main Barrier", 
+                options: [
+                    { text: "I don't have a plan that fits my goals", short: "Lack of Structure", score: 5 }, 
+                    { text: "I struggle with follow-through and need accountability", short: "Accountability", score: 20 }, 
+                    { text: "My diet is my biggest weakness (need a strategy)", short: "Nutrition Strategy", score: 30 }, 
+                    { text: "Staying motivated and finding the time to train", short: "Time & Motivation", score: 10 }
+                ] 
+            },
+            { 
+                id: 3, 
+                question: "What is your #1 primary fitness goal right now?", 
+                key: "primaryGoal", 
+                summaryLabel: "Primary Goal", 
+                options: [
+                    { text: "Shedding fat and transforming my physique", short: "Fat Loss & Physique", score: 30 }, 
+                    { text: "Getting strong and building solid muscle", short: "Strength & Muscle", score: 20 }, 
+                    { text: "Boosting energy and improving my fitness/stamina", short: "Energy & Stamina", score: 10 }, 
+                    { text: "Feeling generally healthier and more consistent", short: "Health & Consistency", score: 5 }
+                ] 
+            },
             
-            // PART 2: HISTORY & READINESS
-            { id: 4, section: "Part 2: Your Background", question: "What level of support do you need?", key: "support", options: [{ text: "I need a great plan and I'll handle the rest", score: 5 }, { text: "I need weekly guidance and access to a coach", score: 20 }, { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, { text: "I learn best in a supportive group environment", score: 10 }] },
-            { id: 5, question: "Do you have any injuries or medical considerations?", key: "medical", summaryLabel: "Medical/Injuries", options: [{ text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }] },
-            { id: 6, question: "What has been your experience with following a structured plan in the past?", key: "pastExp", options: [
-                { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
-                { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
-                { text: "I’ve worked with a coach before and valued the relationship.", score: 30, category: 'COACHED' },
-                { text: "I’m currently training but feel I’ve hit a plateau.", score: 20, category: 'PLATEAU' }
-            ] },
+            // PART 2: COMMITMENT & READINESS
+            { 
+                id: 4, 
+                section: "Part 2: Commitment", 
+                question: "How many days per week can you realistically commit?", 
+                key: "commitment", 
+                summaryLabel: "Commitment", 
+                options: [
+                    { text: "I'm ready for 5+ sessions per week (high commitment)", short: "5+ Days / Week", score: 30 }, 
+                    { text: "I can commit 3-4 days a week easily", short: "3-4 Days / Week", score: 20 }, 
+                    { text: "1-2 days a week is realistic for me right now", short: "1-2 Days / Week", score: 10 }, 
+                    { text: "I need help finding consistency/just starting", short: "Seeking Consistency", score: 5 }
+                ] 
+            },
+            { 
+                id: 5, 
+                question: "What level of support do you need to stay on track?", 
+                key: "support", 
+                options: [
+                    { text: "I need a great plan and I'll handle the rest", score: 5 }, 
+                    { text: "I need weekly guidance and access to a coach", score: 20 }, 
+                    { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, 
+                    { text: "I learn best in a supportive group environment", score: 10 }
+                ] 
+            },
+            { 
+                id: 6, 
+                question: "Do you have any injuries or medical considerations?", 
+                key: "medical", 
+                summaryLabel: "Medical/Injuries", 
+                options: [
+                    { text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, 
+                    { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, 
+                    { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, 
+                    { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }
+                ] 
+            },
 
-            // PART 3: LIFESTYLE & BUDGET
-            { id: 7, section: "Part 3: Practical Strategy", question: "What is your current level of commitment to investment?", key: "budget", summaryLabel: "Budget Level", options: [
-                { text: "All-In: I need a coach to manage every detail for me (£175+)", short: "All-In (£175+)", score: 30, budgetId: 'PREMIUM' }, 
-                { text: "Guided: I want a solid plan and someone to check my progress (£75)", short: "Guided (£75)", score: 20, budgetId: 'MID' }, 
-                { text: "Independent: I want the tools to do it myself (£45)", short: "Independent (£45)", score: 10, budgetId: 'ENTRY' }, 
-                { text: "Undecided: Show me what fits my needs first", short: "Undecided", score: 25, budgetId: 'FLEX' }
-            ] },
-            { id: 8, question: "Where do you primarily workout?", key: "location", options: [{ text: "A fully equipped gym/fitness center", score: 30 }, { text: "At home with minimal equipment", score: 10 }, { text: "Outdoors or using functional bodyweight training", score: 20 }, { text: "It varies (I travel or shift locations often)", score: 5 }] },
-            { id: 9, question: "How would you describe your nutritional discipline?", key: "nutrition", options: [{ text: "I track macros/calories and just need refinement", score: 30 }, { text: "I eat generally healthy but focus on consistency", score: 20 }, { text: "My eating is inconsistent; I need a full overhaul", score: 10 }, { text: "I haven't focused on nutrition yet", score: 5 }] },
+            // PART 3: LIFESTYLE (DYNAMIC WORDING)
+            { 
+                id: 7, 
+                section: "Part 3: Lifestyle Strategy", 
+                question: "How would you describe your nutritional discipline?", 
+                key: "nutrition", 
+                // Dynamic logic will be applied in render function
+                options: [
+                    { 
+                        text: "I track macros/calories and just need refinement", 
+                        altText: "I am focused on high-level performance fuel", 
+                        score: 30 
+                    }, 
+                    { 
+                        text: "I eat generally healthy but focus on consistency", 
+                        altText: "I aim for balanced meals but want more structure", 
+                        score: 20 
+                    }, 
+                    { 
+                        text: "My eating is inconsistent; I need a full overhaul", 
+                        altText: "I struggle with basic nutrition habits", 
+                        score: 10 
+                    }, 
+                    { 
+                        text: "I haven't focused on nutrition yet", 
+                        altText: "I'm just starting to look at my diet", 
+                        score: 5 
+                    }
+                ] 
+            },
+            { 
+                id: 8, 
+                question: "What has been your experience with following a structured plan in the past?", 
+                key: "pastExp", 
+                options: [
+                    { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
+                    { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
+                    { text: "I’ve worked with a coach before and valued the relationship.", score: 30, category: 'COACHED' },
+                    { text: "I’m currently training but feel I’ve hit a plateau.", score: 20, category: 'PLATEAU' }
+                ] 
+            },
+            { 
+                id: 9, 
+                question: "Where do you primarily workout?", 
+                key: "location", 
+                options: [
+                    { text: "A fully equipped gym/fitness center", score: 30 }, 
+                    { text: "At home with minimal equipment", score: 10 }, 
+                    { text: "Outdoors or using functional bodyweight training", score: 20 }, 
+                    { text: "It varies (I travel or shift locations often)", score: 5 }
+                ] 
+            },
 
-            // PART 4: FINAL PROFILING
-            { id: 10, section: "Part 4: Final Profiling", question: "How crucial is guidance on daily habits and stress management?", key: "lifestyle", options: [{ text: "Essential (sleep and stress management are priorities)", score: 30 }, { text: "Important (I want it included in check-ins)", score: 20 }, { text: "Not crucial (I only need the workout programming)", score: 10 }, { text: "I am already highly disciplined in these areas", score: 5 }] },
-            { id: 11, question: "If you hit your goal 6 months from now, what changes most for you?", key: "theWhy", summaryLabel: "Your 'Why'", options: [
-                { text: "My self-confidence and how I feel in my own skin", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
-                { text: "My energy levels for my kids and family", short: "Family Energy", score: 20, whyId: 'FAMILY' }, 
-                { text: "My health longevity and long-term vitality", short: "Health Longevity", score: 30, whyId: 'HEALTH' }, 
-                { text: "My physical performance and absolute strength", short: "Peak Performance", score: 5, whyId: 'PERFORMANCE' }
-            ] },
-            { id: 12, question: "How would you describe your current training experience?", key: "experience", summaryLabel: "Experience", options: [
-                { text: "I am brand new to structured training", short: "Beginner", score: 5, expId: 'BEGINNER' }, 
-                { text: "I have some experience but lost my way", short: "Returning", score: 15, expId: 'RETURNING' }, 
-                { text: "I am an experienced trainee looking for an edge", short: "Experienced", score: 30, expId: 'EXPERIENCED' }
-            ] }
+            // PART 4: BUDGET & MISSION
+            { 
+                id: 10, 
+                section: "Part 4: Final Profiling", 
+                question: "What is your current level of commitment to investment?", 
+                key: "budget", 
+                summaryLabel: "Budget Level", 
+                options: [
+                    { text: "All-In: I need a coach to manage every detail for me (£175+)", short: "All-In (£175+)", score: 30, budgetId: 'PREMIUM' }, 
+                    { text: "Guided: I want a solid plan and someone to check my progress (£75)", short: "Guided (£75)", score: 20, budgetId: 'MID' }, 
+                    { text: "Independent: I want the tools to do it myself (£45)", short: "Independent (£45)", score: 10, budgetId: 'ENTRY' }, 
+                    { text: "Undecided: Show me what fits my needs first", short: "Undecided", score: 25, budgetId: 'FLEX' }
+                ] 
+            },
+            { 
+                id: 11, 
+                question: "If you hit your goal 6 months from now, what changes most for you?", 
+                key: "theWhy", 
+                summaryLabel: "Your 'Why'", 
+                options: [
+                    { text: "My self-confidence and how I feel in my own skin", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
+                    { text: "My energy levels for my kids and family", short: "Family Energy", score: 20, whyId: 'FAMILY' }, 
+                    { text: "My health longevity and long-term vitality", short: "Health Longevity", score: 30, whyId: 'HEALTH' }, 
+                    { text: "My physical performance and absolute strength", short: "Peak Performance", score: 5, whyId: 'PERFORMANCE' }
+                ] 
+            },
+            { 
+                id: 12, 
+                question: "How crucial is guidance on daily habits and stress management?", 
+                key: "lifestyle", 
+                options: [
+                    { text: "Essential (sleep and stress management are priorities)", score: 30 }, 
+                    { text: "Important (I want it included in check-ins)", score: 20 }, 
+                    { text: "Not crucial (I only need the workout programming)", score: 10 }, 
+                    { text: "I am already highly disciplined in these areas", score: 5 }
+                ] 
+            }
         ];
 
         // --- PROGRESSIVE DISCLOSURE MILESTONES ---
         const phaseTransitions = [
-            { triggerIndex: 4, title: "History & Readiness", message: "Great. I've got your vision. Now, let’s look at your training history and physical readiness." },
-            { triggerIndex: 7, title: "Practical Strategy", message: "Understood. Now, let's talk about the logistics: your schedule and budget, so we can find a plan that fits your life." },
-            { triggerIndex: 10, title: "The Finish Line", message: "Almost there. I just need to understand your lifestyle and your 'Why' to tailor the final recommendation." }
+            { triggerIndex: 3, title: "Vision & Goals", message: "Thanks for that context. Now, let’s define exactly what we are aiming for over the next 12 weeks." },
+            { triggerIndex: 6, title: "History & Habits", message: "Understood. Now, let's look at your training history and physical readiness to ensure we build a safe path." },
+            { triggerIndex: 9, title: "The Finish Line", message: "Almost there. I just need to understand your investment level and your 'Why' to tailor the final recommendation." }
         ];
 
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
@@ -622,6 +750,15 @@
             contentArea.innerHTML = ''; 
             const nextText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
 
+            // Improvement 1: Dynamic logic for Question Labeling
+            let currentExp = userAnswers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
+            let dynamicQuestion = stepData.question;
+            
+            if (stepData.key === 'nutrition') {
+                if (currentExp === 'EXPERIENCED') dynamicQuestion = "How would you describe your nutritional discipline for performance?";
+                else dynamicQuestion = "How would you describe your current nutritional habits?";
+            }
+
             let sectionHtml = "";
             if (stepData.section) {
                 sectionHtml = `
@@ -646,7 +783,7 @@
             div.innerHTML = `
                 ${sectionHtml}
                 ${helperTextHtml}
-                <h2 class="text-xl sm:text-2xl font-bold text-white leading-snug mb-8">${stepData.question}</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-white leading-snug mb-8">${dynamicQuestion}</h2>
                 <div id="options-container" class="space-y-3"></div>
                 <div class="flex space-x-4 mt-12">
                     <button id="back-button" class="secondary-button w-1/3 p-4 text-sm uppercase tracking-widest rounded-2xl">BACK</button>
@@ -664,8 +801,15 @@
             stepData.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base group';
+                
+                // Improvement 1: Dynamic Option Text
+                let displayText = opt.text;
+                if (stepData.key === 'nutrition' && currentExp === 'EXPERIENCED' && opt.altText) {
+                    displayText = opt.altText;
+                }
+
                 btn.innerHTML = `
-                    <span>${opt.text}</span>
+                    <span>${displayText}</span>
                     <svg class="check-icon h-5 w-5 shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                     </svg>
