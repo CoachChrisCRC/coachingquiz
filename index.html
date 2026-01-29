@@ -261,8 +261,8 @@
 
     <!-- SPLASH SCREEN LOADER -->
     <div id="initial-loader">
-        <div class="loader-content flex flex-col items-center">
-            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">DIGITAL CONSULTATION</h1>
+        <div class="loader-content flex flex-col items-center px-6">
+            <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic text-center">DIGITAL CONSULTATION</h1>
             <div id="loader-pulse-text" class="text-green-500 font-bold text-xl uppercase tracking-widest mt-2">Loading...</div>
             <div id="loader-sub-text" class="cycling-text">Initializing assessment...</div>
         </div>
@@ -781,7 +781,7 @@
             progressBarFill.style.width = `${progress}%`;
             progressPercent.textContent = `${Math.round(progress)}%`;
             if (currentStep < total) progressTextLabel.textContent = `QUESTION ${displayStep} OF ${total}`;
-            else progressTextLabel.textContent = `QUIZ COMPLETE`;
+            else progressTextLabel.textContent = `CONSULTATION COMPLETE`;
         }
 
         function scrollToTarget() {
