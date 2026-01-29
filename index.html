@@ -432,7 +432,6 @@
                 section: "Part 3: Lifestyle Strategy", 
                 question: "How would you describe your nutritional discipline?", 
                 key: "nutrition", 
-                // Dynamic logic will be applied in render function
                 options: [
                     { 
                         text: "I track macros/calories and just need refinement", 
@@ -479,18 +478,38 @@
                 ] 
             },
 
-            // PART 4: BUDGET & MISSION
+            // PART 4: BUDGET & MISSION (IMPROVEMENT 2: MICRO-COPY ADJ)
             { 
                 id: 10, 
                 section: "Part 4: Final Profiling", 
-                question: "What is your current level of commitment to investment?", 
+                question: "What level of partnership are you seeking for your investment?", 
                 key: "budget", 
-                summaryLabel: "Budget Level", 
+                summaryLabel: "Partnership Level", 
                 options: [
-                    { text: "All-In: I need a coach to manage every detail for me (£175+)", short: "All-In (£175+)", score: 30, budgetId: 'PREMIUM' }, 
-                    { text: "Guided: I want a solid plan and someone to check my progress (£75)", short: "Guided (£75)", score: 20, budgetId: 'MID' }, 
-                    { text: "Independent: I want the tools to do it myself (£45)", short: "Independent (£45)", score: 10, budgetId: 'ENTRY' }, 
-                    { text: "Undecided: Show me what fits my needs first", short: "Undecided", score: 25, budgetId: 'FLEX' }
+                    { 
+                        text: "Total Partnership: I need a coach to manage every detail for me", 
+                        short: "Total Partnership", 
+                        score: 30, 
+                        budgetId: 'PREMIUM' 
+                    }, 
+                    { 
+                        text: "Collaborative: I want a plan and regular coach guidance", 
+                        short: "Collaborative", 
+                        score: 20, 
+                        budgetId: 'MID' 
+                    }, 
+                    { 
+                        text: "Independent: I want the professional tools to do it myself", 
+                        short: "Independent", 
+                        score: 10, 
+                        budgetId: 'ENTRY' 
+                    }, 
+                    { 
+                        text: "Show me what fits my needs and goals first", 
+                        short: "Undecided", 
+                        score: 25, 
+                        budgetId: 'FLEX' 
+                    }
                 ] 
             },
             { 
@@ -750,7 +769,6 @@
             contentArea.innerHTML = ''; 
             const nextText = currentStep === quizData.length - 1 ? 'SUBMIT' : 'CONTINUE';
 
-            // Improvement 1: Dynamic logic for Question Labeling
             let currentExp = userAnswers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             let dynamicQuestion = stepData.question;
             
@@ -802,7 +820,6 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base group';
                 
-                // Improvement 1: Dynamic Option Text
                 let displayText = opt.text;
                 if (stepData.key === 'nutrition' && currentExp === 'EXPERIENCED' && opt.altText) {
                     displayText = opt.altText;
@@ -853,7 +870,6 @@
         function renderNameInputScreen() {
              currentStep = quizData.length; updateProgress();
 
-             // Summary Grid Logic
              const summaryAnswers = quizData.filter(q => q.summaryLabel).map(q => {
                  const answer = userAnswers.find(a => a.key === q.key);
                  return { label: q.summaryLabel, value: answer ? (answer.short || answer.answer) : '—' };
@@ -1053,7 +1069,6 @@
                 
                 currentStep++;
 
-                // Check for transition trigger
                 const transition = phaseTransitions.find(t => t.triggerIndex === currentStep);
                 if (transition) {
                     renderTransitionScreen(transition);
