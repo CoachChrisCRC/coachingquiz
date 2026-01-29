@@ -972,37 +972,32 @@
              upd(); 
         }
 
-        // --- OPTION 3: TRIGGER DUAL NOTIFICATION VIA API ---
         async function triggerWeb3FormsSubmission(primary, rationale, vision) {
             const formData = new FormData();
             formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            formData.append("subject", `NEW QUIZ SUBMISSION: ${clientName}`);
+            formData.append("subject", `Coach Chris Assessment Results for ${clientName}`);
             formData.append("from_name", "Coach Chris Assessment");
             
-            // Standard Fields
-            formData.append("Name", clientName);
-            formData.append("Email", clientEmail);
+            // Standard Fields - web3forms uses 'email' field for autoresponder
+            formData.append("name", clientName);
+            formData.append("email", clientEmail);
             
-            // Result Payload (To be included in both Chris' email and the client autoresponder)
+            // Result Payload
             formData.append("Recommended_Program", primary.title);
             formData.append("Total_Score", totalScore);
             formData.append("Personalized_Rationale", rationale);
             formData.append("Three_Month_Vision", vision);
             
-            // Mapping detailed quiz data
+            // Detailed Quiz Responses
             userAnswers.forEach(ans => {
-                formData.append(`Q_${ans.key}`, ans.answer);
+                formData.append(`${ans.label || ans.key}`, ans.answer);
             });
 
             try {
-                // Send the main data to Coach Chris
-                const response = await fetch("https://api.web3forms.com/submit", {
+                await fetch("https://api.web3forms.com/submit", {
                     method: "POST",
                     body: formData
                 });
-                
-                // Note: Web3Forms "Autoresponder" handles sending to the clientEmail automatically
-                // if configured in your Web3Forms dashboard. 
             } catch (error) {
                 console.error("Submission error", error);
             }
@@ -1021,7 +1016,6 @@
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
              const vision = generateThreeMonthVision(userAnswers);
              
-             // Triggering Option 3
              triggerWeb3FormsSubmission(primary, cleanRationale, vision);
 
              setTimeout(() => { 
