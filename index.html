@@ -327,12 +327,8 @@
         </p>
     </div>
 
-    <!-- Web3Forms Implementation -->
-    <script src="https://web3forms.com/client/script.js" async defer></script>
-
     <script>
-        const WEB3FORMS_ACCESS_KEY = "d24713b2-01ff-4c31-ae52-e49edd41e2c1";
-        const COACH_EMAIL = "circularrootscoaching@gmail.com"; // Receiver for leads
+        const COACH_EMAIL = "circularrootscoaching@gmail.com"; 
 
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -358,6 +354,7 @@
         }
 
         const quizData = [
+            // PHASE 1: Baseline & Logistics
             { 
                 id: 1, 
                 section: "Part 1: Your Baseline", 
@@ -396,7 +393,20 @@
             },
             { 
                 id: 4, 
-                section: "Part 2: Commitment", 
+                question: "Where do you primarily workout?", 
+                key: "location", 
+                options: [
+                    { text: "A fully equipped gym/fitness center", score: 30 }, 
+                    { text: "At home with minimal equipment", score: 10 }, 
+                    { text: "Outdoors or using functional bodyweight training", score: 20 }, 
+                    { text: "It varies (I travel or shift locations often)", score: 5 }
+                ] 
+            },
+
+            // PHASE 2: The Strategy (Commitment & Habits)
+            { 
+                id: 5, 
+                section: "Part 2: The Strategy", 
                 question: "How many days per week can you realistically commit?", 
                 key: "commitment", 
                 summaryLabel: "Commitment", 
@@ -408,7 +418,7 @@
                 ] 
             },
             { 
-                id: 5, 
+                id: 6, 
                 question: "What level of support do you need to stay on track?", 
                 key: "support", 
                 options: [
@@ -419,20 +429,7 @@
                 ] 
             },
             { 
-                id: 6, 
-                question: "Do you have any injuries or medical considerations?", 
-                key: "medical", 
-                summaryLabel: "Medical/Injuries", 
-                options: [
-                    { text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, 
-                    { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, 
-                    { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, 
-                    { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }
-                ] 
-            },
-            { 
                 id: 7, 
-                section: "Part 3: Lifestyle Strategy", 
                 question: "How would you describe your nutritional discipline?", 
                 key: "nutrition", 
                 options: [
@@ -453,20 +450,23 @@
                     { text: "I’m currently training but feel I’ve hit a plateau.", score: 20, category: 'PLATEAU' }
                 ] 
             },
+
+            // PHASE 3: Safety & The Why
             { 
                 id: 9, 
-                question: "Where do you primarily workout?", 
-                key: "location", 
+                section: "Part 3: Readiness & Impact",
+                question: "Do you have any injuries or medical considerations?", 
+                key: "medical", 
+                summaryLabel: "Medical/Injuries", 
                 options: [
-                    { text: "A fully equipped gym/fitness center", score: 30 }, 
-                    { text: "At home with minimal equipment", score: 10 }, 
-                    { text: "Outdoors or using functional bodyweight training", score: 20 }, 
-                    { text: "It varies (I travel or shift locations often)", score: 5 }
+                    { text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, 
+                    { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, 
+                    { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, 
+                    { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }
                 ] 
             },
             { 
                 id: 10, 
-                section: "Part 4: Final Profiling", 
                 question: "What level of partnership are you seeking for your investment?", 
                 key: "budget", 
                 summaryLabel: "Partnership Level", 
@@ -503,9 +503,9 @@
         ];
 
         const phaseTransitions = [
-            { triggerIndex: 3, title: "Vision & Goals", message: "Thanks for that context. Now, let’s define exactly what we are aiming for over the next 12 weeks." },
-            { triggerIndex: 6, title: "History & Habits", message: "Understood. Now, let's look at your training history and physical readiness to ensure we build a safe path." },
-            { triggerIndex: 9, title: "The Finish Line", message: "Almost there. I just need to understand your investment level and your 'Why' to tailor the final recommendation." }
+            { triggerIndex: 4, title: "Vision & Goals", message: "Thanks for that context. Now, let’s define exactly what we are aiming for over the next 12 weeks." },
+            { triggerIndex: 8, title: "Physical Readiness", message: "Understood. Now, let's look at your physical readiness and history to ensure we build a safe path." },
+            { triggerIndex: 11, title: "The Finish Line", message: "Almost there. I just need to understand your investment level and your 'Why' to tailor the final recommendation." }
         ];
 
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
@@ -920,7 +920,7 @@
                          </svg>
                      </div>
                      <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">Review Your Profile</h2>
-                     <p class="text-xs text-neutral-400 mt-2 uppercase tracking-widest">Where should we send your results?</p>
+                     <p class="text-xs text-neutral-400 mt-2 uppercase tracking-widest">Provide your details to see your customized vision</p>
                  </div>
                  
                  <div class="animate-in">
@@ -936,7 +936,7 @@
                          <div>
                              <label class="block text-[10px] font-black uppercase text-neutral-500 tracking-widest mb-2">Email Address</label>
                              <input type="email" id="client-email-input" name="email" required class="custom-input block w-full p-4 rounded-xl" placeholder="EMAIL@DOMAIN.COM" value="${clientEmail}">
-                             <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">We'll email your result & 3-month vision for your records.</p>
+                             <p class="text-[9px] text-neutral-500 mt-2 uppercase tracking-widest">Your results will be reviewed by Coach Chris.</p>
                          </div>
                          <div class="flex items-start py-2">
                             <input type="checkbox" id="disclaimer-check" required class="mt-1">
@@ -944,7 +944,7 @@
                                 I agree to the <a href="#disclaimer" class="font-bold underline text-white">fitness disclaimer</a> and wish to receive my analysis.
                             </label>
                         </div>
-                         <button type="submit" id="display-button" disabled class="action-button w-full py-5 rounded-2xl text-sm tracking-widest">VIEW ANALYSIS & EMAIL ME</button>
+                         <button type="submit" id="display-button" disabled class="action-button w-full py-5 rounded-2xl text-sm tracking-widest">VIEW ANALYSIS</button>
                      </form>
                  </div>
              `;
@@ -964,62 +964,31 @@
              upd(); 
         }
 
-        async function triggerDualServiceSubmission(primary, rationale, vision) {
+        async function triggerAssessmentSubmission(primary, rationale, vision) {
             const coachEmailAddress = COACH_EMAIL;
-            const emailSubject = encodeURIComponent(`Question about my ${primary.title} assessment results`);
 
-            // 1. WEB3FORMS (TO CLIENT - THE USER)
-            const clientData = new FormData();
-            clientData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            clientData.append("from_name", "Coach Chris");
-            clientData.append("name", "Coach Chris");
-            clientData.append("email", clientEmail); // SEND TO USER'S INPUT EMAIL
-            clientData.append("subject", `Your Assessment Results: ${primary.title}`);
-            clientData.append("message", `
-Hi ${clientName}, 
-
-Thank you for completing your fitness assessment. Based on your profile, here is your roadmap:
-
-YOUR PATHWAY: ${primary.title}
-WHY THIS WORKS: ${rationale}
-3-MONTH VISION: ${vision}
-
-NEXT STEPS:
-- View your full program details here: ${primary.ctaLink}
-- Have questions? Simply hit reply to this email or click here to start a thread: mailto:${coachEmailAddress}?subject=${emailSubject}
-
-Train Unconventional,
-Coach Chris
-            `);
-
-            // 2. FORMSUBMIT (TO COACH - THE OWNER)
+            // Single dispatch to Coach via FormSubmit
             const coachData = {
-                _subject: `🔥 NEW LEAD: ${clientName} (${primary.title})`,
+                _subject: `🔥 NEW ASSESSMENT: ${clientName} (${primary.title})`,
                 _template: "table",
+                _replyto: clientEmail, // Allows coach to reply directly to user
                 Name: clientName,
                 Email: clientEmail,
-                Path: primary.title,
-                Score: totalScore,
-                Rationale: rationale,
-                Vision: vision,
-                ...Object.fromEntries(userAnswers.map(a => [a.question, a.answer]))
+                Recommended_Path: primary.title,
+                Coach_Rationale: rationale,
+                Three_Month_Vision: vision,
+                Total_Score: totalScore,
+                // Append raw question data for review
+                ...Object.fromEntries(userAnswers.map(a => [a.question.replace(/\s+/g, '_'), a.answer]))
             };
 
             try {
-                // Dispatch to Client (Web3Forms)
-                await fetch("https://api.web3forms.com/submit", {
-                    method: "POST",
-                    body: clientData
-                });
-
-                // Dispatch to Coach (FormSubmit)
                 await fetch(`https://formsubmit.co/ajax/${coachEmailAddress}`, {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(coachData)
                 });
-
-                console.log("Dual-dispatch successful.");
+                console.log("Assessment data synced successfully.");
             } catch (error) {
                 console.error("Submission failed", error);
             }
@@ -1038,7 +1007,7 @@ Coach Chris
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
              const vision = generateThreeMonthVision(userAnswers);
              
-             triggerDualServiceSubmission(primary, cleanRationale, vision);
+             triggerAssessmentSubmission(primary, cleanRationale, vision);
 
              setTimeout(() => { 
                 renderFinalProgramSummary(); 
@@ -1056,7 +1025,6 @@ Coach Chris
             const medical = userAnswers.find(a => a.key === 'medical')?.answer || '';
             const isInjuryAlert = medical.includes("specialized training");
             const client = clientName.toUpperCase();
-            const altTag = alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative';
             
             const whatsappNumber = "447925116794"; 
             const whatsappMsg = encodeURIComponent(`Hi Chris, it's ${clientName}! I just finished the digital consultation and my result was ${primary.title}. I'd like to chat about getting started.`);
@@ -1070,10 +1038,10 @@ Coach Chris
             if (primary.title.includes(FOUNDATIONS_TITLE)) primaryBtnText = "START 14-DAY FUNDAMENTALS";
 
             let step2;
-            if (primary.title.includes(TIER_1_TITLE)) step2 = `<div><span class="text-white font-bold">Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></div>`;
-            else if (primary.title.includes(FOUNDATIONS_TITLE)) step2 = `<div><span class="text-white font-bold">Secure Your Intake</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Complete the free fundamentals and **secure your spot** in the next group intake.")}</span></div>`;
-            else if (primary.title.includes(TIER_2_TITLE)) step2 = `<div><span class="text-white font-bold">Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></div>`;
-            else step2 = `<div><span class="text-white font-bold">Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></div>`;
+            if (primary.title.includes(TIER_1_TITLE)) step2 = `<div><span class="text-white font-bold uppercase text-xs tracking-tight">Apply & Consult</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit an application and **chat with Coach Chris on WhatsApp**.")}</span></div>`;
+            else if (primary.title.includes(FOUNDATIONS_TITLE)) step2 = `<div><span class="text-white font-bold uppercase text-xs tracking-tight">Secure Your Intake</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Complete the free fundamentals and **secure your spot** in the next group intake.")}</span></div>`;
+            else if (primary.title.includes(TIER_2_TITLE)) step2 = `<div><span class="text-white font-bold uppercase text-xs tracking-tight">Gain Access</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml("Submit a short application then **follow the steps** to gain app access.")}</span></div>`;
+            else step2 = `<div><span class="text-white font-bold uppercase text-xs tracking-tight">Start Training</span><span class="block text-neutral-400 text-sm mt-1">${markdownToHtml(`Gain immediate access to the training app.`)}</span></div>`;
 
             contentArea.innerHTML = `
                 <div class="animate-in space-y-10">
@@ -1130,7 +1098,7 @@ Coach Chris
 
                     ${alt ? `
                     <div class="pt-4 border-t border-white/5">
-                        <h3 class="text-[10px] font-black uppercase text-neutral-500 mb-4 tracking-widest">${altTag}</h3>
+                        <h3 class="text-[10px] font-black uppercase text-neutral-500 mb-4 tracking-widest">${alt.type === 'UPGRADE' ? 'Step Up For Better Results' : 'A More Affordable Alternative'}</h3>
                         <div class="flex flex-col gap-4">
                             <div>
                                 <span class="block text-xl font-black uppercase tracking-tight ${alt.accentColor} leading-tight">${alt.title}</span>
@@ -1146,7 +1114,10 @@ Coach Chris
                         <ol class="space-y-8">
                             <li class="flex gap-4">
                                 <span class="w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-black text-green-500 border border-green-500/30 bg-green-500/10 shrink-0">1</span>
-                                <div><span class="text-white font-bold uppercase text-xs tracking-tight">Check Your Inbox</span><span class="block text-neutral-400 text-sm mt-1">We've sent a copy of this rationale and your 3-month vision to <strong class="text-neutral-300 underline">${clientEmail}</strong>.</span></div>
+                                <div>
+                                    <span class="text-white font-bold uppercase text-xs tracking-tight">Review your Recommendations</span>
+                                    <span class="block text-neutral-400 text-sm mt-1">Use the buttons above to learn more about your Recommended Path & reach out to Coach Chris if you have any questions.</span>
+                                </div>
                             </li>
                             <li class="flex gap-4">
                                 <span class="w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-black text-green-500 border border-green-500/30 bg-green-500/10 shrink-0">2</span>
@@ -1224,5 +1195,4 @@ Coach Chris
         document.addEventListener('DOMContentLoaded', () => { renderWelcomeScreen(); });
     </script>
 </body>
-</html>
-
+    </html>
