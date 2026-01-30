@@ -332,7 +332,7 @@
 
     <script>
         const WEB3FORMS_ACCESS_KEY = "d24713b2-01ff-4c31-ae52-e49edd41e2c1";
-        const COACH_EMAIL = "coachchris.crc@gmail.com"; // Your receiving email
+        const COACH_EMAIL = "circularrootscoaching@gmail.com"; 
 
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -411,6 +411,7 @@
                 id: 5, 
                 question: "What level of support do you need to stay on track?", 
                 key: "support", 
+                summaryLabel: "Support Needed",
                 options: [
                     { text: "I need a great plan and I'll handle the rest", score: 5 }, 
                     { text: "I need weekly guidance and access to a coach", score: 20 }, 
@@ -435,6 +436,7 @@
                 section: "Part 3: Lifestyle Strategy", 
                 question: "How would you describe your nutritional discipline?", 
                 key: "nutrition", 
+                summaryLabel: "Nutrition",
                 options: [
                     { text: "I track macros/calories and just need refinement", altText: "I am focused on high-level performance fuel", score: 30 }, 
                     { text: "I eat generally healthy but focus on consistency", altText: "I aim for balanced meals but want more structure", score: 20 }, 
@@ -446,6 +448,7 @@
                 id: 8, 
                 question: "What has been your experience with following a structured plan in the past?", 
                 key: "pastExp", 
+                summaryLabel: "Past Experience",
                 options: [
                     { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
                     { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
@@ -457,6 +460,7 @@
                 id: 9, 
                 question: "Where do you primarily workout?", 
                 key: "location", 
+                summaryLabel: "Location",
                 options: [
                     { text: "A fully equipped gym/fitness center", score: 30 }, 
                     { text: "At home with minimal equipment", score: 10 }, 
@@ -481,7 +485,7 @@
                 id: 11, 
                 question: "If you hit your goal 3 months from now, what changes most for you?", 
                 key: "theWhy", 
-                summaryLabel: "Your 'Why'", 
+                summaryLabel: "The 'Why'", 
                 options: [
                     { text: "My self-confidence and how I feel in my own skin", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
                     { text: "My energy levels for my kids and family", short: "Family Energy", score: 20, whyId: 'FAMILY' }, 
@@ -493,6 +497,7 @@
                 id: 12, 
                 question: "How crucial is guidance on daily habits and stress management?", 
                 key: "lifestyle", 
+                summaryLabel: "Lifestyle",
                 options: [
                     { text: "Essential (sleep and stress management are priorities)", score: 30 }, 
                     { text: "Important (I want it included in check-ins)", score: 20 }, 
@@ -521,6 +526,7 @@
                     briefOverview: "Exclusive 1-on-1 coaching offering fully customized training and nutrition programming built specifically for you. Includes weekly in-depth check-ins, unlimited direct messaging with Coach Chris, and dynamic program adjustments.", 
                     accentColor: "text-green-400",
                     ctaLink: "https://coachchriscrc.github.io/oc-lp",
+                    whatsappLink: "https://wa.me/447925116794",
                     requiresCall: true,
                     priceId: 'PREMIUM'
                 };
@@ -531,6 +537,7 @@
                     briefOverview: "Begin with our **Free 14-Day Fundamentals** trial to master the basics. This leads directly into our **6-Week Foundations Program (£99)**—a coach-guided online group experience that builds your absolute base for long-term health.",
                     accentColor: "text-orange-400",
                     ctaLink: "https://coachchriscrc.github.io/14dayfundamentals-lp",
+                    whatsappLink: "https://wa.me/447925116794",
                     requiresCall: false,
                     priceId: 'ENTRY'
                 };
@@ -541,6 +548,7 @@
                     briefOverview: "Access our Flagship Hybrid program (Strength, Endurance & Conditioning) via our dedicated app. This features custom nutrition targets, monthly progress check-ins with your coach, and ongoing community support.", 
                     accentColor: "text-blue-400",
                     ctaLink: "https://coachchriscrc.github.io/fsb-lp",
+                    whatsappLink: "https://wa.me/447925116794",
                     requiresCall: true,
                     priceId: 'MID'
                 };
@@ -551,6 +559,7 @@
                     briefOverview: "Gain self-guided access to a library of diverse programs, including strength cycles, conditioning blocks, and WOD packs. Features full tutorials and movement demos—perfect for the independent trainee.", 
                     accentColor: "text-neutral-300",
                     ctaLink: "https://coachchriscrc.github.io/programs-lp",
+                    whatsappLink: "https://wa.me/447925116794",
                     requiresCall: false,
                     priceId: 'ENTRY'
                 };
@@ -964,64 +973,91 @@
              upd(); 
         }
 
-        async function triggerDualServiceSubmission(primary, rationale, vision) {
-            const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
+        async function triggerDualServiceSubmission(primary, alt, rationale, vision) {
             const coachEmailAddress = COACH_EMAIL;
-            const emailSubject = encodeURIComponent(`Question about my ${primary.title} assessment results`);
+            const expLevel = userAnswers.find(a => a.key === 'experience')?.short || 'Not Specified';
+            const primaryGoal = userAnswers.find(a => a.key === 'primaryGoal')?.answer || 'Not Specified';
+            const altTitle = alt ? alt.title : 'N/A';
+            const altLink = alt ? alt.ctaLink : '#';
 
-            // 1. WEB3FORMS (FOR CLIENT)
+            // 1. WEB3FORMS (TO CLIENT)
             const clientData = new FormData();
             clientData.append("access_key", WEB3FORMS_ACCESS_KEY);
-            clientData.append("from_name", "Coach Chris");
+            clientData.append("from_name", "Coach Chris | Circular Roots Coaching");
             clientData.append("name", "Coach Chris");
-            clientData.append("email", clientEmail); // Sending receipt TO client
-            clientData.append("subject", `Your Assessment Results: ${primary.title}`);
+            clientData.append("email", clientEmail); 
+            clientData.append("subject", `Your Path to #Fitter #Stronger #Better | Results for ${clientName}`);
             clientData.append("message", `
-Hi ${clientName}, 
+Hi ${clientName},
+Thank you for completing your digital consultation with Coach Chris.
 
-Thank you for completing your fitness assessment. Based on your profile, here is your roadmap:
+Based on your current baseline of ${expLevel} and your primary goal of ${primaryGoal}, I have analyzed your profile to find the most effective path forward so you can stop guessing & start training with intent.
 
-YOUR PATHWAY: ${primary.title}
-WHY THIS WORKS: ${rationale}
-3-MONTH VISION: ${vision}
+YOUR RECOMMENDED PATH:
+${primary.title}
+Or
+${altTitle}
 
-NEXT STEPS:
-- View your full program details here: ${primary.ctaLink}
-- Have questions? Simply hit reply to this email or click here to start a thread: mailto:${coachEmailAddress}?subject=${emailSubject}
+The Rationale: ${rationale}
 
-Train Unconventional,
-Coach Chris
+Your 3-Month Vision: "${vision}"
+
+NEXT STEPS TO GET STARTED:
+Review the recommend Program Details: [Click here to view your full program breakdown](${primary.ctaLink})
+Or view the (Alternative)[${altLink}]
+
+Consult with Coach Chris: If you have questions before diving in, message me directly on (WhatsApp)[${primary.whatsappLink}]
+
+App Setup: Once you choose your path, you'll receive your login to the training app where you'll complete your Par-Q, set up your account and start the process. 
+
+I’m looking forward to helping you reach your goals.
+
+— Coach Chris 
+Circular Roots Coaching 
+Fitter. Stronger. Better.
             `);
 
-            // 2. FORMSUBMIT (FOR COACH)
+            // 2. FORMSUBMIT (TO COACH)
+            const findAnswer = (key) => userAnswers.find(a => a.key === key)?.answer || 'Not Provided';
+            
             const coachData = {
-                _subject: `🔥 NEW LEAD: ${clientName} (${primary.title})`,
+                _subject: `NEW CONSULTATION: ${clientName} (${primary.title})`,
                 _template: "table",
-                Name: clientName,
-                Email: clientEmail,
-                Path: primary.title,
-                Score: totalScore,
-                Rationale: rationale,
-                Vision: vision,
-                // Automatically include all quiz answers in the table
-                ...Object.fromEntries(userAnswers.map(a => [a.question, a.answer]))
+                "Client Name": clientName,
+                "Client Email": clientEmail,
+                "Total Score": totalScore,
+                "Recommended Program Title": primary.title,
+                "Alternative Program Title": altTitle,
+                "Experience": findAnswer('experience'),
+                "Main Barrier": findAnswer('barrier'),
+                "Primary Goal": primaryGoal,
+                "Commitment": findAnswer('commitment'),
+                "Support Needed": findAnswer('support'),
+                "Medical History": findAnswer('medical'),
+                "Nutrition Habits": findAnswer('nutrition'),
+                "Past Plan Experience": findAnswer('pastExp'),
+                "Training Location": findAnswer('location'),
+                "Budget/Investment": findAnswer('budget'),
+                "The Why/Motivation": findAnswer('theWhy'),
+                "Habit Support Need": findAnswer('lifestyle'),
+                "Clean Rationale Text": rationale,
+                "3-Month Vision Text": vision,
+                "Coach Action": `If the client has not reached out via WhatsApp within 24 hours, follow up via email to discuss the ${primary.title} or ${altTitle} pathways.`
             };
 
             try {
-                // Dispatch to Client (Web3Forms)
+                // Client Delivery
                 await fetch("https://api.web3forms.com/submit", {
                     method: "POST",
                     body: clientData
                 });
 
-                // Dispatch to Coach (FormSubmit)
+                // Coach Delivery
                 await fetch(`https://formsubmit.co/ajax/${coachEmailAddress}`, {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(coachData)
                 });
-
-                console.log("Dual-dispatch successful.");
             } catch (error) {
                 console.error("Submission failed", error);
             }
@@ -1037,10 +1073,11 @@ Coach Chris
              `;
              
              const primary = getRecommendation(totalScore, userAnswers);
+             const alt = getAlternativeRecommendation(primary, totalScore, userAnswers);
              const cleanRationale = generatePersonalizedRationale(userAnswers, primary.title, true);
              const vision = generateThreeMonthVision(userAnswers);
              
-             triggerDualServiceSubmission(primary, cleanRationale, vision);
+             triggerDualServiceSubmission(primary, alt, cleanRationale, vision);
 
              setTimeout(() => { 
                 renderFinalProgramSummary(); 
