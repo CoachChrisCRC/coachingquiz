@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find your path to #Fitter #Stronger #Better | COACH CHRIS</title>
     
-    <!-- --- SOCIAL SHARING METADATA --- -->
     <meta property="og:title" content="Find your path to #Fitter #Stronger #Better">
-    <meta property="og:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
-    <meta property="og:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
+    <meta property="og:description" content="Take our short discovery session to determine which service is best suited to help you achieve your goals">
+    <meta property="og:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Consultation">
     <meta property="og:url" content="YOUR_APP_URL_HERE">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Find your path to #Fitter #Stronger #Better">
-    <meta name="twitter:description" content="Take our short quiz to determine which service is best suited to help you achieve your goals">
-    <meta name="twitter:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Assessment">
+    <meta name="twitter:description" content="Take our short discovery session to determine which service is best suited to help you achieve your goals">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/22c55e/000?text=COACH+CHRIS+Fitness+Consultation">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -261,21 +260,18 @@
 </head>
 <body class="flex flex-col items-center justify-center p-4 sm:p-6">
 
-    <!-- SPLASH SCREEN LOADER -->
     <div id="initial-loader">
         <div class="loader-content flex flex-col items-center text-center">
             <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">DIGITAL CONSULTATION</h1>
             <div id="loader-pulse-text" class="text-green-500 font-bold text-xl uppercase tracking-widest mt-2">Loading...</div>
-            <div id="loader-sub-text" class="cycling-text">Initializing assessment...</div>
+            <div id="loader-sub-text" class="cycling-text">Initializing consultation...</div>
         </div>
     </div>
 
-    <!-- Main Quiz Container -->
     <div id="quiz-app" class="quiz-container glass-panel w-full rounded-3xl p-6 md:p-10 relative overflow-hidden">
         
         <div class="absolute top-0 left-0 w-full h-1.5 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]"></div>
 
-        <!-- BRANDING BLOCK -->
         <div id="branding-block" class="mb-8 animate-in">
             <h1 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">
                 COACH CHRIS
@@ -293,11 +289,10 @@
             <span class="text-green-500">#BETTER</span>
         </h2>
         
-        <!-- Progress Bar -->
         <div id="progress-anchor" class="mb-10">
             <div class="flex items-center justify-between mb-2">
                 <p id="progress-text-label" class="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-                    QUESTION 1 OF 12
+                    STEP 1 OF 12
                 </p>
                 <p id="progress-percent" class="text-[10px] font-black text-green-500 tracking-widest">
                     0%
@@ -308,19 +303,17 @@
             </div>
         </div>
 
-        <!-- Dynamic Content Area -->
         <div id="content-area">
             <div class="text-center font-bold animate-pulse text-neutral-500">LOADING...</div>
         </div>
     </div>
     
-    <!-- Footer Block -->
     <div class="mt-12 w-full max-w-2xl text-center px-4">
         <p id="disclaimer" class="text-neutral-500 text-xs mb-6 leading-relaxed max-w-xl mx-auto">
             General Fitness Disclaimer: Always consult your medical professional or doctor before beginning any new fitness regime. This site provides general information for educational purposes only. You engage in physical activity at your own risk.
         </p>
         <p class="text-neutral-400 font-bold text-[10px] uppercase tracking-[0.25em]">
-            © <span id="current-year">2025</span> COACH CHRIS | CIRCULAR ROOTS COACHING
+            © <span id="current-year">2026</span> COACH CHRIS | CIRCULAR ROOTS COACHING
         </p>
         <p class="text-green-500/50 text-sm italic font-semibold mt-2 tracking-widest">
             Fitter. Stronger. Better.
@@ -335,7 +328,7 @@
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const subText = document.getElementById('loader-sub-text');
-            const cycleMessages = ["Loading questions...", "Configuring logic...", "Ready."];
+            const cycleMessages = ["Reviewing frameworks...", "Analyzing tier logic...", "Ready."];
             let i = 0;
             const cycleInterval = setInterval(() => {
                 if (i < cycleMessages.length) { subText.textContent = cycleMessages[i++]; }
@@ -354,158 +347,173 @@
         }
 
         const quizData = [
-            // PHASE 1: Baseline & Logistics
+            // PHASE 1: Vision
             { 
                 id: 1, 
-                section: "Part 1: Your Baseline", 
-                question: "How would you describe your current training experience?", 
-                key: "experience", 
-                summaryLabel: "Experience", 
+                section: "Phase 1: The Vision", 
+                question: "When you look in the mirror 12 weeks from now, what feeling do you want to experience most?", 
+                key: "primaryGoal", 
+                summaryLabel: "Primary Goal", 
                 options: [
-                    { text: "I am brand new to structured training", short: "Beginner", score: 5, expId: 'BEGINNER' }, 
-                    { text: "I have some experience but lost my way", short: "Returning", score: 15, expId: 'RETURNING' }, 
-                    { text: "I am an experienced trainee looking for an edge", short: "Experienced", score: 30, expId: 'EXPERIENCED' }
+                    { text: "Absolute confidence in how my clothes fit and my body looks", short: "Physique Confidence", score: 30 }, 
+                    { text: "The 'unstoppable' feeling of raw physical strength", short: "Raw Strength", score: 20 }, 
+                    { text: "Waking up with a deep surplus of energy for my family and work", short: "High Energy", score: 10 }, 
+                    { text: "The peace of mind that comes with a consistent, healthy routine", short: "Consistency & Peace", score: 5 }
                 ] 
             },
             { 
                 id: 2, 
-                question: "What is your biggest barrier to success right now?", 
+                question: "How would your daily life change if you felt 20% more capable in your own skin?", 
+                key: "theWhy", 
+                summaryLabel: "Your 'Why'", 
+                options: [
+                    { text: "I'd stop hiding in the back of photos and lead with confidence", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
+                    { text: "I'd be the parent who actually plays with their kids, not just watches", short: "Family Vitality", score: 20, whyId: 'FAMILY' }, 
+                    { text: "I'd know I'm actively extending my healthy years on this planet", short: "Longevity", score: 30, whyId: 'HEALTH' }, 
+                    { text: "I'd finally have the physical edge to match my mental ambition", short: "Peak Performance", score: 5, whyId: 'PERFORMANCE' }
+                ] 
+            },
+
+            // PHASE 2: Reality (Pain Points)
+            { 
+                id: 3, 
+                section: "Phase 2: The Reality", 
+                question: "Be honest with yourself: why hasn't the 'perfect' version of you arrived yet?", 
                 key: "barrier", 
                 summaryLabel: "Main Barrier", 
                 options: [
-                    { text: "I don't have a plan that fits my goals", short: "Lack of Structure", score: 5 }, 
-                    { text: "I struggle with follow-through and need accountability", short: "Accountability", score: 20 }, 
-                    { text: "My diet is my biggest weakness (need a strategy)", short: "Nutrition Strategy", score: 30 }, 
-                    { text: "Staying motivated and finding the time to train", short: "Time & Motivation", score: 10 }
-                ] 
-            },
-            { 
-                id: 3, 
-                question: "What is your #1 primary fitness goal right now?", 
-                key: "primaryGoal", 
-                summaryLabel: "Primary Goal", 
-                options: [
-                    { text: "Shedding fat and transforming my physique", short: "Fat Loss & Physique", score: 30 }, 
-                    { text: "Getting strong and building solid muscle", short: "Strength & Muscle", score: 20 }, 
-                    { text: "Boosting energy and improving my fitness/stamina", short: "Energy & Stamina", score: 10 }, 
-                    { text: "Feeling generally healthier and more consistent", short: "Health & Consistency", score: 5 }
+                    { text: "I'm overwhelmed by options and lack a simple, effective plan", short: "Overwhelmed", score: 5 }, 
+                    { text: "I start strong, but fall off when life gets busy (Accountability)", short: "Follow-through", score: 20 }, 
+                    { text: "I'm training hard but my nutrition is a 'black box' I can't solve", short: "Nutrition Friction", score: 30 }, 
+                    { text: "I've hit a plateau and I'm bored with my current results", short: "Plateaued", score: 15 }
                 ] 
             },
             { 
                 id: 4, 
-                question: "Where do you primarily workout?", 
-                key: "location", 
+                question: "When things get 'busy,' what is the first thing to suffer?", 
+                key: "lifestyle", 
                 options: [
-                    { text: "A fully equipped gym/fitness center", score: 30 }, 
-                    { text: "At home with minimal equipment", score: 10 }, 
-                    { text: "Outdoors or using functional bodyweight training", score: 20 }, 
-                    { text: "It varies (I travel or shift locations often)", score: 5 }
+                    { text: "My consistency: I skip sessions until the 'time is right'", score: 30 }, 
+                    { text: "My nutrition: I default to whatever is fast and easy", score: 20 }, 
+                    { text: "My recovery: I sacrifice sleep and stress management", score: 10 }, 
+                    { text: "Everything: I usually just stop and have to 'start over' later", score: 5 }
                 ] 
             },
 
-            // PHASE 2: The Strategy (Commitment & Habits)
+            // PHASE 3: Philosophy (The Pivot)
             { 
                 id: 5, 
-                section: "Part 2: The Strategy", 
-                question: "How many days per week can you realistically commit?", 
+                section: "Phase 3: The Philosophy", 
+                question: "Do you believe that 3 focused, full-body sessions are better than 6 'half-hearted' ones?", 
                 key: "commitment", 
                 summaryLabel: "Commitment", 
                 options: [
-                    { text: "I'm ready for 5+ sessions per week (high commitment)", short: "5+ Days / Week", score: 30 }, 
-                    { text: "I can commit 3-4 days a week easily", short: "3-4 Days / Week", score: 20 }, 
-                    { text: "1-2 days a week is realistic for me right now", short: "1-2 Days / Week", score: 10 }, 
-                    { text: "I need help finding consistency/just starting", short: "Seeking Consistency", score: 5 }
+                    { text: "Absolutely. I value efficiency and 'minimum effective dose'", short: "Efficiency First", score: 20 }, 
+                    { text: "I'm ready to commit to whatever it takes, even high frequency", short: "High Commitment", score: 30 }, 
+                    { text: "I need to be convinced—I've always been told more is better", short: "Skeptical/New", score: 10 },
+                    { text: "I just need a rhythm I can actually stick to long-term", short: "Sustainable Rhythm", score: 5 }
                 ] 
             },
             { 
                 id: 6, 
-                question: "What level of support do you need to stay on track?", 
-                key: "support", 
+                question: "How do you feel about the 'Minimalist Full Body' approach—focusing on big moves for big results?", 
+                key: "experience", 
+                summaryLabel: "Experience", 
                 options: [
-                    { text: "I need a great plan and I'll handle the rest", score: 5 }, 
-                    { text: "I need weekly guidance and access to a coach", score: 20 }, 
-                    { text: "Maximum accountability, check-ins, and a custom plan", score: 30 }, 
-                    { text: "I learn best in a supportive group environment", score: 10 }
+                    { text: "I'm a beginner; I need you to show me the way", short: "Beginner", score: 5, expId: 'BEGINNER' }, 
+                    { text: "I've done it before and it works—I just need a better plan", short: "Returning", score: 15, expId: 'RETURNING' }, 
+                    { text: "I'm experienced and ready to optimize for elite performance", short: "Experienced", score: 30, expId: 'EXPERIENCED' }
                 ] 
             },
             { 
                 id: 7, 
-                question: "How would you describe your nutritional discipline?", 
-                key: "nutrition", 
+                question: "What has been your experience with following a structured plan in the past?", 
+                key: "pastExp", 
                 options: [
-                    { text: "I track macros/calories and just need refinement", altText: "I am focused on high-level performance fuel", score: 30 }, 
-                    { text: "I eat generally healthy but focus on consistency", altText: "I aim for balanced meals but want more structure", score: 20 }, 
-                    { text: "My eating is inconsistent; I need a full overhaul", altText: "I struggle with basic nutrition habits", score: 10 }, 
-                    { text: "I haven't focused on nutrition yet", altText: "I'm just starting to look at my diet", score: 5 }
+                    { text: "I’ve never followed a real plan; I just 'wing it'", score: 5, category: 'NEW' },
+                    { text: "I’ve tried PDFs/Apps but they felt robotic and disconnected", score: 15, category: 'FRICTION' },
+                    { text: "I’ve worked with a coach and know that's where the results are", score: 30, category: 'COACHED' },
+                    { text: "I’m currently training but I feel like I'm just spinning my wheels", score: 20, category: 'PLATEAU' }
                 ] 
             },
             { 
                 id: 8, 
-                question: "What has been your experience with following a structured plan in the past?", 
-                key: "pastExp", 
+                question: "Which of these best describes your current nutrition status?", 
+                key: "nutrition", 
                 options: [
-                    { text: "I’ve never followed a structured plan before.", score: 5, category: 'NEW' },
-                    { text: "I’ve tried apps/PDFs but struggled to stay consistent.", score: 15, category: 'FRICTION' },
-                    { text: "I’ve worked with a coach before and valued the relationship.", score: 30, category: 'COACHED' },
-                    { text: "I’m currently training but feel I’ve hit a plateau.", score: 20, category: 'PLATEAU' }
+                    { text: "I'm ready for a total overhaul and a strict strategy", score: 10 }, 
+                    { text: "I eat 'okay' but I'm missing the structure to see real change", score: 20 }, 
+                    { text: "I track everything and just need refinement for performance", score: 30 }, 
+                    { text: "I'm overwhelmed by food and don't know where to start", score: 5 }
                 ] 
             },
 
-            // PHASE 3: Safety & The Why
+            // PHASE 4: Logistics
             { 
                 id: 9, 
-                section: "Part 3: Readiness & Impact",
-                question: "Do you have any injuries or medical considerations?", 
-                key: "medical", 
-                summaryLabel: "Medical/Injuries", 
+                section: "Phase 4: The Logistics", 
+                question: "Where will your transformation take place?", 
+                key: "location", 
                 options: [
-                    { text: "Yes, I have current injuries requiring specialized training", short: "Specialized Care", score: 100 }, 
-                    { text: "I have minor aches but nothing that stops me from training", short: "Minor Aches", score: 20 }, 
-                    { text: "No, I am generally fit and injury-free", short: "Injury Free", score: 10 }, 
-                    { text: "I'm not sure about my physical limitations yet", short: "Uncertain", score: 5 }
+                    { text: "A fully equipped commercial or home gym", score: 30 }, 
+                    { text: "At home with minimal kit (dumbbells/kettlebells)", score: 10 }, 
+                    { text: "Mostly bodyweight or outdoor training", score: 20 }, 
+                    { text: "It's a mix: I travel often or move around", score: 5 }
                 ] 
             },
             { 
                 id: 10, 
-                question: "What level of partnership are you seeking for your investment?", 
-                key: "budget", 
-                summaryLabel: "Partnership Level", 
+                question: "Do you have any injuries or movement restrictions I need to know about?", 
+                key: "medical", 
+                summaryLabel: "Medical", 
                 options: [
-                    { text: "Total Partnership: I need a coach to manage every detail for me", short: "Total Partnership", score: 30, budgetId: 'PREMIUM' }, 
-                    { text: "Collaborative: I want a plan and regular coach guidance", short: "Collaborative", score: 20, budgetId: 'MID' }, 
-                    { text: "Independent: I want the professional tools to do it myself", short: "Independent", score: 10, budgetId: 'ENTRY' }, 
-                    { text: "Show me what fits my needs and goals first", short: "Undecided", score: 25, budgetId: 'FLEX' }
+                    { text: "Yes, I have current injuries that need expert modification", short: "Specialized", score: 100 }, 
+                    { text: "Just the usual 'desk job' aches and minor niggles", short: "Minor Aches", score: 20 }, 
+                    { text: "None. I'm ready to move without restriction", short: "Injury Free", score: 10 }, 
+                    { text: "I'm not sure—I haven't pushed myself in a while", short: "Uncertain", score: 5 }
                 ] 
             },
             { 
                 id: 11, 
-                question: "If you hit your goal 3 months from now, what changes most for you?", 
-                key: "theWhy", 
-                summaryLabel: "Your 'Why'", 
+                question: "What level of partnership are you looking for to guarantee success?", 
+                key: "budget", 
+                summaryLabel: "Partnership", 
                 options: [
-                    { text: "My self-confidence and how I feel in my own skin", short: "Self-Confidence", score: 25, whyId: 'CONFIDENCE' }, 
-                    { text: "My energy levels for my kids and family", short: "Family Energy", score: 20, whyId: 'FAMILY' }, 
-                    { text: "My health longevity and long-term vitality", short: "Health Longevity", score: 30, whyId: 'HEALTH' }, 
-                    { text: "My physical performance and absolute strength", short: "Peak Performance", score: 5, whyId: 'PERFORMANCE' }
+                    { text: "Total Partnership: 1-1 access to manage every variable", short: "1-1 Premium", score: 30, budgetId: 'PREMIUM' }, 
+                    { text: "Collaborative: Group accountability and expert programming", short: "Collaborative", score: 20, budgetId: 'MID' }, 
+                    { text: "Independent: Just give me the tools and I'll do the work", short: "Independent", score: 10, budgetId: 'ENTRY' }, 
+                    { text: "I want to see what you recommend based on my goals", short: "Flexible", score: 25, budgetId: 'FLEX' }
                 ] 
             },
             { 
                 id: 12, 
-                question: "How crucial is guidance on daily habits and stress management?", 
-                key: "lifestyle", 
+                question: "What level of support do you need to stay on track?", 
+                key: "support", 
                 options: [
-                    { text: "Essential (sleep and stress management are priorities)", score: 30 }, 
-                    { text: "Important (I want it included in check-ins)", score: 20 }, 
-                    { text: "Not crucial (I only need the workout programming)", score: 10 }, 
-                    { text: "I am already highly disciplined in these areas", score: 5 }
+                    { text: "I need high-level accountability and frequent check-ins", score: 30 }, 
+                    { text: "I need a community and a coach I can reach out to", score: 20 }, 
+                    { text: "I just need a rock-solid program I can trust", score: 5 }, 
+                    { text: "I'm not sure yet", score: 10 }
                 ] 
             }
         ];
 
         const phaseTransitions = [
-            { triggerIndex: 4, title: "Vision & Goals", message: "Thanks for that context. Now, let’s define exactly what we are aiming for over the next 12 weeks." },
-            { triggerIndex: 8, title: "Physical Readiness", message: "Understood. Now, let's look at your physical readiness and history to ensure we build a safe path." },
-            { triggerIndex: 11, title: "The Finish Line", message: "Almost there. I just need to understand your investment level and your 'Why' to tailor the final recommendation." }
+            { 
+                triggerIndex: 2, 
+                title: "Reality Check", 
+                message: "Powerful vision. Now, let’s get honest about what has been standing in your way so we can tear those walls down for good." 
+            },
+            { 
+                triggerIndex: 4, 
+                title: "The Pivot", 
+                message: "Understood. It's time to shift our focus. Let's see if you're ready to embrace a smarter, more minimalist way of training." 
+            },
+            { 
+                triggerIndex: 8, 
+                title: "Final Details", 
+                message: "Almost there. I just need a few logistical details to determine exactly where you fit in the #FSB hierarchy." 
+            }
         ];
 
         const TIER_1_TITLE = "1-1 ONLINE COACHING";
@@ -564,7 +572,7 @@
             const supportPref = answers.find(a => a.key === 'support')?.answer || '';
             const pastExp = answers.find(a => a.key === 'pastExp')?.category || 'NEW';
             
-            if (medical.includes("specialized training")) return getProgramDetailsByTitle(TIER_1_TITLE);
+            if (medical.includes("specialized attention")) return getProgramDetailsByTitle(TIER_1_TITLE);
             if (pastExp === 'COACHED' && (budgetId === 'PREMIUM' || budgetId === 'FLEX')) return getProgramDetailsByTitle(TIER_1_TITLE);
             if (budgetId === 'PREMIUM') return getProgramDetailsByTitle(TIER_1_TITLE); 
             
@@ -575,9 +583,9 @@
 
             const primaryGoal = answers.find(a => a.key === 'primaryGoal')?.answer || '';
             const theWhy = answers.find(a => a.key === 'theWhy')?.answer || '';
-            const isHybridIntent = (primaryGoal.includes("Getting strong") || primaryGoal.includes("Boosting energy")) && theWhy.includes("longevity");
+            const isHybridIntent = (primaryGoal.includes("raw physical strength") || primaryGoal.includes("surplus of energy")) && theWhy.includes("extending my healthy years");
 
-            if (isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("handle the rest"))) return getProgramDetailsByTitle(TIER_3_TITLE);
+            if (isHybridIntent && (budgetId === 'ENTRY' || supportPref.includes("trust"))) return getProgramDetailsByTitle(TIER_3_TITLE);
 
             const fsbThreshold = isHybridIntent ? 150 : 170;
             if (score >= fsbThreshold && budgetId !== 'ENTRY') return getProgramDetailsByTitle(TIER_2_TITLE);
@@ -589,7 +597,7 @@
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
 
-            if (medical.includes("specialized training") && primary.title.includes(TIER_1_TITLE)) {
+            if (medical.includes("specialized attention") && primary.title.includes(TIER_1_TITLE)) {
                 if (expId === 'EXPERIENCED') return { ...getProgramDetailsByTitle(TIER_2_TITLE), type: 'DOWNGRADE' };
                 return { ...getProgramDetailsByTitle(FOUNDATIONS_TITLE), type: 'DOWNGRADE' };
             }
@@ -619,29 +627,29 @@
             const expId = answers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             const pastExp = answers.find(a => a.key === 'pastExp')?.answer || '';
             
-            if (medical.includes("specialized training")) {
+            if (medical.includes("specialized attention")) {
                 let txt = `Because you reported an injury requiring specialized attention, I have prioritized the 1-1 Coaching path for you. A 'one-size-fits-most' approach is a high-risk strategy when your body is sending these signals. By choosing this 1-1 bridge, we don't just 'work around' your limitations—we build through them. This allows me to provide the bio-individual feedback and regressions necessary to ensure you stay in the game for the long run, turning a temporary hurdle into a bulletproof foundation.`;
                 return isCleanText ? txt : markdownToHtml(txt);
             }
 
             let goalPhrase = rawGoal;
-            if (rawGoal.includes("Shedding fat")) goalPhrase = "fat loss and physique transformation";
-            else if (rawGoal.includes("Getting strong")) goalPhrase = "building muscle and strength";
-            else if (rawGoal.includes("Boosting energy")) goalPhrase = "improved energy and endurance";
-            else if (rawGoal.includes("Feeling generally healthier")) goalPhrase = "establishing consistent habits";
+            if (rawGoal.includes("clothes fit")) goalPhrase = "physique confidence and feeling good in your skin";
+            else if (rawGoal.includes("raw physical strength")) goalPhrase = "raw, functional strength";
+            else if (rawGoal.includes("surplus of energy")) goalPhrase = "reclaiming your energy levels";
+            else if (rawGoal.includes("peace of mind")) goalPhrase = "establishing a non-negotiable routine";
 
             let barrierPhrase = rawBarrier;
-            if (rawBarrier.includes("don't have a plan")) barrierPhrase = "the lack of structure that causes plateaus";
-            else if (rawBarrier.includes("struggle with follow-through")) barrierPhrase = "the accountability gap that has held you back";
-            else if (rawBarrier.includes("My diet is my biggest weakness")) barrierPhrase = "the nutritional friction in your daily routine";
-            else if (rawBarrier.includes("Staying motivated")) barrierPhrase = "the inconsistency and time-management hurdles";
+            if (rawBarrier.includes("overwhelmed by options")) barrierPhrase = "cutting through the noise of analysis paralysis";
+            else if (rawBarrier.includes("fall off when life gets busy")) barrierPhrase = "the accountability gap that breaks your momentum";
+            else if (rawBarrier.includes("nutrition is a 'black box'")) barrierPhrase = "the nutritional friction that stalls your progress";
+            else if (rawBarrier.includes("spinning my wheels")) barrierPhrase = "the plateau that comes from 'winging it'";
 
             let expText = "";
-            if (expId === 'BEGINNER') expText = "As you are brand new to structured training, build competency over complexity. ";
-            else if (expId === 'RETURNING') expText = "Since you are returning after a break, we prioritize re-establishing your physical baseline. ";
+            if (expId === 'BEGINNER') expText = "As you are brand new to the full-body approach, we prioritize building competency over complexity. ";
+            else if (expId === 'RETURNING') expText = "Since you are returning to training, our focus is re-establishing your base without burnout. ";
             else expText = "As an experienced trainee, your path focuses on refined precision to bypass your current plateau. ";
 
-            let rationale = `${expText}Based on your profile, we aren't just looking for a general workout plan; we are specifically looking to solve **${barrierPhrase}**. The **${recommendationTitle}** path is strategically designed to bridge the gap between your current baseline and your priority of **${goalPhrase}**. By focusing on this transformation rather than just information, we ensure that your progress is both rapid and sustainable.`;
+            let rationale = `${expText}Based on your profile, we aren't just looking for a workout plan; we are specifically looking to solve **${barrierPhrase}**. The **${recommendationTitle}** path is strategically designed to bridge the gap between where you are and your goal of **${goalPhrase}**. By focusing on efficiency rather than just 'doing more,' we ensure your progress is sustainable.`;
             
             if (pastExp.includes("struggled to stay consistent")) {
                 rationale += ` Since you've found consistency difficult in the past, this pathway includes the specific support layers required to break that cycle once and for all.`;
@@ -656,14 +664,14 @@
             
             let vision = "Three months (90 days) from now, if you remain consistent on this path: ";
             
-            if (rawGoal.includes("Shedding fat")) {
-                vision += "You will have completed your first successful 12-week transformation cycle. You'll notice clothes fitting significantly better and have locked in the daily nutritional habits that make this change sustainable, rather than just another temporary fix.";
-            } else if (rawGoal.includes("Getting strong")) {
-                vision += "You will have established a rock-solid foundation of movement mechanics. You'll be lifting with more confidence and intent, and you'll already be seeing the first real signs of physical lean muscle development in the mirror.";
-            } else if (rawGoal.includes("Boosting energy")) {
-                vision += "Your daily energy levels will have stabilized. You'll notice that you no longer need that afternoon caffeine hit to get through the day, and your capacity for work—both inside and outside the gym—will have noticeably increased.";
+            if (rawGoal.includes("clothes fit")) {
+                vision += "You will have completed your first successful 12-week transformation. You'll notice clothes fitting significantly better and have locked in the minimalist habits that make this change permanent, not a quick fix.";
+            } else if (rawGoal.includes("raw physical strength")) {
+                vision += "You will have established a rock-solid foundation of movement mechanics. You'll be lifting with more confidence and intent, and you'll already be seeing the first real signs of physical lean muscle development.";
+            } else if (rawGoal.includes("surplus of energy")) {
+                vision += "Your daily energy levels will have stabilized. You'll notice that you no longer need that afternoon crash to get through the day, and your capacity for work—both inside and outside the gym—will have noticeably increased.";
             } else {
-                vision += "The 'friction' of starting will be gone. You will have successfully integrated training into your weekly routine, moving from 'trying' to exercise to it being a non-negotiable part of your high-performance lifestyle.";
+                vision += "The 'friction' of starting will be gone. You will have successfully integrated training into your weekly routine, moving from 'trying' to exercise to it being a non-negotiable part of your lifestyle.";
             }
 
             switch(theWhyId) {
@@ -682,7 +690,7 @@
             const medical = answers.find(a => a.key === 'medical')?.answer || '';
             let d = '';
             
-            if (medical.includes("specialized training")) {
+            if (medical.includes("specialized attention")) {
                 d = `If 1-1 Coaching is not feasible right now, the **${altRec.title}** pathway offers a structured starting point. However, this route requires you to be extra diligent with our movement tutorials and prioritize slow, controlled progression.`;
                 return markdownToHtml(d);
             }
@@ -718,7 +726,7 @@
             const progress = (currentStep / total) * 100;
             progressBarFill.style.width = `${progress}%`;
             progressPercent.textContent = `${Math.round(progress)}%`;
-            if (currentStep < total) progressTextLabel.textContent = `QUESTION ${currentStep + 1} OF ${total}`;
+            if (currentStep < total) progressTextLabel.textContent = `STEP ${currentStep + 1} OF ${total}`;
             else progressTextLabel.textContent = `CONSULTATION COMPLETE`;
         }
 
@@ -741,12 +749,12 @@
                             Stop guessing. Start training with intent. 
                         </p>
                         <p class="text-neutral-400 text-sm leading-relaxed">
-                            This 2-minute digital assessment is designed to map your current baseline against your ultimate fitness goals. At the end, I will provide you with a tailored roadmap to becoming <strong class="text-white">#Fitter #Stronger #Better</strong>.
+                            This 2-minute digital consultation is designed to map your baseline against your ultimate vision. At the end, I will provide you with a tailored roadmap to becoming <strong class="text-white">#Fitter #Stronger #Better</strong>.
                         </p>
                     </div>
 
                     <div class="space-y-4">
-                        <h3 class="text-xs font-black uppercase text-green-500 tracking-widest">What you'll receive:</h3>
+                        <h3 class="text-xs font-black uppercase text-green-500 tracking-widest">Your discovery session includes:</h3>
                         <div class="grid gap-3">
                             <div class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
                                 <div class="bg-green-500/20 p-2 rounded-lg">
@@ -771,7 +779,7 @@
 
                     <div class="pt-4">
                         <button id="start-btn" class="action-button w-full py-5 rounded-2xl text-sm tracking-widest flex items-center justify-center gap-3 group">
-                            START ASSESSMENT
+                            START CONSULTATION
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </button>
                         <p class="text-[9px] text-neutral-500 text-center mt-4 uppercase tracking-widest">Takes approximately 2 minutes to complete</p>
@@ -797,11 +805,6 @@
 
             let currentExp = userAnswers.find(a => a.key === 'experience')?.expId || 'BEGINNER';
             let dynamicQuestion = stepData.question;
-            
-            if (stepData.key === 'nutrition') {
-                if (currentExp === 'EXPERIENCED') dynamicQuestion = "How would you describe your nutritional discipline for performance?";
-                else dynamicQuestion = "How would you describe your current nutritional habits?";
-            }
 
             let sectionHtml = "";
             if (stepData.section) {
@@ -817,7 +820,7 @@
             if (currentStep === 10) {
                 helperTextHtml = `
                     <div class="mb-6 p-3 bg-green-500/10 border border-green-500/20 rounded-xl animate-in">
-                        <p class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Final deep dive: Let's find your 'Why'.</p>
+                        <p class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Almost there: Let's talk partnership.</p>
                     </div>
                 `;
             }
@@ -847,9 +850,6 @@
                 btn.className = 'option-button w-full text-left p-5 rounded-2xl text-base group';
                 
                 let displayText = opt.text;
-                if (stepData.key === 'nutrition' && currentExp === 'EXPERIENCED' && opt.altText) {
-                    displayText = opt.altText;
-                }
 
                 btn.innerHTML = `
                     <span>${displayText}</span>
@@ -967,18 +967,16 @@
         async function triggerAssessmentSubmission(primary, rationale, vision) {
             const coachEmailAddress = COACH_EMAIL;
 
-            // Single dispatch to Coach via FormSubmit
             const coachData = {
-                _subject: `🔥 NEW ASSESSMENT: ${clientName} (${primary.title})`,
+                _subject: `🔥 NEW DISCOVERY SESSION: ${clientName} (${primary.title})`,
                 _template: "table",
-                _replyto: clientEmail, // Allows coach to reply directly to user
+                _replyto: clientEmail, 
                 Name: clientName,
                 Email: clientEmail,
                 Recommended_Path: primary.title,
                 Coach_Rationale: rationale,
                 Three_Month_Vision: vision,
                 Total_Score: totalScore,
-                // Append raw question data for review
                 ...Object.fromEntries(userAnswers.map(a => [a.question.replace(/\s+/g, '_'), a.answer]))
             };
 
@@ -988,7 +986,7 @@
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(coachData)
                 });
-                console.log("Assessment data synced successfully.");
+                console.log("Discovery session data synced successfully.");
             } catch (error) {
                 console.error("Submission failed", error);
             }
@@ -1023,7 +1021,7 @@
             const vision = generateThreeMonthVision(userAnswers);
             const altDesc = alt ? generateAlternativeDescription(primary, alt, userAnswers) : null; 
             const medical = userAnswers.find(a => a.key === 'medical')?.answer || '';
-            const isInjuryAlert = medical.includes("specialized training");
+            const isInjuryAlert = medical.includes("specialized attention");
             const client = clientName.toUpperCase();
             
             const whatsappNumber = "447925116794"; 
@@ -1131,7 +1129,7 @@
                     </div>
 
                     <div class="pt-8 space-y-4">
-                        <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-[10px] tracking-[0.2em] uppercase">RESTART ASSESSMENT</button>
+                        <button id="restart-button" class="secondary-button w-full py-4 rounded-2xl text-[10px] tracking-[0.2em] uppercase">RESTART CONSULTATION</button>
                     </div>
                 </div>
             `;
